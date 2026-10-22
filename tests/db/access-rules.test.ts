@@ -171,6 +171,62 @@ describe.skipIf(!url)("database access rules", () => {
     });
   });
 
+  describe("create_project", () => {
+    const roles = (list: { category: string; need: string; hours: number | string }[]) => JSON.stringify(list);
+    const create = (userId: string | null, status: string, roleList: string) =>
+      as(userId, (c) =>
+        c.query(
+          `select create_project('Dewick wait-time tracker', 'Live line length at the dining halls.', '', 'prototype',
+                                 '', 'https://github.com/x/y', $1::project_status, $2::jsonb) as id`,
+          [status, roleList],
+        ),
+      );
+
+    it("saves the project and its roles together, owned by the caller, roles in order", async () => {
+      const ben = await newUser("ben@tufts.edu");
+      const { rows } = await create(
+        ben,
+        "published",
+        roles([
+          { category: "design", need: "Redesign three screens", hours: 5 },
+          { category: "writing", need: "App Store description", hours: 2 },
+        ]),
+      );
+      const project = await admin("select owner_id, status, prototype_url, repo_url from projects where id = $1", [rows[0].id]);
+      expect(project.rows[0]).toEqual({ owner_id: ben, status: "published", prototype_url: null, repo_url: "https://github.com/x/y" });
+      const saved = await as(ben, (c) => c.query("select category, hours, status from roles where project_id = $1 order by created_at", [rows[0].id]));
+      expect(saved.rows).toEqual([
+        { category: "design", hours: 5, status: "open" },
+        { category: "writing", hours: 2, status: "open" },
+      ]);
+    });
+
+    it("is all-or-nothing: one bad role leaves no project behind", async () => {
+      const ben = await newUser("ben@tufts.edu");
+      await expect(
+        create(ben, "draft", roles([{ category: "design", need: "Redesign three screens", hours: 5 }, { category: "ml", need: "Train it", hours: 99 }])),
+      ).rejects.toThrow(/check constraint/);
+      const left = await admin("select count(*)::int as n from projects");
+      expect(left.rows[0].n).toBe(0);
+    });
+
+    it("needs 1 to 5 roles and only creates drafts or published projects", async () => {
+      const ben = await newUser("ben@tufts.edu");
+      const one = { category: "design", need: "Redesign three screens", hours: 5 };
+      await expect(create(ben, "draft", roles([]))).rejects.toThrow(/at least one role/);
+      await expect(create(ben, "draft", roles(Array(6).fill(one)))).rejects.toThrow(/Up to 5 roles/);
+      await expect(create(ben, "archived", roles([one]))).rejects.toThrow(/draft or published/);
+      const left = await admin("select count(*)::int as n from projects");
+      expect(left.rows[0].n).toBe(0);
+    });
+
+    it("can't be called signed out", async () => {
+      await expect(create(null, "draft", roles([{ category: "design", need: "Redesign three screens", hours: 5 }]))).rejects.toThrow(
+        /permission denied/,
+      );
+    });
+  });
+
   describe("offers", () => {
     it("lets students offer on others' open roles, once", async () => {
       const ben = await newUser("ben@tufts.edu");

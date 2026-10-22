@@ -35,6 +35,9 @@ export const projectInputSchema = z.object({
   roles: z.array(roleInputSchema).min(1, "Add at least one role.").max(5, "Up to 5 roles per project."),
 });
 
+/** Which button submitted the post form. */
+export const postIntentSchema = z.enum(["publish", "draft"]).catch("draft");
+
 export const offerInputSchema = z.object({
   roleId: z.uuid(),
   note: trimmed(10, 600, "Say why you're a good fit (10+ characters).", "Keep it under 600 characters."),

@@ -10,7 +10,7 @@ Treat them as the spec for layout, copy and spacing. Build with the real tokens 
 | `SignIn.dc.html` | Sign in | Built (`src/app/sign-in`) |
 | `Feed.dc.html` | Browse open roles | Built (`src/app/(app)/browse`) |
 | `Project.dc.html` | Project page, offers, credits | Built (`src/app/(app)/projects/[id]`) |
-| `Post.dc.html` | Post a project | Phase 2 |
+| `Post.dc.html` | Post a project | Built (`src/app/(app)/post`; screenshot upload not yet) |
 | `Messages.dc.html` | Messages | Phase 2 |
 | `Profile.dc.html` | Profile | Phase 2 (sign-out and basic info built) |
 

@@ -39,3 +39,9 @@ test("Browse and project pages need sign-in and keep the filter in the return pa
   await expect(page).toHaveURL(/\/sign-in\?next=%2Fprojects%2F5eed0000-0000-4000-8000-0000000000a1/);
   await expect(page.getByRole("heading", { name: "Sign in" })).toBeVisible();
 });
+
+test("Post a project needs sign-in", async ({ page }) => {
+  await page.goto("/post");
+  await expect(page).toHaveURL(/\/sign-in\?next=%2Fpost/);
+  await expect(page.getByRole("heading", { name: "Sign in" })).toBeVisible();
+});
