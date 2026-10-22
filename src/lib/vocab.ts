@@ -33,3 +33,11 @@ export const CATEGORY_CHIP_LABEL: Record<Category, string> = {
   testing: "Testing",
   other: "Other",
 };
+
+export const PROJECT_STATUSES = ["draft", "published", "archived"] as const;
+export const ROLE_STATUSES = ["open", "in_progress", "filled", "closed"] as const;
+export const OFFER_STATUSES = ["pending", "accepted", "declined", "withdrawn"] as const;
+
+export type ProjectStatus = (typeof PROJECT_STATUSES)[number];
+export type RoleStatus = (typeof ROLE_STATUSES)[number];
+export type OfferStatus = (typeof OFFER_STATUSES)[number];

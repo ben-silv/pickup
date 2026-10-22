@@ -69,6 +69,11 @@ export const feedQuerySchema = z.object({
 });
 
 export const projectIdSchema = z.uuid();
+export const offerIdSchema = z.uuid();
+export const personIdSchema = z.uuid();
+
+/** Owner's Publish / Unpublish button. Archiving isn't offered in the app. */
+export const projectStatusInputSchema = z.object({ projectId: z.uuid(), status: z.enum(["draft", "published"]) });
 
 export type FeedQuery = z.output<typeof feedQuerySchema>;
 export type ProjectInput = z.output<typeof projectInputSchema>;

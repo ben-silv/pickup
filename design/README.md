@@ -9,7 +9,7 @@ Treat them as the spec for layout, copy and spacing. Build with the real tokens 
 | `Landing.dc.html` | Landing page | Built (`src/app/page.tsx`) |
 | `SignIn.dc.html` | Sign in | Built (`src/app/sign-in`) |
 | `Feed.dc.html` | Browse open roles | Built (`src/app/(app)/browse`) |
-| `Project.dc.html` | Project page, offers, credits | Phase 2 |
+| `Project.dc.html` | Project page, offers, credits | Built (`src/app/(app)/projects/[id]`) |
 | `Post.dc.html` | Post a project | Phase 2 |
 | `Messages.dc.html` | Messages | Phase 2 |
 | `Profile.dc.html` | Profile | Phase 2 (sign-out and basic info built) |

@@ -111,7 +111,7 @@ code { font-family: ui-monospace, Menlo, monospace; font-size: 0.9em; background
 
 .role-tag { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; }
 .tag { background: var(--sky-soft); color: var(--navy); border-radius: var(--pill); padding: 6px 13px; font-weight: 700; font-size: 14px; }
-.scope { font-size: 14px; color: var(--muted); }
+.scope { font-size: 14px; color: var(--muted); overflow-wrap: anywhere; min-width: 0; }
 .role-tag.tiny .tag { font-size: 11px; padding: 3px 8px; }
 .role-tag.tiny .scope { font-size: 11px; }
 
@@ -258,8 +258,8 @@ code { font-family: ui-monospace, Menlo, monospace; font-size: 0.9em; background
 .band { background: var(--tufts-blue); color: var(--on-blue); padding-top: 120px; padding-bottom: 64px; }
 .band-tall { padding-bottom: 120px; }
 .band-inner { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 24px; }
-.band-title { font-size: clamp(44px, 6vw, 76px); }
-.band-lede { font-size: 20px; font-weight: 700; max-width: 44ch; }
+.band-title { font-size: clamp(44px, 6vw, 76px); overflow-wrap: anywhere; }
+.band-lede { font-size: 20px; font-weight: 700; max-width: 44ch; overflow-wrap: anywhere; }
 .overlap { margin-top: -88px; padding-bottom: 96px; }
 .overlap-sm { margin-top: -40px; padding-bottom: 96px; }
 .coming-next { display: flex; flex-direction: column; gap: 14px; max-width: 760px; }
@@ -297,6 +297,46 @@ code { font-family: ui-monospace, Menlo, monospace; font-size: 0.9em; background
 .stage-mockup { background: var(--sky-soft); }
 .stage-prototype { background: var(--sky); }
 .stage-live { background: var(--green); }
+
+/* ---- Shared app pieces -------------------------------------------------- */
+.stack-xs { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.h4 { font-size: 24px; }
+.row-wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+.row-between { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; }
+.prose { white-space: pre-line; overflow-wrap: anywhere; max-width: 65ch; }
+.badge-neutral { background: var(--cream); color: var(--navy); }
+.label.badge { font-size: 11px; padding: 5px 11px; align-self: flex-start; }
+.person-name { font-weight: 700; }
+.person-text { min-width: 0; }
+.action-form { display: flex; flex-direction: column; gap: 8px; }
+.band-text { min-width: 0; }
+.band-back { align-self: flex-start; color: var(--on-blue); font-weight: 700; font-size: 19px; text-underline-offset: 4px; }
+.band-links { margin-top: 6px; }
+
+/* Two columns that stack on phones: main content + a narrower side column. */
+.split { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 24px; }
+.split-main { flex: 999 1 560px; min-width: 0; }
+.split-side { flex: 1 1 320px; min-width: 0; }
+
+/* ---- Project page ------------------------------------------------------- */
+.role-item { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; }
+.role-item-head { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; min-width: 0; }
+.offer[open] { flex-basis: 100%; }
+.offer summary { list-style: none; }
+.offer summary::-webkit-details-marker { display: none; }
+.offer .when-open, .offer[open] .when-closed { display: none; }
+.offer[open] .when-open { display: inline; }
+.offer[open] summary { background: var(--white); color: var(--navy); border: 1.5px solid var(--line); box-shadow: none; }
+.offer-form { border-top: 1.5px solid var(--line-warm); margin-top: 16px; padding-top: 16px; display: flex; flex-direction: column; gap: 12px; }
+.owner-panel { border: 2px solid var(--sky); }
+.offer-item { border-top: 1.5px solid var(--line-warm); padding-top: 16px; }
+.credit-item { display: flex; gap: 14px; align-items: flex-start; }
+.credit-line { overflow-wrap: anywhere; }
+.avatar-check { position: relative; }
+.avatar-tick {
+  position: absolute; right: -4px; bottom: -4px; width: 22px; height: 22px; border-radius: 50%;
+  border: 2.5px solid var(--white); background: var(--green); color: var(--navy); display: grid; place-items: center;
+}
 
 /* ---- Larger screens ----------------------------------------------------- */
 @media (min-width: 700px) {

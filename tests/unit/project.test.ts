@@ -1,0 +1,74 @@
+import { describe, expect, it } from "vitest";
+import { OFFER_BADGE, byRole, firstName, hasConversation, hrs, openRolesLabel, roleViewerState } from "@/lib/project";
+
+describe("openRolesLabel", () => {
+  it("counts open roles in words", () => {
+    expect(openRolesLabel(0)).toBe("No open roles");
+    expect(openRolesLabel(1)).toBe("1 open role");
+    expect(openRolesLabel(3)).toBe("3 open roles");
+  });
+});
+
+describe("firstName and hrs", () => {
+  it("uses the first word of the name, with a fallback", () => {
+    expect(firstName("Jamie Lee")).toBe("Jamie");
+    expect(firstName("  ")).toBe("The owner");
+    expect(firstName("", "They")).toBe("They");
+  });
+
+  it("pluralizes hours", () => {
+    expect(hrs(1)).toBe("1 hr");
+    expect(hrs(6)).toBe("6 hrs");
+  });
+});
+
+describe("byRole", () => {
+  it("groups rows by role and keeps their order", () => {
+    const rows = [
+      { role_id: "a", id: 1 },
+      { role_id: "b", id: 2 },
+      { role_id: "a", id: 3 },
+    ];
+    const grouped = byRole(rows);
+    expect([...grouped.keys()]).toEqual(["a", "b"]);
+    expect(grouped.get("a")?.map((r) => r.id)).toEqual([1, 3]);
+  });
+});
+
+describe("roleViewerState", () => {
+  const published = { status: "published" as const, isOwner: false };
+
+  it("never lets the owner offer on their own role", () => {
+    expect(roleViewerState({ status: "open" }, { status: "published", isOwner: true }, null)).toEqual({ kind: "owner" });
+  });
+
+  it("lets other students offer on open roles of published projects", () => {
+    expect(roleViewerState({ status: "open" }, published, null)).toEqual({ kind: "can-offer" });
+  });
+
+  it("shows my offer instead of the button once I've offered, whatever its status", () => {
+    expect(roleViewerState({ status: "open" }, published, { status: "pending" })).toEqual({ kind: "offered", status: "pending" });
+    expect(roleViewerState({ status: "in_progress" }, published, { status: "declined" })).toEqual({ kind: "offered", status: "declined" });
+  });
+
+  it("doesn't offer on roles that aren't open or projects that aren't published", () => {
+    expect(roleViewerState({ status: "in_progress" }, published, null)).toEqual({ kind: "unavailable" });
+    expect(roleViewerState({ status: "open" }, { status: "draft", isOwner: false }, null)).toEqual({ kind: "unavailable" });
+  });
+});
+
+describe("hasConversation", () => {
+  it("is true only while the offer is live", () => {
+    expect(hasConversation("pending")).toBe(true);
+    expect(hasConversation("accepted")).toBe(true);
+    expect(hasConversation("declined")).toBe(false);
+    expect(hasConversation("withdrawn")).toBe(false);
+  });
+});
+
+describe("OFFER_BADGE", () => {
+  it("is green (success) only for accepted offers", () => {
+    const green = Object.entries(OFFER_BADGE).filter(([, b]) => b.success).map(([status]) => status);
+    expect(green).toEqual(["accepted"]);
+  });
+});
