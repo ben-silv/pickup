@@ -18,6 +18,6 @@ export default defineConfig({
     port: PORT,
     timeout: 180_000,
     reuseExistingServer: !process.env.CI,
-    env: { NEXT_PUBLIC_SUPABASE_URL: "", NEXT_PUBLIC_SUPABASE_ANON_KEY: "" },
+    env: { NEXT_PUBLIC_SUPABASE_URL: "", NEXT_PUBLIC_SUPABASE_ANON_KEY: "", NEXT_DIST_DIR: ".next-e2e" },
   },
 });

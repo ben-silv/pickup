@@ -1,11 +1,30 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { PageBand } from "@/components/app/PageBand";
-import { ComingNext } from "@/components/app/ComingNext";
+import { FeedFilters } from "@/components/app/FeedFilters";
+import { FeedCard } from "@/components/app/FeedCard";
+import { createClient } from "@/lib/supabase/server";
+import { feedQuerySchema } from "@/lib/schemas";
+import { FEED_LIMIT, countLabel, searchFilter, type FeedRow } from "@/lib/feed";
 
 export const metadata: Metadata = { title: "Browse · Pickup" };
 
-export default function BrowsePage() {
+export default async function BrowsePage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
+  const { skill, q, sort } = feedQuerySchema.parse(await searchParams);
+
+  const supabase = await createClient();
+  let query = supabase
+    .from("open_roles")
+    .select("role_id, category, need, hours, created_at, project_id, title, pitch, stage, owner_id, owner_name, owner_class_year, owner_major");
+  if (skill) query = query.eq("category", skill);
+  const or = searchFilter(q);
+  if (or) query = query.or(or);
+  query = sort === "hours" ? query.order("hours").order("created_at", { ascending: false }) : query.order("created_at", { ascending: false });
+  const { data, error } = await query.limit(FEED_LIMIT).overrideTypes<FeedRow[], { merge: false }>();
+  if (error) console.error("browse: open_roles query failed", error);
+  const rows = data ?? [];
+  const filtered = Boolean(skill || q);
+
   return (
     <>
       <PageBand
@@ -13,12 +32,37 @@ export default function BrowsePage() {
         lede="Small, scoped asks from Tufts students. Pick one you can finish in a weekend."
         actions={<Link href="/post" className="btn glass-dark">Post a project</Link>}
       />
-      <main className="wrap overlap">
-        <ComingNext
-          title="The feed lands here"
-          body="Open roles from the open_roles view, with skill filters and search. Each card links to its project page."
-          design="design/Feed.dc.html"
-        />
+      <main className="wrap overlap stack-md">
+        <FeedFilters skill={skill} q={q} sort={sort} />
+        {error ? (
+          <p className="card error-text" role="alert">
+            Couldn&apos;t load open roles right now. Refresh to try again.
+          </p>
+        ) : (
+          <>
+            <p className="label muted" aria-live="polite">{countLabel(rows.length)}</p>
+            {rows.length > 0 ? (
+              <div className="feed-grid">
+                {rows.map((row) => (
+                  <FeedCard key={row.role_id} row={row} />
+                ))}
+              </div>
+            ) : (
+              <section className="card stack-sm">
+                <h2 className="display h3">{filtered ? "No open roles match that" : "No open roles yet"}</h2>
+                {filtered ? (
+                  <p>
+                    <Link href="/browse">Clear filters</Link>
+                  </p>
+                ) : (
+                  <p className="muted">
+                    Be the first. <Link href="/post">Post a project</Link> and ask for one role.
+                  </p>
+                )}
+              </section>
+            )}
+          </>
+        )}
       </main>
     </>
   );

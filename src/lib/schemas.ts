@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { CATEGORIES, CLASS_YEARS, STAGES, TUFTS_EMAIL } from "./vocab";
+import { FEED_SORTS, sanitizeSearch } from "./feed";
 
 /**
  * Input validation for everything users submit. Mirrors the CHECK constraints in
@@ -59,6 +60,17 @@ export const profileInputSchema = z.object({
     .refine((s) => s === null || s.startsWith("https://"), "Use the full https:// link."),
 });
 
+/** Browse page search params. Anything unexpected falls back to the default instead of erroring. */
+const firstParam = (v: unknown) => (Array.isArray(v) ? v[0] : v);
+export const feedQuerySchema = z.object({
+  skill: z.preprocess(firstParam, z.enum(CATEGORIES).nullable().catch(null)),
+  q: z.preprocess(firstParam, z.string().catch("").transform(sanitizeSearch)),
+  sort: z.preprocess(firstParam, z.enum(FEED_SORTS).catch("newest")),
+});
+
+export const projectIdSchema = z.uuid();
+
+export type FeedQuery = z.output<typeof feedQuerySchema>;
 export type ProjectInput = z.output<typeof projectInputSchema>;
 export type RoleInput = z.output<typeof roleInputSchema>;
 export type OfferInput = z.output<typeof offerInputSchema>;

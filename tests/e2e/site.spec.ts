@@ -30,3 +30,12 @@ test("an expired link sends you back with an explanation", async ({ page }) => {
   await expect(page).toHaveURL(/\/sign-in\?error=link/);
   await expect(page.locator("#sign-in-error")).toContainText("expired");
 });
+
+test("Browse and project pages need sign-in and keep the filter in the return path", async ({ page }) => {
+  await page.goto("/browse?skill=design&q=dewick");
+  await expect(page).toHaveURL(/\/sign-in\?next=%2Fbrowse%3Fskill%3Ddesign%26q%3Ddewick/);
+
+  await page.goto("/projects/5eed0000-0000-4000-8000-0000000000a1");
+  await expect(page).toHaveURL(/\/sign-in\?next=%2Fprojects%2F5eed0000-0000-4000-8000-0000000000a1/);
+  await expect(page.getByRole("heading", { name: "Sign in" })).toBeVisible();
+});

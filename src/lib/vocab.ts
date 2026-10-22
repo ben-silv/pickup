@@ -20,3 +20,16 @@ export const CATEGORY_LABEL: Record<Category, string> = {
   testing: "User testing",
   other: "Other",
 };
+
+/** Short labels for the Browse filter chips. */
+export const CATEGORY_CHIP_LABEL: Record<Category, string> = {
+  design: "Design",
+  frontend: "Frontend",
+  backend: "Backend",
+  data: "Data",
+  ml: "ML",
+  mobile: "Mobile",
+  writing: "Writing",
+  testing: "Testing",
+  other: "Other",
+};

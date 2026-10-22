@@ -266,6 +266,37 @@ code { font-family: ui-monospace, Menlo, monospace; font-size: 0.9em; background
 .facts { display: grid; grid-template-columns: max-content 1fr; gap: 10px 24px; margin: 0; }
 .facts dt { font-weight: 700; }
 .facts dd { margin: 0; color: var(--muted); }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+/* ---- Browse ------------------------------------------------------------- */
+.feed-controls { display: flex; flex-direction: column; gap: 16px; padding: 20px; }
+.feed-controls-row { display: flex; flex-wrap: wrap; gap: 12px; }
+.search-field {
+  flex: 1 1 360px; min-width: 0; display: flex; align-items: center; gap: 10px; color: var(--muted);
+  border: 1.5px solid var(--line); background: var(--field); border-radius: var(--pill); padding: 4px 18px;
+}
+.search-field:focus-within { outline: 3px solid var(--navy); outline-offset: 3px; }
+.search-field input { flex: 1; min-width: 0; border: 0; background: transparent; padding: 12px 0; font-size: 16px; color: var(--navy); outline: none; }
+.sort-field { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 15px; }
+.sort-field select { border: 1.5px solid var(--line); background: var(--field); border-radius: var(--pill); padding: 12px 16px; font-size: 15px; color: var(--navy); }
+.chip-group { display: flex; flex-wrap: wrap; gap: 8px; }
+.filter-chip { font-size: 15px; padding: 11px 16px; }
+
+.feed-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr)); gap: 20px; }
+.feed-card { min-width: 0; background: var(--white); border-radius: var(--radius-lg); padding: 24px; display: flex; flex-direction: column; gap: 16px; }
+.feed-card-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.feed-card-head .person { min-width: 0; }
+.feed-owner { font-weight: 700; }
+.feed-title { font-size: 26px; line-height: 1.05; overflow-wrap: anywhere; }
+.feed-pitch { font-size: 15px; line-height: 1.55; overflow-wrap: anywhere; }
+.feed-card-foot { margin-top: auto; }
+.feed-link { align-self: flex-start; font-weight: 700; font-size: 15px; text-underline-offset: 4px; }
+.feed-link:hover { text-decoration-thickness: 3px; }
+.stage { flex: none; border-radius: var(--pill); padding: 5px 11px; font-size: 11px; color: var(--navy); }
+.stage-idea { background: var(--cream); }
+.stage-mockup { background: var(--sky-soft); }
+.stage-prototype { background: var(--sky); }
+.stage-live { background: var(--green); }
 
 /* ---- Larger screens ----------------------------------------------------- */
 @media (min-width: 700px) {

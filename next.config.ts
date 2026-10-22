@@ -8,6 +8,8 @@ const securityHeaders = [
 ];
 
 const config: NextConfig = {
+  // Test builds use their own folder so they never clash with a running `npm run dev`.
+  distDir: process.env.NEXT_DIST_DIR || ".next",
   reactStrictMode: true,
   poweredByHeader: false,
   async headers() {
