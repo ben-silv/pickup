@@ -24,13 +24,3 @@ export function projectFormValues(form: FormLike) {
     roles: Array.from({ length: count }, (_, i) => ({ category: categories[i] ?? "", need: needs[i] ?? "", hours: hours[i] ?? "" })),
   };
 }
-
-/** Validation issues → first message per field, keyed like "title" or "roles.0.need". */
-export function fieldErrors(issues: readonly { path: readonly PropertyKey[]; message: string }[]): Record<string, string> {
-  const out: Record<string, string> = {};
-  for (const issue of issues) {
-    const key = issue.path.map(String).join(".") || "form";
-    out[key] ??= issue.message;
-  }
-  return out;
-}

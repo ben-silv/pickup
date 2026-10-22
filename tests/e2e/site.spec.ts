@@ -45,3 +45,9 @@ test("Post a project needs sign-in", async ({ page }) => {
   await expect(page).toHaveURL(/\/sign-in\?next=%2Fpost/);
   await expect(page.getByRole("heading", { name: "Sign in" })).toBeVisible();
 });
+
+test("a conversation needs sign-in and comes back to the same thread", async ({ page }) => {
+  await page.goto("/messages/5eed0000-0000-4000-8000-0000000000d1");
+  await expect(page).toHaveURL(/\/sign-in\?next=%2Fmessages%2F5eed0000-0000-4000-8000-0000000000d1/);
+  await expect(page.getByRole("heading", { name: "Sign in" })).toBeVisible();
+});

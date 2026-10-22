@@ -27,7 +27,7 @@ export function OfferForm({ roleId, projectId, ownerFirstName }: { roleId: strin
   const error = state.status === "error" ? state.message : "";
 
   return (
-    <details className="offer" open={state.status === "error" || undefined} onToggle={(e) => e.currentTarget.open && noteRef.current?.focus()}>
+    <details className="reveal" open={state.status === "error" || undefined} onToggle={(e) => e.currentTarget.open && noteRef.current?.focus()}>
       <summary className="btn btn-sm glass-dark">
         <span className="when-closed">Offer to help</span>
         <span className="when-open">Cancel</span>

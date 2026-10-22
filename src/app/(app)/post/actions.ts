@@ -4,9 +4,9 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createClient, getUser } from "@/lib/supabase/server";
 import { postIntentSchema, projectInputSchema } from "@/lib/schemas";
-import { fieldErrors, projectFormValues } from "@/lib/post";
+import { projectFormValues } from "@/lib/post";
 import { friendlyDbError } from "@/lib/db-errors";
-import type { ActionState } from "@/lib/action-state";
+import { fieldErrors, type ActionState } from "@/lib/action-state";
 
 /** Saves the project and its roles in one transaction (create_project), then opens the new project page. */
 export async function createProject(_prev: ActionState, form: FormData): Promise<ActionState> {

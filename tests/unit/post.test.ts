@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { fieldErrors, projectFormValues } from "@/lib/post";
+import { projectFormValues } from "@/lib/post";
+import { fieldErrors } from "@/lib/action-state";
 import { projectInputSchema } from "@/lib/schemas";
 
 function form(entries: [string, string][]) {

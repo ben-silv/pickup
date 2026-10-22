@@ -48,6 +48,14 @@ export const messageInputSchema = z.object({
   body: trimmed(1, 2000, "Write a message first.", "Keep messages under 2,000 characters."),
 });
 
+/** Owner marks a role filled and leaves a credit note (complete_role). Limits match the credits table. */
+export const completeRoleInputSchema = z.object({
+  roleId: z.uuid(),
+  offerId: z.uuid(),
+  hours: z.coerce.number().int("Use whole hours.").min(1, "At least 1 hour.").max(80, "Up to 80 hours."),
+  note: trimmed(1, 400, "Write a short credit note.", "Keep the note under 400 characters."),
+});
+
 export const profileInputSchema = z.object({
   fullName: z.string().trim().max(80, "Keep your name under 80 characters."),
   classYear: z.enum(CLASS_YEARS).nullable(),

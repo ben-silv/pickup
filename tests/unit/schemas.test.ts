@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { messageInputSchema, offerInputSchema, profileInputSchema, projectInputSchema } from "@/lib/schemas";
+import { completeRoleInputSchema, messageInputSchema, offerInputSchema, profileInputSchema, projectInputSchema } from "@/lib/schemas";
 
 const role = { category: "design", need: "Redesign three screens", hours: "5" };
 const project = {
@@ -45,5 +45,18 @@ describe("offer, message and profile inputs", () => {
     expect(profileInputSchema.safeParse({ ...base, githubUrl: "http://github.com/x" }).success).toBe(false);
     const ok = profileInputSchema.parse({ ...base, githubUrl: "" });
     expect(ok).toMatchObject({ githubUrl: null, major: null, hoursPerWeek: 4 });
+  });
+});
+
+describe("completeRoleInputSchema", () => {
+  const ok = { roleId: "5eed0000-0000-4000-8000-0000000000c2", offerId: "5eed0000-0000-4000-8000-0000000000d1", hours: "6", note: " Great work. " };
+
+  it("matches the credits table limits (hours 1–80, note 1–400)", () => {
+    expect(completeRoleInputSchema.parse(ok)).toMatchObject({ hours: 6, note: "Great work." });
+    expect(completeRoleInputSchema.safeParse({ ...ok, hours: "80" }).success).toBe(true);
+    for (const hours of ["0", "81", "2.5", ""]) expect(completeRoleInputSchema.safeParse({ ...ok, hours }).success).toBe(false);
+    expect(completeRoleInputSchema.safeParse({ ...ok, note: "   " }).success).toBe(false);
+    expect(completeRoleInputSchema.safeParse({ ...ok, note: "x".repeat(401) }).success).toBe(false);
+    expect(completeRoleInputSchema.safeParse({ ...ok, roleId: "nope" }).success).toBe(false);
   });
 });

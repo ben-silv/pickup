@@ -11,7 +11,7 @@ Treat them as the spec for layout, copy and spacing. Build with the real tokens 
 | `Feed.dc.html` | Browse open roles | Built (`src/app/(app)/browse`) |
 | `Project.dc.html` | Project page, offers, credits | Built (`src/app/(app)/projects/[id]`) |
 | `Post.dc.html` | Post a project | Built (`src/app/(app)/post`; screenshot upload not yet) |
-| `Messages.dc.html` | Messages | Phase 2 |
+| `Messages.dc.html` | Messages | Built (`src/app/(app)/messages`; no unread counts) |
 | `Profile.dc.html` | Profile | Phase 2 (sign-out and basic info built) |
 
 How to read a file: the markup inside `<x-dc>` is the screen; `{{name}}` holes and `<sc-for>` loops are filled
