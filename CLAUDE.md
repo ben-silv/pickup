@@ -37,6 +37,8 @@ src/lib/supabase/             clients
 supabase/migrations/          timestamped SQL; never edit an applied migration, add a new one
 tests/unit, tests/db, tests/e2e
 design/                       approved screens from Claude Design
+.claude/agents/reviewer.md    independent reviewer subagent (see Workflow)
+.claude/hooks/                Stop hook that runs `npm run check` before a turn ends
 ```
 
 ## Data model and security
@@ -75,7 +77,7 @@ Final direction from the Claude Design canvas: calm, roomy pages (Dirtywave) wit
 - No other typefaces.
 
 ### Shape, glass, motion
-- Radii: tiles 36px, cards 28px, inputs 16px, buttons/tags/nav fully pill-shaped.
+- Radii: tiles 36px, cards 28px, form inputs 16px, buttons/tags/nav fully pill-shaped. Search boxes and selects in filter bars are pill-shaped too (as in the designs).
 - **Liquid glass** (`.glass` light, `.glass-dark` navy): the menu, all primary buttons, chips and the sign-in card. Don't invent new glass variants; don't put glass on plain white areas where it can't be seen.
 - Depth from color blocks; cards get at most the one soft shadow in `.card`.
 - Motion: buttons lift 2px on hover; nothing else moves. Respect `prefers-reduced-motion`.
@@ -103,7 +105,7 @@ Final direction from the Claude Design canvas: calm, roomy pages (Dirtywave) wit
 - Business logic in `src/lib` as plain functions with dependencies passed in (see `requestSignInLink(input, deps)`), so it's unit-testable without Supabase.
 - Server Actions: parse with Zod → call Supabase as the user → return a typed state object (`{ status, message }`) for `useActionState`. Map database errors to plain-English messages; log the raw error server-side.
 - Forms: submit through `onSubmit` + `startTransition(() => action(formData))` so React 19 doesn't wipe fields on error (see `SignInForm`).
-- Client bundle: never import `zod`, `@/lib/schemas`, `@/lib/auth/sign-in` or `@/lib/supabase/server` into a client component. `@/lib/vocab` and `*-state.ts` files are fine.
+- Client bundle: never import `zod`, `@/lib/schemas`, `@/lib/auth/sign-in` or `@/lib/supabase/server` into a client component. `@/lib/vocab`, `@/lib/feed` and `*-state.ts` files are fine (plain functions, no dependencies).
 - Secrets in env vars only. The app needs just `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` (both public by design).
 - Every bug fix gets a test that would have caught it. No new dependencies without saying why.
 
@@ -113,6 +115,16 @@ Final direction from the Claude Design canvas: calm, roomy pages (Dirtywave) wit
 3. Mutations as Server Actions next to the page, validated with the schema in `src/lib/schemas.ts`; state changes via `supabase.rpc(...)`.
 4. Interactive bits (filters, accept/decline buttons, chat composer) as small client components; realtime chat subscribes to `messages` inserts for the current `offer_id` with the browser client.
 5. Remove the page's `ComingNext` block. Add unit tests for any new pure logic and an e2e test for the signed-out behaviour.
+
+## Workflow (every task)
+1. **Plan first** for anything bigger than a one-line fix: show the plan and wait for approval, unless the human said to run on autopilot.
+2. **Build** following the rules above.
+3. **Check**: `npm run check` must pass. The Stop hook runs it automatically and sends failures back to you; fix them rather than stopping.
+4. **Review**: hand the finished work to the `reviewer` subagent ("Use the reviewer subagent to review the uncommitted changes"). Fix every "Must fix" item, then run the reviewer again. Repeat until it returns `VERDICT: APPROVE` (at most 3 rounds; if it still isn't approved, stop and explain what's blocking).
+5. **Commit** with a short message describing the user-facing change (`git add -A && git commit -m "..."`). Never push; the human pushes.
+6. **Report** in 3–6 lines: what changed, the reviewer's verdict, test results, anything the human must do by hand (e.g. run a SQL file in Supabase), and any rule from this file you bent and why.
+
+**Autopilot.** When the human says "autopilot" (or asks you to build several screens in a row), skip waiting for plan approval: write the plan into your notes, build, check, review, commit, and move to the next screen. Stop and ask only for decisions that can't be undone or that change the data model in a way the design doesn't cover.
 
 ## Commands
 `npm run dev` · `npm run check` (lint + typecheck + unit) · `npm run test:db` (needs `DATABASE_URL` to a throwaway Postgres) · `npm run test:e2e` · `npm run build`
