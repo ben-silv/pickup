@@ -18,6 +18,8 @@ describe("isProtectedPath", () => {
   it("guards app pages but not the landing or sign-in pages", () => {
     expect(isProtectedPath("/browse")).toBe(true);
     expect(isProtectedPath("/projects/123")).toBe(true);
+    expect(isProtectedPath("/people/123")).toBe(true);
+    expect(isProtectedPath("/peoplesoft")).toBe(false);
     expect(isProtectedPath("/")).toBe(false);
     expect(isProtectedPath("/sign-in")).toBe(false);
     expect(isProtectedPath("/browser-tips")).toBe(false);

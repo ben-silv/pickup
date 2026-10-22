@@ -14,7 +14,9 @@ export function FeedCard({ row }: { row: FeedRow }) {
             {initials(row.owner_name)}
           </span>
           <div className="person-text">
-            <span className="feed-owner">{ownerName(row.owner_name)}</span>
+            <Link href={`/people/${row.owner_id}`} className="feed-owner">
+              {ownerName(row.owner_name)}
+            </Link>
             {year ? <span className="muted">{year}</span> : null}
           </div>
         </div>

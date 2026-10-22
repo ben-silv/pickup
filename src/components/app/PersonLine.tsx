@@ -1,7 +1,8 @@
+import Link from "next/link";
 import { avatarTone, initials, ownerName } from "@/lib/feed";
 import type { Person } from "@/lib/project";
 
-/** Avatar, short name and one line of context ("Owner · CS '28"). */
+/** Avatar, short name (linking to their profile) and one line of context ("Owner · CS '28"). */
 export function PersonLine({ person, meta, small = false }: { person: Person; meta?: string; small?: boolean }) {
   return (
     <div className="person">
@@ -9,7 +10,9 @@ export function PersonLine({ person, meta, small = false }: { person: Person; me
         {initials(person.full_name)}
       </span>
       <div className="person-text">
-        <span className="person-name">{ownerName(person.full_name)}</span>
+        <Link href={`/people/${person.id}`} className="person-name">
+          {ownerName(person.full_name)}
+        </Link>
         {meta ? <span className="muted">{meta}</span> : null}
       </div>
     </div>

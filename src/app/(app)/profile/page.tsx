@@ -1,51 +1,80 @@
+import Link from "next/link";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { PageBand } from "@/components/app/PageBand";
-import { ComingNext } from "@/components/app/ComingNext";
+import { CreditList, ProfileCard, ProjectTiles } from "@/components/app/ProfileParts";
+import { ProfileForm } from "./ProfileForm";
+import { loadProfile } from "./data";
 import { createClient, getUser } from "@/lib/supabase/server";
 import { signOut } from "../actions";
 
 export const metadata: Metadata = { title: "Profile · Pickup" };
 
-export default async function ProfilePage() {
+export default async function ProfilePage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const user = await getUser();
-  if (!user) redirect("/sign-in");
+  if (!user) redirect("/sign-in?next=%2Fprofile");
+  const editing = (await searchParams).edit === "1";
   const supabase = await createClient();
-  const { data: profile, error } = await supabase
-    .from("profiles")
-    .select("email, full_name, class_year, major, open_to_requests")
-    .eq("id", user.id)
-    .single();
+  const { profile, profileFailed, projects, projectsFailed, credits, creditsFailed } = await loadProfile(supabase, user.id, true);
+
+  const signOutForm = (
+    <form action={signOut}>
+      <button type="submit" className="btn btn-sm btn-outline">
+        Sign out
+      </button>
+    </form>
+  );
 
   return (
     <>
-      <PageBand title={profile?.full_name || "Your profile"} lede={profile?.email ?? user.email ?? undefined} />
-      <main className="wrap overlap stack-lg">
-        <section className="card stack-md">
-          <h2 className="display h3">Signed in</h2>
-          {error ? (
-            <p className="error-text">Couldn&apos;t load your profile. Check that the database migration has been applied.</p>
+      <PageBand />
+      <main className="wrap overlap split">
+        <div className="split-side stack-md">
+          {!profile ? (
+            <section className="card stack-md">
+              <h1 className="display h3">Your profile</h1>
+              <p role="alert" className="error-text">
+                {profileFailed ? "Couldn't load your profile. Refresh to try again." : "Your profile hasn't been set up. Check that the database migration has been applied."}
+              </p>
+              {signOutForm}
+            </section>
+          ) : editing ? (
+            <ProfileForm
+              values={{
+                fullName: profile.full_name,
+                classYear: profile.class_year,
+                major: profile.major,
+                bio: profile.bio,
+                skills: profile.skills,
+                openToRequests: profile.open_to_requests,
+                hoursPerWeek: profile.hours_per_week,
+                githubUrl: profile.github_url,
+              }}
+            />
           ) : (
-            <dl className="facts">
-              <dt>Email</dt>
-              <dd>{profile?.email}</dd>
-              <dt>Class year</dt>
-              <dd>{profile?.class_year ?? "Not set"}</dd>
-              <dt>Major</dt>
-              <dd>{profile?.major ?? "Not set"}</dd>
-              <dt>Open to requests</dt>
-              <dd>{profile?.open_to_requests ? "Yes" : "No"}</dd>
-            </dl>
+            <ProfileCard
+              profile={profile}
+              email={user.email ?? undefined}
+              actions={
+                <>
+                  <Link href="/profile?edit=1" className="btn btn-sm glass-dark">
+                    Edit profile
+                  </Link>
+                  {signOutForm}
+                </>
+              }
+            />
           )}
-          <form action={signOut}>
-            <button type="submit" className="btn btn-outline">Sign out</button>
-          </form>
-        </section>
-        <ComingNext
-          title="Profile editing and credits land here"
-          body="Edit name, skills and availability (profileInputSchema), list your projects, and show credit notes from people you've helped."
-          design="design/Profile.dc.html"
-        />
+          {profile && !editing ? (
+            <Link href={`/people/${user.id}`} className="small">
+              See your public profile
+            </Link>
+          ) : null}
+        </div>
+        <div className="split-main stack-lg">
+          <ProjectTiles projects={projects} own failed={projectsFailed} />
+          <CreditList credits={credits} own failed={creditsFailed} />
+        </div>
       </main>
     </>
   );

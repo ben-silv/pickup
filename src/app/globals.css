@@ -407,6 +407,33 @@ code { font-family: ui-monospace, Menlo, monospace; font-size: 0.9em; background
   .thread-back { display: none; }
 }
 
+/* ---- Profile ------------------------------------------------------------ */
+.avatar-xl { width: 96px; height: 96px; font-size: 32px; }
+.profile-card { border-radius: 32px; }
+.profile-name { font-size: 40px; overflow-wrap: anywhere; }
+.tag-list { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.availability { background: var(--paper); border-radius: 20px; padding: 16px; display: flex; flex-direction: column; gap: 2px; }
+.availability-title { font-weight: 700; font-size: 15px; display: inline-flex; align-items: center; gap: 8px; }
+.dot-success { width: 10px; height: 10px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 3px var(--green-soft); }
+.profile-link { font-weight: 700; font-size: 15px; padding: 12px 4px; text-underline-offset: 4px; }
+.on-band { color: var(--navy); }
+.tile-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr)); gap: 16px; }
+.project-tile { min-width: 0; background: var(--white); border-radius: var(--radius-lg); padding: 24px; display: flex; flex-direction: column; gap: 12px; text-decoration: none; }
+.project-tile:hover .tile-title { text-decoration: underline; }
+.tile-title { overflow-wrap: anywhere; text-decoration: none; }
+.tile-pitch { line-height: 1.5; overflow-wrap: anywhere; }
+.tile-stats { font-weight: 700; margin-top: auto; }
+.tile-new { border: 2px dashed var(--line); background: transparent; justify-content: center; align-items: center; min-height: 180px; color: var(--muted); font-weight: 700; }
+.tile-plus { font-size: 28px; line-height: 1; }
+.switch-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; cursor: pointer; }
+.switch {
+  appearance: none; -webkit-appearance: none; flex: none; margin: 0; width: 48px; height: 28px; border-radius: var(--pill);
+  background: var(--line); position: relative; cursor: pointer; transition: background 0.15s ease;
+}
+.switch::before { content: ""; position: absolute; left: 3px; top: 3px; width: 22px; height: 22px; border-radius: 50%; background: var(--white); transition: transform 0.15s ease; }
+.switch:checked { background: var(--navy); }
+.switch:checked::before { transform: translateX(20px); }
+
 /* ---- Larger screens ----------------------------------------------------- */
 @media (min-width: 700px) {
   .hide-sm { display: inline-flex; }
@@ -415,4 +442,5 @@ code { font-family: ui-monospace, Menlo, monospace; font-size: 0.9em; background
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .btn, .btn:hover, .faq-plus { transition: none; transform: none; }
+  .switch, .switch::before { transition: none; }
 }

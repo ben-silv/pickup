@@ -58,12 +58,12 @@ export const completeRoleInputSchema = z.object({
 
 export const profileInputSchema = z.object({
   fullName: z.string().trim().max(80, "Keep your name under 80 characters."),
-  classYear: z.enum(CLASS_YEARS).nullable(),
-  major: z.string().trim().max(80).transform((s) => s || null),
+  classYear: z.enum(CLASS_YEARS, { error: "Pick a class year." }).nullable(),
+  major: z.string().trim().max(80, "Keep your major under 80 characters.").transform((s) => s || null),
   bio: z.string().trim().max(400, "Keep your bio under 400 characters.").transform((s) => s || null),
   skills: z.array(z.enum(CATEGORIES)).max(CATEGORIES.length),
   openToRequests: z.boolean(),
-  hoursPerWeek: z.coerce.number().int().min(1).max(40).nullable(),
+  hoursPerWeek: z.coerce.number().int("Use whole hours.").min(1, "At least 1 hour a week.").max(40, "Up to 40 hours a week.").nullable(),
   githubUrl: z
     .string()
     .trim()

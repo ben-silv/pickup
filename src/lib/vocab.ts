@@ -7,6 +7,15 @@ export const TUFTS_EMAIL = /^[^@\s]+@tufts\.edu$/i;
 export type Stage = (typeof STAGES)[number];
 export type Category = (typeof CATEGORIES)[number];
 
+export const CLASS_YEAR_LABEL: Record<(typeof CLASS_YEARS)[number], string> = {
+  "2027": "Class of 2027",
+  "2028": "Class of 2028",
+  "2029": "Class of 2029",
+  "2030": "Class of 2030",
+  Grad: "Grad student",
+  Other: "Other",
+};
+
 export const STAGE_LABEL: Record<Stage, string> = { idea: "Idea", mockup: "Mockup", prototype: "Prototype", live: "Live" };
 
 export const CATEGORY_LABEL: Record<Category, string> = {

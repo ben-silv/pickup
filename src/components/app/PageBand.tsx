@@ -12,7 +12,8 @@ export function PageBand({
   children,
   tall = true,
 }: {
-  title: string;
+  /** Optional: the profile pages put their h1 in the card that overlaps the band. */
+  title?: string;
   lede?: string;
   actions?: ReactNode;
   top?: ReactNode;
@@ -24,7 +25,7 @@ export function PageBand({
       <div className="wrap band-inner">
         <div className="stack-sm band-text">
           {top}
-          <h1 className="display band-title">{title}</h1>
+          {title ? <h1 className="display band-title">{title}</h1> : null}
           {lede ? <p className="band-lede">{lede}</p> : null}
           {children}
         </div>

@@ -12,7 +12,7 @@ Treat them as the spec for layout, copy and spacing. Build with the real tokens 
 | `Project.dc.html` | Project page, offers, credits | Built (`src/app/(app)/projects/[id]`) |
 | `Post.dc.html` | Post a project | Built (`src/app/(app)/post`; screenshot upload not yet) |
 | `Messages.dc.html` | Messages | Built (`src/app/(app)/messages`; no unread counts) |
-| `Profile.dc.html` | Profile | Phase 2 (sign-out and basic info built) |
+| `Profile.dc.html` | Profile | Built (`src/app/(app)/profile` edit, `src/app/(app)/people/[id]` public) |
 
 How to read a file: the markup inside `<x-dc>` is the screen; `{{name}}` holes and `<sc-for>` loops are filled
 from `renderVals()` in the `<script>` at the bottom, which also holds the example data and the interactions

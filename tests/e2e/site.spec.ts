@@ -51,3 +51,11 @@ test("a conversation needs sign-in and comes back to the same thread", async ({ 
   await expect(page).toHaveURL(/\/sign-in\?next=%2Fmessages%2F5eed0000-0000-4000-8000-0000000000d1/);
   await expect(page.getByRole("heading", { name: "Sign in" })).toBeVisible();
 });
+
+test("profiles need sign-in", async ({ page }) => {
+  await page.goto("/profile?edit=1");
+  await expect(page).toHaveURL(/\/sign-in\?next=%2Fprofile%3Fedit%3D1/);
+  await page.goto("/people/5eed0000-0000-4000-8000-000000000001");
+  await expect(page).toHaveURL(/\/sign-in\?next=%2Fpeople%2F5eed0000-0000-4000-8000-000000000001/);
+  await expect(page.getByRole("heading", { name: "Sign in" })).toBeVisible();
+});
