@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Pickup · Profile</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500..800&amp;family=Montserrat:wght@400..800&amp;family=Archivo:wdth,wght@62..125,400..900&amp;display=swap">
+<style>
+body{margin:0}
+.pk{font-family:'Montserrat',Arial,sans-serif;color:#002E6D;background:#F7F5F2;-webkit-font-smoothing:antialiased;min-height:100%}
+.pk .d{font-family:'Playfair Display',Georgia,serif;font-weight:600;letter-spacing:-0.01em;line-height:1.05;margin:0;text-wrap:balance}
+.pk .m{font-family:'Archivo','Arial Narrow',sans-serif;font-stretch:78%;font-weight:700;letter-spacing:.07em;text-transform:uppercase;font-size:13px;line-height:1.4}
+.pk p{margin:0}
+.pk .glass{background:linear-gradient(180deg,rgba(255,255,255,.64) 0%,rgba(255,255,255,.36) 100%);-webkit-backdrop-filter:blur(22px) saturate(180%);backdrop-filter:blur(22px) saturate(180%);border:1px solid rgba(255,255,255,.72);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(255,255,255,.35),inset 0 0 18px rgba(255,255,255,.25),0 10px 30px rgba(0,30,80,.16)}
+.pk .glass-dark{background:linear-gradient(180deg,rgba(24,74,146,.80) 0%,rgba(0,46,109,.88) 100%);-webkit-backdrop-filter:blur(18px) saturate(170%);backdrop-filter:blur(18px) saturate(170%);border:1px solid rgba(255,255,255,.4);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.5),inset 0 -1px 0 rgba(255,255,255,.14),inset 0 0 14px rgba(120,170,235,.25),0 8px 24px rgba(0,30,80,.25);color:#FFFFFF}
+.pk a:focus-visible{outline:3px solid #002E6D;outline-offset:3px}
+a{color:#002E6D}a:hover{color:#3E8EDE}
+</style>
+</helmet>
+<div class="pk" style="width: 100%">
+  <div style="background: #3E8EDE; padding: 16px clamp(16px, 3vw, 32px) 120px">
+    <nav class="glass" aria-label="Main" style="max-width: 1240px; margin: 0 auto; border-radius: 999px; padding: 8px 8px 8px 22px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
+      <a href="Landing.dc.html" style="display: flex; align-items: center; gap: 26px; text-decoration: none">
+        <span aria-hidden="true" style="width: 15px; height: 15px; border-radius: 50%; background: #002E6D; box-shadow: 19px 0 0 #3E8EDE; display: inline-block"></span>
+        <span class="d" style="font-size: 24px">Pickup</span>
+      </a>
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 4px">
+        <a href="Feed.dc.html" style="text-decoration: none; font-weight: 700; font-size: 15px; padding: 11px 16px; border-radius: 999px">Browse</a>
+        <a href="Post.dc.html" style="text-decoration: none; font-weight: 700; font-size: 15px; padding: 11px 16px; border-radius: 999px">Post a project</a>
+        <a href="Messages.dc.html" style="text-decoration: none; font-weight: 700; font-size: 15px; padding: 11px 16px; border-radius: 999px; display: inline-flex; align-items: center; gap: 8px">Messages <span style="background: #002E6D; color: #FFFFFF; border-radius: 999px; font-size: 12px; padding: 2px 8px">2</span></a>
+        <a href="Profile.dc.html" aria-current="page" aria-label="Your profile" style="text-decoration: none; width: 44px; height: 44px; border-radius: 50%; background: #002E6D; color: #FFFFFF; display: grid; place-items: center; font-weight: 700; font-size: 15px; margin-left: 4px; box-shadow: 0 0 0 3px #FFFFFF">BS</a>
+      </div>
+    </nav>
+  </div>
+
+  <main style="padding: 0 clamp(16px, 3vw, 32px) 96px">
+    <div style="max-width: 1240px; margin: -88px auto 0; display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+
+      <!-- Identity card -->
+      <section style="flex: 1 1 320px; min-width: 0; background: #FFFFFF; border-radius: 32px; padding: 28px; display: flex; flex-direction: column; gap: 18px; box-shadow: 0 12px 32px rgba(0,30,80,0.08)">
+        <span aria-hidden="true" style="width: 96px; height: 96px; border-radius: 50%; background: #002E6D; color: #FFFFFF; display: grid; place-items: center; font-weight: 700; font-size: 32px">BS</span>
+        <div style="display: flex; flex-direction: column; gap: 6px">
+          <h1 class="d" style="font-size: 40px">Ben Silver</h1>
+          <p style="font-size: 16px; color: #45577A">Computer Science · Class of 2028</p>
+        </div>
+        <p style="font-size: 16px; line-height: 1.6; color: #45577A">Building small tools for research and campus life. Happy to help with backend and data work.</p>
+        <div style="display: flex; flex-direction: column; gap: 10px">
+          <p class="m" style="color: #45577A">Can help with</p>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px">
+            <span style="background: #E3EEFA; border-radius: 999px; padding: 7px 13px; font-weight: 700; font-size: 14px">Backend</span>
+            <span style="background: #E3EEFA; border-radius: 999px; padding: 7px 13px; font-weight: 700; font-size: 14px">Data science</span>
+            <span style="background: #E3EEFA; border-radius: 999px; padding: 7px 13px; font-weight: 700; font-size: 14px">Frontend</span>
+          </div>
+        </div>
+        <div style="background: #F7F5F2; border-radius: 20px; padding: 16px; display: flex; justify-content: space-between; align-items: center; gap: 12px">
+          <div style="display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 700; font-size: 15px; display: inline-flex; align-items: center; gap: 8px"><span aria-hidden="true" style="width: 10px; height: 10px; border-radius: 50%; background: #98D5C7; box-shadow: 0 0 0 3px #DDF1EC"></span>Open to requests</span><span style="font-size: 14px; color: #45577A">About 4 hrs a week</span></div>
+          <span aria-hidden="true" style="width: 48px; height: 28px; border-radius: 999px; background: #002E6D; position: relative; flex: none"><span style="position: absolute; right: 3px; top: 3px; width: 22px; height: 22px; border-radius: 50%; background: #FFFFFF"></span></span>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 10px">
+          <a href="#" class="glass-dark" style="text-decoration: none; font-weight: 700; font-size: 15px; padding: 12px 20px; border-radius: 999px">Edit profile</a>
+          <a href="#" style="font-weight: 700; font-size: 15px; padding: 12px 4px; text-underline-offset: 4px">GitHub ↗</a>
+        </div>
+      </section>
+
+      <div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 24px">
+        <section style="display: flex; flex-direction: column; gap: 14px">
+          <h2 class="d" style="font-size: 30px; color: #FFFFFF; margin-bottom: 6px">Your projects</h2>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px">
+            <a href="Project.dc.html" style="text-decoration: none; background: #FFFFFF; border-radius: 28px; padding: 24px; display: flex; flex-direction: column; gap: 12px">
+              <span class="m" style="align-self: flex-start; background: #CFE2F6; border-radius: 999px; padding: 5px 11px; font-size: 11px">Prototype</span>
+              <span class="d" style="font-size: 24px">Shadowing hours log</span>
+              <span style="font-size: 15px; color: #45577A; line-height: 1.5">Track clinical hours and reflections for med school applications.</span>
+              <span style="font-size: 14px; font-weight: 700">1 open role · 2 offers</span>
+            </a>
+            <a href="Post.dc.html" style="text-decoration: none; border: 2px dashed #B9C3D3; border-radius: 28px; padding: 24px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 8px; min-height: 180px; color: #45577A; font-weight: 700">
+              <span style="font-size: 28px; line-height: 1">+</span>Post another project
+            </a>
+          </div>
+        </section>
+
+        <section style="display: flex; flex-direction: column; gap: 14px">
+          <h2 class="d" style="font-size: 30px">Credits</h2>
+          <p style="font-size: 15px; color: #45577A; margin-top: -6px">Projects you’ve helped ship, with notes from their owners.</p>
+          <sc-for list="{{credits}}" as="c" hint-placeholder-count="2">
+            <article style="background: #FFFFFF; border-radius: 28px; padding: 24px; display: flex; flex-direction: column; gap: 12px">
+              <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; align-items: center">
+                <span class="d" style="font-size: 22px">{{c.project}}</span>
+                <div style="display: flex; gap: 8px; align-items: center">
+                  <span style="background: #E3EEFA; border-radius: 999px; padding: 6px 12px; font-weight: 700; font-size: 14px">{{c.role}}</span>
+                  <span style="font-size: 14px; color: #45577A">{{c.hours}}</span>
+                </div>
+              </div>
+              <p style="font-size: 16px; line-height: 1.6; color: #45577A">“{{c.note}}” · {{c.by}}</p>
+            </article>
+          </sc-for>
+        </section>
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1500}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      credits: [
+        { project: 'Wet-lab protocol timer', role: 'Data science', hours: '4 hrs', note: 'Found the two steps everyone skips and made a chart our PI actually read.', by: 'Sam O.' },
+        { project: 'CS 15 study-group matcher', role: 'Backend', hours: '7 hrs', note: 'Set up sign-in and the database in one weekend. We launched the next Monday.', by: 'Priya K.' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

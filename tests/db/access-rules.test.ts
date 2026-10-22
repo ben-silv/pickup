@@ -1,0 +1,290 @@
+/**
+ * Database access-rule tests. They run the real migrations against a throwaway Postgres and act as
+ * different users, the same way Supabase does (role `authenticated` + the user's id in the JWT claim).
+ *
+ *   DATABASE_URL=postgres://postgres@localhost:5432/pickup_test npm run test:db
+ *
+ * Skipped when DATABASE_URL isn't set. The database is wiped at the start, so never point this at real data.
+ */
+import { readFileSync, readdirSync } from "node:fs";
+import { join } from "node:path";
+import pg from "pg";
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
+
+const url = process.env.DATABASE_URL;
+const root = join(__dirname, "..", "..");
+
+describe.skipIf(!url)("database access rules", () => {
+  let pool: pg.Pool;
+
+  async function admin(sql: string, params: unknown[] = []) {
+    return pool.query(sql, params);
+  }
+
+  /** Runs `fn` as a signed-in user (or anonymous when `userId` is null), inside a transaction. */
+  async function as<T>(userId: string | null, fn: (c: pg.PoolClient) => Promise<T>): Promise<T> {
+    const c = await pool.connect();
+    try {
+      await c.query("begin");
+      await c.query(`set local role ${userId ? "authenticated" : "anon"}`);
+      if (userId) await c.query("select set_config('request.jwt.claim.sub', $1, true)", [userId]);
+      const out = await fn(c);
+      await c.query("commit");
+      return out;
+    } catch (err) {
+      await c.query("rollback");
+      throw err;
+    } finally {
+      c.release();
+    }
+  }
+
+  async function newUser(email: string): Promise<string> {
+    const { rows } = await admin("insert into auth.users (email) values ($1) returning id", [email]);
+    return rows[0].id as string;
+  }
+
+  async function newProject(ownerId: string, status: "draft" | "published" = "published") {
+    return as(ownerId, async (c) => {
+      const { rows } = await c.query(
+        `insert into projects (owner_id, title, pitch, stage, status)
+         values ($1, 'Dewick wait-time tracker', 'Live line length at the dining halls.', 'prototype', $2) returning id`,
+        [ownerId, status],
+      );
+      const projectId = rows[0].id as string;
+      const role = await c.query(
+        `insert into roles (project_id, category, need, hours) values ($1, 'design', 'Redesign three screens', 5) returning id`,
+        [projectId],
+      );
+      return { projectId, roleId: role.rows[0].id as string };
+    });
+  }
+
+  async function offer(helperId: string, roleId: string) {
+    return as(helperId, async (c) => {
+      const { rows } = await c.query(
+        "insert into offers (role_id, helper_id, note) values ($1, $2, 'I can do this by Sunday.') returning id",
+        [roleId, helperId],
+      );
+      return rows[0].id as string;
+    });
+  }
+
+  beforeAll(async () => {
+    pool = new pg.Pool({ connectionString: url });
+    await admin("drop schema if exists public cascade; drop schema if exists auth cascade; create schema public;");
+    await admin(readFileSync(join(root, "tests/db/supabase-stub.sql"), "utf8"));
+    const dir = join(root, "supabase/migrations");
+    for (const file of readdirSync(dir).filter((f) => f.endsWith(".sql")).sort()) {
+      await admin(readFileSync(join(dir, file), "utf8"));
+    }
+  });
+
+  beforeEach(async () => {
+    await admin("truncate auth.users cascade");
+  });
+
+  afterAll(async () => {
+    await pool?.end();
+  });
+
+  describe("sign-up", () => {
+    it("creates a profile for Tufts emails, lowercased", async () => {
+      const id = await newUser("Ben@Tufts.edu");
+      const { rows } = await admin("select email from profiles where id = $1", [id]);
+      expect(rows[0].email).toBe("ben@tufts.edu");
+    });
+
+    it("rejects non-Tufts emails outright", async () => {
+      await expect(newUser("someone@gmail.com")).rejects.toThrow(/Tufts students/);
+      await expect(newUser("x@tufts.edu.evil.com")).rejects.toThrow(/Tufts students/);
+    });
+  });
+
+  describe("profiles", () => {
+    it("lets you edit your own profile but not your email or anyone else's", async () => {
+      const ben = await newUser("ben@tufts.edu");
+      const maya = await newUser("maya@tufts.edu");
+
+      await as(ben, (c) => c.query("update profiles set full_name = 'Ben Silver' where id = $1", [ben]));
+      await expect(as(ben, (c) => c.query("update profiles set email = 'x@tufts.edu' where id = $1", [ben]))).rejects.toThrow(
+        /permission denied/,
+      );
+      const res = await as(ben, (c) => c.query("update profiles set full_name = 'Hacked' where id = $1", [maya]));
+      expect(res.rowCount).toBe(0);
+    });
+
+    it("hides everything from signed-out visitors", async () => {
+      await newUser("ben@tufts.edu");
+      await expect(as(null, (c) => c.query("select * from profiles"))).rejects.toThrow(/permission denied/);
+      await expect(as(null, (c) => c.query("select * from projects"))).rejects.toThrow(/permission denied/);
+    });
+  });
+
+  describe("projects and roles", () => {
+    it("shows drafts only to their owner", async () => {
+      const ben = await newUser("ben@tufts.edu");
+      const maya = await newUser("maya@tufts.edu");
+      await newProject(ben, "draft");
+
+      const mine = await as(ben, (c) => c.query("select id from projects"));
+      const theirs = await as(maya, (c) => c.query("select id from projects"));
+      expect(mine.rowCount).toBe(1);
+      expect(theirs.rowCount).toBe(0);
+    });
+
+    it("doesn't let you create a project as someone else or add roles to their project", async () => {
+      const ben = await newUser("ben@tufts.edu");
+      const maya = await newUser("maya@tufts.edu");
+      const { projectId } = await newProject(ben);
+
+      await expect(
+        as(maya, (c) =>
+          c.query(
+            "insert into projects (owner_id, title, pitch, stage) values ($1, 'Fake project', 'Pretending to be Ben', 'idea')",
+            [ben],
+          ),
+        ),
+      ).rejects.toThrow(/row-level security/);
+      await expect(
+        as(maya, (c) =>
+          c.query("insert into roles (project_id, category, need, hours) values ($1, 'ml', 'Sneaky role here', 3)", [projectId]),
+        ),
+      ).rejects.toThrow(/row-level security/);
+    });
+
+    it("lists open roles on published projects in the feed view", async () => {
+      const ben = await newUser("ben@tufts.edu");
+      const maya = await newUser("maya@tufts.edu");
+      await newProject(ben, "published");
+      await newProject(ben, "draft");
+      const feed = await as(maya, (c) => c.query("select title, category, hours from open_roles"));
+      expect(feed.rows).toEqual([{ title: "Dewick wait-time tracker", category: "design", hours: 5 }]);
+    });
+
+    it("doesn't let owners set role status directly", async () => {
+      const ben = await newUser("ben@tufts.edu");
+      const { roleId } = await newProject(ben);
+      await expect(as(ben, (c) => c.query("update roles set status = 'filled' where id = $1", [roleId]))).rejects.toThrow(
+        /permission denied/,
+      );
+    });
+  });
+
+  describe("offers", () => {
+    it("lets students offer on others' open roles, once", async () => {
+      const ben = await newUser("ben@tufts.edu");
+      const maya = await newUser("maya@tufts.edu");
+      const { roleId } = await newProject(ben);
+
+      await offer(maya, roleId);
+      await expect(offer(maya, roleId)).rejects.toThrow(/duplicate key/);
+      await expect(offer(ben, roleId)).rejects.toThrow(/row-level security/); // own project
+    });
+
+    it("can't offer on a draft project", async () => {
+      const ben = await newUser("ben@tufts.edu");
+      const maya = await newUser("maya@tufts.edu");
+      const { roleId } = await newProject(ben, "draft");
+      await expect(offer(maya, roleId)).rejects.toThrow(/row-level security/);
+    });
+
+    it("shows an offer only to the helper and the project owner", async () => {
+      const ben = await newUser("ben@tufts.edu");
+      const maya = await newUser("maya@tufts.edu");
+      const theo = await newUser("theo@tufts.edu");
+      const { roleId } = await newProject(ben);
+      await offer(maya, roleId);
+
+      const count = async (id: string) => (await as(id, (c) => c.query("select id from offers"))).rowCount;
+      expect(await count(ben)).toBe(1);
+      expect(await count(maya)).toBe(1);
+      expect(await count(theo)).toBe(0);
+    });
+
+    it("accepting puts the role in progress and declines competing offers", async () => {
+      const ben = await newUser("ben@tufts.edu");
+      const maya = await newUser("maya@tufts.edu");
+      const theo = await newUser("theo@tufts.edu");
+      const { roleId } = await newProject(ben);
+      const mayaOffer = await offer(maya, roleId);
+      const theoOffer = await offer(theo, roleId);
+
+      await expect(as(maya, (c) => c.query("select accept_offer($1)", [mayaOffer]))).rejects.toThrow(/Only the project owner/);
+      await as(ben, (c) => c.query("select accept_offer($1)", [mayaOffer]));
+
+      const { rows } = await admin("select id, status from offers order by status");
+      expect(Object.fromEntries(rows.map((r) => [r.id, r.status]))).toEqual({ [mayaOffer]: "accepted", [theoOffer]: "declined" });
+      const role = await admin("select status, helper_id from roles where id = $1", [roleId]);
+      expect(role.rows[0]).toEqual({ status: "in_progress", helper_id: maya });
+      await expect(as(ben, (c) => c.query("select accept_offer($1)", [theoOffer]))).rejects.toThrow(/no longer pending/);
+    });
+
+    it("only the helper can withdraw their own pending offer", async () => {
+      const ben = await newUser("ben@tufts.edu");
+      const maya = await newUser("maya@tufts.edu");
+      const { roleId } = await newProject(ben);
+      const id = await offer(maya, roleId);
+
+      await expect(as(ben, (c) => c.query("select withdraw_offer($1)", [id]))).rejects.toThrow(/Only the person/);
+      await as(maya, (c) => c.query("select withdraw_offer($1)", [id]));
+      const { rows } = await admin("select status from offers where id = $1", [id]);
+      expect(rows[0].status).toBe("withdrawn");
+    });
+  });
+
+  describe("messages", () => {
+    it("lets only the two people in a conversation read and write it", async () => {
+      const ben = await newUser("ben@tufts.edu");
+      const maya = await newUser("maya@tufts.edu");
+      const theo = await newUser("theo@tufts.edu");
+      const { roleId } = await newProject(ben);
+      const id = await offer(maya, roleId);
+
+      const send = (who: string, from: string) =>
+        as(who, (c) => c.query("insert into messages (offer_id, sender_id, body) values ($1, $2, 'hi')", [id, from]));
+      await send(maya, maya);
+      await send(ben, ben);
+      await expect(send(theo, theo)).rejects.toThrow(/row-level security/);
+      await expect(send(maya, ben)).rejects.toThrow(/row-level security/); // can't send as someone else
+
+      const read = async (who: string) => (await as(who, (c) => c.query("select id from messages"))).rowCount;
+      expect(await read(maya)).toBe(2);
+      expect(await read(ben)).toBe(2);
+      expect(await read(theo)).toBe(0);
+    });
+
+    it("closes the conversation when an offer is declined", async () => {
+      const ben = await newUser("ben@tufts.edu");
+      const maya = await newUser("maya@tufts.edu");
+      const { roleId } = await newProject(ben);
+      const id = await offer(maya, roleId);
+      await as(ben, (c) => c.query("select decline_offer($1)", [id]));
+      await expect(
+        as(maya, (c) => c.query("insert into messages (offer_id, sender_id, body) values ($1, $2, 'still there?')", [id, maya])),
+      ).rejects.toThrow(/row-level security/);
+    });
+  });
+
+  describe("credits", () => {
+    it("are written when the owner marks the role filled, and visible to everyone signed in", async () => {
+      const ben = await newUser("ben@tufts.edu");
+      const maya = await newUser("maya@tufts.edu");
+      const theo = await newUser("theo@tufts.edu");
+      const { roleId } = await newProject(ben);
+      const id = await offer(maya, roleId);
+
+      await expect(as(ben, (c) => c.query("select complete_role($1, 5::smallint, 'Great work')", [roleId]))).rejects.toThrow(
+        /Accept an offer/,
+      );
+      await as(ben, (c) => c.query("select accept_offer($1)", [id]));
+      await as(ben, (c) => c.query("select complete_role($1, 5::smallint, 'Redid all three screens in a weekend.')", [roleId]));
+
+      const credit = await as(theo, (c) => c.query("select helper_id, hours, note from credits"));
+      expect(credit.rows).toEqual([{ helper_id: maya, hours: 5, note: "Redid all three screens in a weekend." }]);
+      await expect(
+        as(maya, (c) => c.query("insert into credits (role_id, helper_id, hours, note) values ($1, $2, 40, 'self-credit')", [roleId, maya])),
+      ).rejects.toThrow(/row-level security/);
+    });
+  });
+});

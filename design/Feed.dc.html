@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Pickup · Browse open roles</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500..800&amp;family=Montserrat:wght@400..800&amp;family=Archivo:wdth,wght@62..125,400..900&amp;display=swap">
+<style>
+body{margin:0}
+.pk{font-family:'Montserrat',Arial,sans-serif;color:#002E6D;background:#F7F5F2;-webkit-font-smoothing:antialiased;min-height:100%}
+.pk .d{font-family:'Playfair Display',Georgia,serif;font-weight:600;letter-spacing:-0.01em;line-height:1.05;margin:0;text-wrap:balance}
+.pk .m{font-family:'Archivo','Arial Narrow',sans-serif;font-stretch:78%;font-weight:700;letter-spacing:.07em;text-transform:uppercase;font-size:13px;line-height:1.4}
+.pk p{margin:0}
+.pk input,.pk select,.pk textarea,.pk button{font:inherit}
+.pk .glass{background:linear-gradient(180deg,rgba(255,255,255,.64) 0%,rgba(255,255,255,.36) 100%);-webkit-backdrop-filter:blur(22px) saturate(180%);backdrop-filter:blur(22px) saturate(180%);border:1px solid rgba(255,255,255,.72);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(255,255,255,.35),inset 0 0 18px rgba(255,255,255,.25),0 10px 30px rgba(0,30,80,.16)}
+.pk .glass-dark{background:linear-gradient(180deg,rgba(24,74,146,.80) 0%,rgba(0,46,109,.88) 100%);-webkit-backdrop-filter:blur(18px) saturate(170%);backdrop-filter:blur(18px) saturate(170%);border:1px solid rgba(255,255,255,.4);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.5),inset 0 -1px 0 rgba(255,255,255,.14),inset 0 0 14px rgba(120,170,235,.25),0 8px 24px rgba(0,30,80,.25);color:#FFFFFF}
+.pk a:focus-visible,.pk button:focus-visible,.pk input:focus-visible,.pk select:focus-visible{outline:3px solid #002E6D;outline-offset:3px}
+a{color:#002E6D}a:hover{color:#3E8EDE}
+</style>
+</helmet>
+<div class="pk" style="width: 100%">
+  <!-- Blue band: nav + page header -->
+  <div style="background: #3E8EDE; padding: 16px clamp(16px, 3vw, 32px) 120px">
+    <nav class="glass" aria-label="Main" style="max-width: 1240px; margin: 0 auto; border-radius: 999px; padding: 8px 8px 8px 22px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
+      <a href="Landing.dc.html" style="display: flex; align-items: center; gap: 26px; text-decoration: none">
+        <span aria-hidden="true" style="width: 15px; height: 15px; border-radius: 50%; background: #002E6D; box-shadow: 19px 0 0 #3E8EDE; display: inline-block"></span>
+        <span class="d" style="font-size: 24px">Pickup</span>
+      </a>
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 4px">
+        <a href="Feed.dc.html" aria-current="page" style="text-decoration: none; font-weight: 700; font-size: 15px; padding: 11px 16px; border-radius: 999px; background: rgba(0,46,109,0.1)">Browse</a>
+        <a href="Post.dc.html" style="text-decoration: none; font-weight: 700; font-size: 15px; padding: 11px 16px; border-radius: 999px">Post a project</a>
+        <a href="Messages.dc.html" style="text-decoration: none; font-weight: 700; font-size: 15px; padding: 11px 16px; border-radius: 999px; display: inline-flex; align-items: center; gap: 8px">Messages <span style="background: #002E6D; color: #FFFFFF; border-radius: 999px; font-size: 12px; padding: 2px 8px">2</span></a>
+        <a href="Profile.dc.html" aria-label="Your profile" style="text-decoration: none; width: 44px; height: 44px; border-radius: 50%; background: #002E6D; color: #FFFFFF; display: grid; place-items: center; font-weight: 700; font-size: 15px; margin-left: 4px">BS</a>
+      </div>
+    </nav>
+
+    <div style="max-width: 1240px; margin: 56px auto 0; display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 24px">
+      <div style="display: flex; flex-direction: column; gap: 14px">
+        <h1 class="d" style="font-size: clamp(44px, 6vw, 76px); color: #FFFFFF">Open roles</h1>
+        <p style="font-size: 20px; font-weight: 700; color: #FFFFFF; max-width: 36ch">Small, scoped asks from Tufts students. Pick one you can finish in a weekend.</p>
+      </div>
+      <a href="Post.dc.html" class="glass-dark" style="text-decoration: none; font-weight: 700; font-size: 17px; padding: 16px 26px; border-radius: 999px">Post a project</a>
+    </div>
+  </div>
+
+  <main style="padding: 0 clamp(16px, 3vw, 32px) 96px">
+    <div style="max-width: 1240px; margin: -88px auto 0; display: flex; flex-direction: column; gap: 24px">
+      <!-- Search + filters -->
+      <div style="background: #FFFFFF; border-radius: 28px; padding: 20px; display: flex; flex-direction: column; gap: 16px; box-shadow: 0 12px 32px rgba(0,30,80,0.08)">
+        <div style="display: flex; flex-wrap: wrap; gap: 12px">
+          <label style="flex: 1 1 360px; display: flex; align-items: center; gap: 10px; border: 1.5px solid #D9DEE7; background: #F8F6F3; border-radius: 999px; padding: 4px 18px">
+            <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#45577A" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+            <span style="position: absolute; left: -9999px">Search roles</span>
+            <input type="search" placeholder="Search projects, skills, people" style="flex: 1; border: 0; background: transparent; padding: 12px 0; font-size: 16px; color: #002E6D; outline: none">
+          </label>
+          <label style="display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 15px">Sort
+            <select style="border: 1.5px solid #D9DEE7; background: #F8F6F3; border-radius: 999px; padding: 12px 16px; font-size: 15px; color: #002E6D"><option>Newest</option><option>Fewest hours</option><option>Most recent activity</option></select>
+          </label>
+        </div>
+        <div role="group" aria-label="Filter by skill" style="display: flex; flex-wrap: wrap; gap: 8px">
+          <sc-for list="{{filters}}" as="f" hint-placeholder-count="9">
+            <button type="button" aria-pressed="{{f.on}}" onClick="{{f.pick}}" style="border: 1.5px solid {{f.border}}; background: {{f.bg}}; color: {{f.ink}}; border-radius: 999px; padding: 10px 16px; font-size: 15px; font-weight: 700; cursor: pointer">{{f.label}}</button>
+          </sc-for>
+        </div>
+      </div>
+
+      <p class="m" style="color: #45577A">{{countLabel}}</p>
+
+      <!-- Role cards -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px">
+        <sc-for list="{{shown}}" as="r" hint-placeholder-count="6">
+          <article style="background: #FFFFFF; border-radius: 28px; padding: 24px; display: flex; flex-direction: column; gap: 16px">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px">
+              <div style="display: flex; align-items: center; gap: 10px">
+                <span aria-hidden="true" style="width: 38px; height: 38px; border-radius: 50%; background: {{r.avatarBg}}; color: {{r.avatarInk}}; display: grid; place-items: center; font-weight: 700; font-size: 14px">{{r.initials}}</span>
+                <div style="display: flex; flex-direction: column">
+                  <span style="font-weight: 700; font-size: 14px">{{r.owner}}</span>
+                  <span style="font-size: 13px; color: #45577A">{{r.year}}</span>
+                </div>
+              </div>
+              <span class="m" style="background: {{r.stageBg}}; color: {{r.stageInk}}; border-radius: 999px; padding: 5px 11px; font-size: 11px">{{r.stage}}</span>
+            </div>
+            <h2 class="d" style="font-size: 26px">{{r.title}}</h2>
+            <p style="font-size: 15px; line-height: 1.55; color: #45577A">{{r.blurb}}</p>
+            <div style="margin-top: auto; display: flex; flex-wrap: wrap; align-items: center; gap: 10px">
+              <span style="background: #E3EEFA; border-radius: 999px; padding: 7px 14px; font-weight: 700; font-size: 14px">{{r.role}}</span>
+              <span style="font-size: 14px; color: #45577A">{{r.scope}}</span>
+            </div>
+            <a href="Project.dc.html" style="align-self: flex-start; font-weight: 700; font-size: 15px; text-underline-offset: 4px">View project</a>
+          </article>
+        </sc-for>
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1700}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { filter: 'all' };
+  }
+  renderVals() {
+    const stages = {
+      Idea: ['#F2EDE7', '#002E6D'], Mockup: ['#E3EEFA', '#002E6D'],
+      Prototype: ['#CFE2F6', '#002E6D'], Live: ['#98D5C7', '#002E6D']
+    };
+    const avatars = [['#CFE2F6', '#002E6D'], ['#002E6D', '#FFFFFF'], ['#3E8EDE', '#FFFFFF'], ['#F2EDE7', '#002E6D']];
+    const roles = [
+      { cat: 'design', title: 'Dewick wait-time tracker', owner: 'Jamie L.', initials: 'JL', year: "CS '28", stage: 'Prototype', role: 'UI/UX design', scope: '3 screens · ~5 hrs', blurb: 'Shows live line length at the dining halls. Built with Cursor; the screens need a real designer.' },
+      { cat: 'backend', title: 'CS 15 study-group matcher', owner: 'Priya K.', initials: 'PK', year: "CS '27", stage: 'Mockup', role: 'Backend', scope: 'Auth + database · ~8 hrs', blurb: 'Pairs people by section and free time. Front end is done; sign-in and storage are not.' },
+      { cat: 'data', title: 'Wet-lab protocol timer', owner: 'Sam O.', initials: 'SO', year: "Biology '28", stage: 'Prototype', role: 'Data science', scope: 'One analysis · ~4 hrs', blurb: 'Step timers for bench work, with a semester of usage logs. Which steps do people skip?' },
+      { cat: 'writing', title: 'Textbook swap board', owner: 'Alex M.', initials: 'AM', year: "Economics '29", stage: 'Idea', role: 'Copywriting', scope: 'Landing page · ~2 hrs', blurb: 'Trade last semester’s books with people in your next class. Needs words that make it click.' },
+      { cat: 'mobile', title: 'Davis Square study spots', owner: 'Lena W.', initials: 'LW', year: "Civil Eng '27", stage: 'Live', role: 'iOS', scope: 'TestFlight build · ~6 hrs', blurb: 'A map of quiet cafes with outlets. The web version works; it wants to be an app.' },
+      { cat: 'frontend', title: 'Club budget tracker', owner: 'Marcus T.', initials: 'MT', year: "Econ + CS '28", stage: 'Mockup', role: 'Frontend', scope: 'React dashboard · ~8 hrs', blurb: 'Treasurers log spending and see what’s left for the semester. Figma is done.' },
+      { cat: 'testing', title: 'Res Quad laundry alerts', owner: 'Noor A.', initials: 'NA', year: "EE '28", stage: 'Prototype', role: 'User testing', scope: 'Five interviews · ~3 hrs', blurb: 'Sensors ping you when a machine frees up. Need honest feedback before launch.' },
+      { cat: 'ml', title: 'Course review summarizer', owner: 'Diego R.', initials: 'DR', year: "CS '27", stage: 'Prototype', role: 'ML', scope: 'Evaluate summaries · ~6 hrs', blurb: 'Summarizes course reviews into pros and cons. Needs a fair way to score the output.' }
+    ].map((r, i) => {
+      const s = stages[r.stage]; const a = avatars[i % avatars.length];
+      return Object.assign({}, r, { stageBg: s[0], stageInk: s[1], avatarBg: a[0], avatarInk: a[1] });
+    });
+    const labels = [['all', 'All'], ['design', 'Design'], ['frontend', 'Frontend'], ['backend', 'Backend'], ['data', 'Data'], ['ml', 'ML'], ['mobile', 'Mobile'], ['writing', 'Writing'], ['testing', 'Testing']];
+    const filters = labels.map(([id, label]) => {
+      const on = this.state.filter === id;
+      return { label, on: on ? 'true' : 'false', bg: on ? '#002E6D' : '#FFFFFF', ink: on ? '#FFFFFF' : '#002E6D', border: on ? '#002E6D' : '#D9DEE7', pick: () => this.setState({ filter: id }) };
+    });
+    const shown = this.state.filter === 'all' ? roles : roles.filter((r) => r.cat === this.state.filter);
+    return { filters, shown, countLabel: shown.length + (shown.length === 1 ? ' open role' : ' open roles') + ' · example data' };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Pickup · landing page</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500..800&amp;family=Montserrat:wght@400..800&amp;family=Archivo:wdth,wght@62..125,400..900&amp;family=Figtree:wght@400;500;600;700&amp;display=swap">
+<style>
+body{margin:0}
+.pk{font-family:var(--body);color:#002E6D;background:#FFFFFF;-webkit-font-smoothing:antialiased}
+.pk .d{font-family:var(--display);font-stretch:var(--stretch);font-weight:var(--dw);letter-spacing:var(--dls);line-height:1.02;margin:0;text-wrap:balance}
+.pk .m{font-family:'Archivo','Arial Narrow',sans-serif;font-stretch:78%;font-weight:700;letter-spacing:.07em;text-transform:uppercase;font-size:13px;line-height:1.4}
+.pk p{margin:0}
+.pk .hl{background:var(--pop);color:var(--popInk);border-radius:.16em;padding:0 .1em;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+/* Liquid glass: translucent fill with a top-lit sheen, heavy blur + saturation, bright rim and inner highlights */
+.pk .glass{background:linear-gradient(180deg,rgba(255,255,255,.64) 0%,rgba(255,255,255,.36) 100%);-webkit-backdrop-filter:blur(22px) saturate(180%);backdrop-filter:blur(22px) saturate(180%);border:1px solid rgba(255,255,255,.72);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(255,255,255,.35),inset 0 0 18px rgba(255,255,255,.25),0 10px 30px rgba(0,30,80,.16)}
+.pk .glass-dark{background:linear-gradient(180deg,rgba(24,74,146,.80) 0%,rgba(0,46,109,.88) 100%);-webkit-backdrop-filter:blur(18px) saturate(170%);backdrop-filter:blur(18px) saturate(170%);border:1px solid rgba(255,255,255,.4);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.5),inset 0 -1px 0 rgba(255,255,255,.14),inset 0 0 14px rgba(120,170,235,.25),0 8px 24px rgba(0,30,80,.25);color:#FFFFFF}
+.pk details summary{list-style:none;cursor:pointer}
+.pk details summary::-webkit-details-marker{display:none}
+.pk input,.pk select,.pk textarea{font:inherit}
+.pk a:focus-visible,.pk button:focus-visible,.pk input:focus-visible,.pk select:focus-visible,.pk textarea:focus-visible,.pk summary:focus-visible{outline:3px solid #3E8EDE;outline-offset:3px}
+a{color:#002E6D}a:hover{color:#3E8EDE}
+</style>
+</helmet>
+
+<div class="pk" style="--display: {{display}}; --stretch: {{stretch}}; --dw: {{dweight}}; --dls: {{dls}}; --body: {{body}}; --hl: {{soft}}; --pop: {{pop}}; --popInk: {{popInk}}; width: 100%; min-height: 100%">
+
+  <!-- ========== HERO ========== -->
+  <!-- Frosted-glass menu: sticks to the top, page scrolls underneath -->
+  <div style="position: sticky; top: 0; z-index: 30; height: 0; padding: 0 clamp(16px, 3vw, 32px)">
+    <nav aria-label="Main" class="glass" style="position: relative; top: 16px; max-width: 1240px; margin: 0 auto; color: #002E6D; border-radius: 999px; padding: 8px 8px 8px 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
+      <a href="#top" style="display: flex; align-items: center; gap: 26px; text-decoration: none; color: #002E6D">
+        <span aria-hidden="true" style="width: 15px; height: 15px; border-radius: 50%; background: #002E6D; box-shadow: 19px 0 0 #3E8EDE; display: inline-block"></span>
+        <span class="d" style="font-size: 24px">Pickup</span>
+      </a>
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 4px">
+        <a href="#how" style="text-decoration: none; font-weight: 700; font-size: 15px; padding: 12px 14px; border-radius: 999px; color: #002E6D">How it works</a>
+        <a href="#roster" style="text-decoration: none; font-weight: 700; font-size: 15px; padding: 12px 14px; border-radius: 999px; color: #002E6D">Roles</a>
+        <a href="#faq" style="text-decoration: none; font-weight: 700; font-size: 15px; padding: 12px 14px; border-radius: 999px; color: #002E6D">FAQ</a>
+        <a href="#join" class="glass-dark" style="text-decoration: none; font-weight: 700; font-size: 15px; padding: 13px 22px; border-radius: 999px; margin-left: 4px">Join the waitlist</a>
+      </div>
+    </nav>
+  </div>
+
+  <header style="background: {{heroBg}}; color: {{heroInk}}; padding: 112px clamp(16px, 3vw, 32px) clamp(56px, 8vw, 112px)">
+
+    <div id="top" style="max-width: 1240px; margin: clamp(48px, 7vw, 96px) auto 0; display: flex; flex-wrap: wrap; align-items: center; gap: clamp(40px, 5vw, 72px)">
+      <div style="flex: 1 1 540px; min-width: 0; display: flex; flex-direction: column; gap: 28px">
+        <p class="m" style="align-self: flex-start; background: {{eyebrowBg}}; color: #FFFFFF; padding: 8px 14px; border-radius: 999px">For Tufts students · opening this spring</p>
+        <h1 class="d" style="font-size: clamp(46px, 7.2vw, 104px)">Your app needs a designer. Someone on the Hill <span class="hl">wants in.</span></h1>
+        <p style="font-size: clamp(20px, 1.7vw, 22px); font-weight: {{ledeWeight}}; line-height: 1.5; color: {{heroSub}}; max-width: 34ch">Post your project, name the role and the hours, and team up with another Tufts student. Nobody gets paid. Everybody gets credit.</p>
+        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 18px">
+          <a href="#join" class="glass-dark" style="text-decoration: none; font-weight: 700; font-size: 18px; padding: 18px 32px; border-radius: 999px">Join the waitlist</a>
+          <span style="font-size: 19px; font-weight: 700; color: {{heroSub}}">Free. Tufts email only.</span>
+        </div>
+      </div>
+
+      <!-- Hero visual: product shot on a Tufts Blue tile -->
+      <div role="img" aria-label="Example post on Pickup: Dewick wait-time tracker asking for a UI/UX designer for about five hours" style="flex: 1 1 440px; min-width: 0; position: relative; background: {{tileBg}}; border-radius: 36px; min-height: 520px; overflow: hidden">
+        <div aria-hidden="true" style="position: absolute; right: -60px; top: -60px; width: 240px; height: 240px; border-radius: 50%; background: var(--pop)"></div>
+        <div aria-hidden="true" style="position: absolute; left: -40px; bottom: -70px; width: 200px; height: 200px; border-radius: 50%; background: {{tileCircle}}"></div>
+
+        <div style="position: absolute; left: 50%; top: 50%; width: min(78%, 380px); transform: translate(-46%, -58%) rotate(5deg); background: #F2EDE7; border-radius: 24px; padding: 20px; color: #002E6D; display: flex; flex-direction: column; gap: 10px">
+          <p class="m" style="color: #45577A">Posted · CS 15 study-group matcher</p>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center">
+            <span style="background: var(--hl); border-radius: 999px; padding: 6px 12px; font-weight: 700; font-size: 14px">Backend dev</span>
+            <span class="m" style="color: #45577A; text-transform: none; letter-spacing: 0">auth + database · ~8 hrs</span>
+          </div>
+        </div>
+
+        <div style="position: absolute; left: 50%; top: 50%; width: min(84%, 410px); transform: translate(-54%, -32%) rotate(-3deg); background: #FFFFFF; border-radius: 28px; padding: 22px; color: #002E6D; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 24px 50px rgba(0,20,60,.28)">
+          <div style="display: flex; align-items: center; gap: 12px">
+            <span aria-hidden="true" style="width: 40px; height: 40px; border-radius: 50%; background: #98D5C7; display: grid; place-items: center; font-weight: 700; font-size: 15px">JL</span>
+            <div style="display: flex; flex-direction: column; gap: 2px">
+              <span style="font-weight: 700; font-size: 15px">Jamie L. · CS '28</span>
+              <span class="m" style="color: #45577A">Prototype live</span>
+            </div>
+          </div>
+          <p class="d" style="font-size: 26px; line-height: 1.05">Dewick wait-time tracker</p>
+          <p style="font-size: 15px; line-height: 1.5; color: #45577A">Built with Cursor. Shows live line length at the dining halls. The screens need a real designer.</p>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center">
+            <span style="background: var(--hl); border-radius: 999px; padding: 6px 12px; font-weight: 700; font-size: 14px">UI/UX designer</span>
+            <span class="m" style="color: #45577A; text-transform: none; letter-spacing: 0">3 screens · ~5 hrs</span>
+          </div>
+          <span style="align-self: flex-start; background: #002E6D; color: #FFFFFF; font-weight: 700; font-size: 15px; padding: 12px 18px; border-radius: 999px">I can help</span>
+        </div>
+
+        <span class="m glass" style="position: absolute; top: 22px; left: 22px; background: linear-gradient(180deg, rgba(255,255,255,0.86), rgba(255,255,255,0.64)); color: #002E6D; padding: 9px 14px; border-radius: 999px">Example post</span>
+      </div>
+    </div>
+
+    <ul aria-label="Roles people ask for" style="list-style: none; max-width: 1240px; margin: clamp(48px, 6vw, 80px) auto 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px">
+      <sc-for list="{{chips}}" as="c" hint-placeholder-count="8">
+        <li class="glass" style="color: #002E6D; border-radius: 999px; padding: 10px 18px; font-size: 16px; font-weight: 700">{{c}}</li>
+      </sc-for>
+    </ul>
+  </header>
+
+  <main>
+    <!-- ========== IMAGE BAND ========== -->
+    <section aria-label="Pickup in use" style="padding: clamp(56px, 8vw, 112px) clamp(16px, 3vw, 32px) 0">
+      <div style="max-width: 1240px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 20px">
+
+        <figure style="flex: 2 1 520px; min-width: 0; margin: 0; height: clamp(360px, 34vw, 480px); background: #F2EDE7; border-radius: 36px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center">
+          <svg aria-hidden="true" width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="#63493A" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="3"/><circle cx="12" cy="12.5" r="3.5"/><path d="M8 6l1.5-2h5L16 6"/></svg>
+          <figcaption class="m" style="position: absolute; left: 20px; bottom: 20px; right: 20px; background: #FFFFFF; color: #002E6D; padding: 12px 16px; border-radius: 16px">Photo · two students at a table in Tisch, one laptop, one sketchbook</figcaption>
+        </figure>
+
+        <figure role="img" aria-label="The Pickup feed on a phone" style="flex: 1 1 300px; min-width: 0; margin: 0; height: clamp(360px, 34vw, 480px); background: #3E8EDE; border-radius: 36px; position: relative; overflow: hidden; display: flex; align-items: flex-end; justify-content: center">
+          <div style="width: 240px; height: 88%; background: #FFFFFF; border: 8px solid #002E6D; border-bottom: 0; border-radius: 34px 34px 0 0; padding: 18px 14px 0; display: flex; flex-direction: column; gap: 10px; overflow: hidden">
+            <div style="display: flex; align-items: center; justify-content: space-between">
+              <span class="d" style="font-size: 17px">Pickup</span>
+              <span class="m" style="font-size: 10px; color: #45577A">Open roles</span>
+            </div>
+            <sc-for list="{{feed}}" as="f" hint-placeholder-count="4">
+              <div style="background: #F2EDE7; border-radius: 16px; padding: 12px; display: flex; flex-direction: column; gap: 8px">
+                <span style="font-weight: 700; font-size: 13px; line-height: 1.25">{{f.title}}</span>
+                <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap">
+                  <span style="background: var(--hl); border-radius: 999px; padding: 3px 8px; font-weight: 700; font-size: 11px">{{f.role}}</span>
+                  <span class="m" style="font-size: 10px; letter-spacing: 0; text-transform: none; color: #45577A">{{f.hrs}}</span>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </figure>
+
+        <figure role="img" aria-label="A shipped project page with a contributor credit" style="flex: 1 1 300px; min-width: 0; margin: 0; height: clamp(360px, 34vw, 480px); background: #002E6D; border-radius: 36px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; padding: 24px; box-sizing: border-box">
+          <div style="width: 100%; max-width: 300px; background: #FFFFFF; border-radius: 24px; padding: 20px; display: flex; flex-direction: column; gap: 14px; transform: rotate(-2deg)">
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px">
+              <span class="m" style="color: #45577A">Project page</span>
+              <span style="background: #98D5C7; color: #002E6D; border-radius: 999px; padding: 4px 10px; font-weight: 700; font-size: 12px">Shipped</span>
+            </div>
+            <span class="d" style="font-size: 22px; line-height: 1.05">Dewick wait-time tracker</span>
+            <div style="border-top: 1.5px solid #E6E1DA; padding-top: 14px; display: flex; gap: 10px; align-items: flex-start">
+              <span aria-hidden="true" style="flex: none; width: 34px; height: 34px; border-radius: 50%; background: #3E8EDE; color: #FFFFFF; display: grid; place-items: center; font-weight: 700; font-size: 13px">MR</span>
+              <div style="display: flex; flex-direction: column; gap: 4px">
+                <span style="font-weight: 700; font-size: 14px">Maya R. · UI/UX design · 5 hrs</span>
+                <span style="font-size: 14px; line-height: 1.45; color: #45577A">Redid all three screens in a weekend.</span>
+              </div>
+            </div>
+          </div>
+          <span class="m" style="position: absolute; top: 20px; left: 20px; color: #FFFFFF">Example</span>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ========== HOW IT WORKS ========== -->
+    <section id="how" style="padding: clamp(72px, 10vw, 140px) clamp(16px, 3vw, 32px) 0">
+      <div style="max-width: 1240px; margin: 0 auto; display: flex; flex-direction: column; gap: clamp(32px, 4vw, 56px)">
+        <div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px 40px">
+          <h2 class="d" style="font-size: clamp(38px, 5vw, 68px); max-width: 12ch">Three steps. A few hours.</h2>
+          <p style="font-size: 19px; line-height: 1.55; color: #45577A; max-width: 38ch">Pickup is for small, scoped asks. That makes yes an easy answer.</p>
+        </div>
+        <ol style="list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px">
+          <sc-for list="{{steps}}" as="s" hint-placeholder-count="3">
+            <li style="background: #F2EDE7; border-radius: 32px; padding: 28px; display: flex; flex-direction: column; gap: 14px; min-height: 260px">
+              <span class="d" aria-hidden="true" style="font-size: 64px; color: #3E8EDE">{{s.n}}</span>
+              <h3 class="d" style="font-size: 26px; line-height: 1.1; margin-top: auto">{{s.title}}</h3>
+              <p style="font-size: 17px; line-height: 1.55; color: #45577A">{{s.body}}</p>
+            </li>
+          </sc-for>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ========== ROSTER ========== -->
+    <section id="roster" style="padding: clamp(72px, 10vw, 140px) clamp(16px, 3vw, 32px) 0">
+      <div style="max-width: 1240px; margin: 0 auto; display: flex; flex-direction: column; gap: clamp(32px, 4vw, 56px)">
+        <div style="display: flex; flex-direction: column; gap: 16px; max-width: 760px">
+          <p class="m" style="color: #45577A">Open roles · examples</p>
+          <h2 class="d" style="font-size: clamp(38px, 5vw, 68px)">Small asks people actually say yes to.</h2>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px">
+          <sc-for list="{{roles}}" as="r" hint-placeholder-count="6">
+            <article style="border: 1.5px solid #D9DEE7; border-radius: 28px; padding: 24px; display: flex; flex-direction: column; gap: 18px; min-height: 170px">
+              <h3 class="d" style="font-size: 23px; line-height: 1.1">{{r.task}}</h3>
+              <div style="margin-top: auto; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px">
+                <span style="background: var(--hl); border-radius: 999px; padding: 7px 14px; font-weight: 700; font-size: 15px">{{r.role}}</span>
+                <span class="m" style="color: #45577A; text-transform: none; letter-spacing: 0; font-size: 14px">{{r.hrs}}</span>
+              </div>
+            </article>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== THE ONE LOUD BLOCK ========== -->
+    <section style="padding: clamp(72px, 10vw, 140px) clamp(16px, 3vw, 32px) 0">
+      <div style="max-width: 1240px; margin: 0 auto; background: #3E8EDE; border-radius: 40px; padding: clamp(32px, 5vw, 72px); display: flex; flex-direction: column; gap: clamp(32px, 4vw, 48px)">
+        <h2 class="d" style="font-size: clamp(40px, 6vw, 84px); color: #FFFFFF; max-width: 14ch">Built for the Hill, not the internet.</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px">
+          <sc-for list="{{points}}" as="p" hint-placeholder-count="3">
+            <div style="background: #FFFFFF; border-radius: 28px; padding: 26px; display: flex; flex-direction: column; gap: 10px">
+              <h3 class="d" style="font-size: 23px; line-height: 1.1">{{p.title}}</h3>
+              <p style="font-size: 17px; line-height: 1.55; color: #45577A">{{p.body}}</p>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== FAQ (quiet) ========== -->
+    <section id="faq" style="padding: clamp(72px, 10vw, 140px) clamp(16px, 3vw, 32px) 0">
+      <div style="max-width: 1240px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 32px clamp(40px, 6vw, 96px)">
+        <h2 class="d" style="flex: 1 1 280px; font-size: clamp(38px, 5vw, 68px)">Questions.</h2>
+        <div style="flex: 2 1 520px; min-width: 0; display: flex; flex-direction: column">
+          <sc-for list="{{faqs}}" as="f" hint-placeholder-count="4">
+            <details style="border-top: 1.5px solid #D9DEE7; padding: 22px 0">
+              <summary style="display: flex; justify-content: space-between; align-items: center; gap: 16px; font-weight: 700; font-size: 20px">
+                <span>{{f.q}}</span>
+                <span aria-hidden="true" style="flex: none; width: 36px; height: 36px; border-radius: 50%; background: #F2EDE7; display: grid; place-items: center; font-size: 20px">+</span>
+              </summary>
+              <p style="font-size: 17px; line-height: 1.6; color: #45577A; padding-top: 12px; max-width: 60ch">{{f.a}}</p>
+            </details>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== WAITLIST ========== -->
+    <section id="join" style="margin-top: clamp(72px, 10vw, 140px); background: #F2EDE7; padding: clamp(64px, 9vw, 120px) clamp(16px, 3vw, 32px)">
+      <div style="max-width: 720px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 36px">
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 18px; text-align: center">
+          <!-- Original elephant illustration, not Tufts' Jumbo artwork. Never placed next to the word "Tufts". -->
+          <svg aria-hidden="true" width="150" height="112" viewBox="0 0 120 90">
+            <path d="M104 40 q8 6 6 16" fill="none" stroke="#002E6D" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="111" cy="57" r="3" fill="#002E6D"/>
+            <rect x="84" y="52" width="13" height="32" rx="5" fill="#002E6D"/>
+            <rect x="46" y="54" width="13" height="30" rx="5" fill="#002E6D"/>
+            <ellipse cx="72" cy="44" rx="34" ry="25" fill="#002E6D"/>
+            <rect x="72" y="54" width="13" height="30" rx="5" fill="#002E6D"/>
+            <rect x="56" y="56" width="13" height="28" rx="5" fill="#002E6D"/>
+            <circle cx="34" cy="36" r="19" fill="#002E6D"/>
+            <path d="M22 44 C 14 54, 12 64, 16 72 C 19 78, 27 77, 26 71" fill="none" stroke="#002E6D" stroke-width="10" stroke-linecap="round"/>
+            <path d="M26 50 q2 8 9 10" fill="none" stroke="#F2EDE7" stroke-width="3.5" stroke-linecap="round"/>
+            <path d="M44 20 C 62 14, 66 34, 60 48 C 56 56, 46 56, 42 50 Z" fill="#3E8EDE"/>
+            <circle cx="30" cy="31" r="2.6" fill="#F2EDE7"/>
+          </svg>
+          <h2 class="d" style="font-size: clamp(40px, 6vw, 76px)">Get in on the <span class="hl">first round.</span></h2>
+          <p style="font-size: 19px; line-height: 1.55; color: #45577A; max-width: 40ch">Tell us what you'd post or what you'd help with. It takes about a minute.</p>
+        </div>
+
+        <form aria-label="Join the waitlist" style="width: 100%; box-sizing: border-box; background: #FFFFFF; border-radius: 36px; padding: clamp(24px, 4vw, 40px); display: flex; flex-direction: column; gap: 22px">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px">
+            <label style="display: flex; flex-direction: column; gap: 8px; font-weight: 600; font-size: 15px">Name
+              <input type="text" autocomplete="name" style="border: 1.5px solid #D9DEE7; background: #F8F6F3; border-radius: 16px; padding: 14px 16px; font-size: 16px; color: #002E6D">
+            </label>
+            <label style="display: flex; flex-direction: column; gap: 8px; font-weight: 600; font-size: 15px">Tufts email
+              <input type="email" placeholder="you@tufts.edu" autocomplete="email" style="border: 1.5px solid #D9DEE7; background: #F8F6F3; border-radius: 16px; padding: 14px 16px; font-size: 16px; color: #002E6D">
+            </label>
+          </div>
+          <label style="display: flex; flex-direction: column; gap: 8px; font-weight: 600; font-size: 15px">Class year
+            <select style="border: 1.5px solid #D9DEE7; background: #F8F6F3; border-radius: 16px; padding: 14px 16px; font-size: 16px; color: #002E6D">
+              <option>Choose…</option><option>2027</option><option>2028</option><option>2029</option><option>2030</option><option>Grad</option><option>Other</option>
+            </select>
+          </label>
+          <fieldset style="border: 0; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px">
+            <legend style="font-weight: 600; font-size: 15px; padding: 0; margin-bottom: 10px">I want to…</legend>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px">
+              <sc-for list="{{intents}}" as="i" hint-placeholder-count="3">
+                <label style="display: inline-flex; align-items: center; gap: 8px; border: 1.5px solid {{i.border}}; background: {{i.bg}}; color: {{i.ink}}; border-radius: 999px; padding: 11px 18px; font-size: 15px; font-weight: 600; cursor: pointer">
+                  <input type="radio" name="intent" checked="{{i.on}}" onChange="{{i.pick}}" style="margin: 0; accent-color: #002E6D">{{i.label}}
+                </label>
+              </sc-for>
+            </div>
+          </fieldset>
+          <fieldset style="border: 0; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px">
+            <legend style="font-weight: 600; font-size: 15px; padding: 0; margin-bottom: 10px">Skills you have or need</legend>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px">
+              <sc-for list="{{skills}}" as="k" hint-placeholder-count="8">
+                <label style="display: inline-flex; align-items: center; gap: 8px; border: 1.5px solid #D9DEE7; background: #F8F6F3; border-radius: 999px; padding: 11px 16px; font-size: 15px; cursor: pointer">
+                  <input type="checkbox" style="margin: 0; accent-color: #002E6D">{{k}}
+                </label>
+              </sc-for>
+            </div>
+          </fieldset>
+          <label style="display: flex; flex-direction: column; gap: 8px; font-weight: 600; font-size: 15px">What would you post or work on? <span style="font-weight: 400; color: #45577A">Optional</span>
+            <textarea rows="3" style="border: 1.5px solid #D9DEE7; background: #F8F6F3; border-radius: 16px; padding: 14px 16px; font-size: 16px; color: #002E6D; resize: vertical"></textarea>
+          </label>
+          <button type="button" class="glass-dark" style="align-self: center; font-family: inherit; font-weight: 700; font-size: 19px; padding: 18px 34px; border-radius: 999px; cursor: pointer">Join the waitlist</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========== FOOTER ========== -->
+  <footer style="background: #002E6D; color: #D5E0F2; padding: clamp(48px, 6vw, 80px) clamp(16px, 3vw, 32px)">
+    <div style="max-width: 1240px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 32px">
+      <div style="display: flex; flex-direction: column; gap: 16px; max-width: 520px">
+        <div style="display: flex; align-items: center; gap: 26px">
+          <span aria-hidden="true" style="width: 16px; height: 16px; border-radius: 50%; background: #FFFFFF; box-shadow: 20px 0 0 #3E8EDE; display: inline-block"></span>
+          <span class="d" style="font-size: clamp(40px, 6vw, 72px); color: #FFFFFF">Pickup</span>
+        </div>
+        <p style="font-size: 15px; line-height: 1.6">A student project for Tufts students. Not affiliated with or endorsed by Tufts University. Example posts and people are illustrations.</p>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px 24px; font-weight: 600; font-size: 15px">
+        <a href="#how" style="color: #FFFFFF">How it works</a>
+        <a href="#roster" style="color: #FFFFFF">Roles</a>
+        <a href="#faq" style="color: #FFFFFF">FAQ</a>
+        <a href="#join" style="color: #FFFFFF">Join</a>
+      </div>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"fontPair":{"editor":"enum","options":["Tufts serif (Playfair + Montserrat)","Tufts sans (Montserrat)","Archivo + Figtree (previous)"],"default":"Tufts serif (Playfair + Montserrat)","section":"Type"},"colorCombo":{"editor":"enum","options":["Light Blue","Flame Orange","Radiant Magenta","Aurora Green","Civic Purple"],"default":"Light Blue","section":"Color"},"heroGround":{"editor":"enum","options":["Tufts Blue","Candle White"],"default":"Tufts Blue","section":"Color"},"$preview":{"width":1440,"height":5600}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { intent: 'both' };
+  }
+  renderVals() {
+    const pairs = {
+      'Tufts serif (Playfair + Montserrat)': { display: "'Playfair Display', Georgia, serif", stretch: '100%', dweight: 600, dls: '-0.01em', body: "'Montserrat', Arial, sans-serif" },
+      'Tufts sans (Montserrat)': { display: "'Montserrat', Arial, sans-serif", stretch: '100%', dweight: 800, dls: '-0.03em', body: "'Montserrat', Arial, sans-serif" },
+      'Archivo + Figtree (previous)': { display: "'Archivo', 'Arial Black', sans-serif", stretch: '118%', dweight: 800, dls: '-0.025em', body: "'Figtree', 'Helvetica Neue', sans-serif" }
+    };
+    const pair = pairs[this.props.fontPair] || pairs['Tufts serif (Playfair + Montserrat)'];
+    // Hero ground. Tufts Blue is too light for small white text, so on it the lede is bold
+    // (WCAG large text) and small labels sit on Jumbo Blue pills.
+    const navyGlass = { ctaBg: 'rgba(0,46,109,0.86)', ctaBorder: 'rgba(255,255,255,0.35)', ctaInk: '#FFFFFF' };
+    const grounds = {
+      'Tufts Blue': Object.assign({ heroBg: '#3E8EDE', heroInk: '#FFFFFF', heroSub: '#FFFFFF', ledeWeight: 700, eyebrowBg: '#002E6D', tileBg: '#002E6D', tileCircle: '#3E8EDE', chipBg: 'rgba(255,255,255,0.24)', chipBorder: 'rgba(255,255,255,0.6)', chipInk: '#002E6D' }, navyGlass),
+      'Jumbo Blue': { heroBg: '#002E6D', heroInk: '#FFFFFF', heroSub: '#C9D6EC', ledeWeight: 500, eyebrowBg: 'rgba(255,255,255,0.14)', tileBg: '#3E8EDE', tileCircle: '#002E6D', chipBg: 'transparent', chipBorder: 'rgba(255,255,255,0.45)', chipInk: '#FFFFFF', ctaBg: 'rgba(255,255,255,0.16)', ctaBorder: 'rgba(255,255,255,0.5)', ctaInk: '#FFFFFF' },
+      'Candle White': Object.assign({ heroBg: '#F2EDE7', heroInk: '#002E6D', heroSub: '#45577A', ledeWeight: 500, eyebrowBg: '#002E6D', tileBg: '#3E8EDE', tileCircle: '#002E6D', chipBg: 'transparent', chipBorder: '#B9C3D3', chipInk: '#002E6D' }, navyGlass)
+    };
+    const g = grounds[this.props.heroGround] || grounds['Tufts Blue'];
+    // One pop color from Tufts' secondary palette, plus a soft tint for role tags.
+    const combos = {
+      'Flame Orange': { pop: '#F37121', popInk: '#002E6D', soft: '#FCE3D3' },
+      'Radiant Magenta': { pop: '#AA0061', popInk: '#FFFFFF', soft: '#F6DCEA' },
+      'Aurora Green': { pop: '#98D5C7', popInk: '#002E6D', soft: '#DDF1EC' },
+      'Civic Purple': { pop: '#8C4799', popInk: '#FFFFFF', soft: '#EBDDEF' },
+      'Light Blue': { pop: '#CFE2F6', popInk: '#002E6D', soft: '#E3EEFA' }
+    };
+    const combo = combos[this.props.colorCombo] || combos['Light Blue'];
+    const intents = [
+      { id: 'post', label: 'Post a project' },
+      { id: 'help', label: 'Help on projects' },
+      { id: 'both', label: 'Both' }
+    ].map((x) => {
+      const on = this.state.intent === x.id;
+      return {
+        label: x.label,
+        on: on,
+        border: on ? '#002E6D' : '#D9DEE7',
+        bg: on ? '#002E6D' : '#F8F6F3',
+        ink: on ? '#FFFFFF' : '#002E6D',
+        pick: () => this.setState({ intent: x.id })
+      };
+    });
+    return {
+      display: pair.display,
+      stretch: pair.stretch,
+      dweight: pair.dweight,
+      dls: pair.dls,
+      body: pair.body,
+      pop: combo.pop,
+      popInk: combo.popInk,
+      soft: combo.soft,
+      ctaBg: g.ctaBg,
+      ctaBorder: g.ctaBorder,
+      ctaInk: g.ctaInk,
+      heroBg: g.heroBg,
+      heroInk: g.heroInk,
+      heroSub: g.heroSub,
+      ledeWeight: g.ledeWeight,
+      eyebrowBg: g.eyebrowBg,
+      tileBg: g.tileBg,
+      tileCircle: g.tileCircle,
+      chipBg: g.chipBg,
+      chipBorder: g.chipBorder,
+      chipInk: g.chipInk,
+      chips: ['UI/UX design', 'Frontend', 'Backend', 'Data science', 'ML', 'iOS / Android', 'Copywriting', 'User testing'],
+      feed: [
+        { title: 'Dewick wait-time tracker', role: 'UI/UX', hrs: '~5 hrs' },
+        { title: 'CS 15 study-group matcher', role: 'Backend', hrs: '~8 hrs' },
+        { title: 'Wet-lab protocol timer', role: 'Data science', hrs: '~4 hrs' },
+        { title: 'Textbook swap board', role: 'Copywriting', hrs: '~2 hrs' }
+      ],
+      steps: [
+        { n: '1', title: 'Post the project', body: "An idea, a mockup or a half-built app. Say what it does and how far along it is." },
+        { n: '2', title: 'Ask for one role', body: "Pick the skill you're missing and scope it: what's needed and roughly how many hours." },
+        { n: '3', title: 'Build it, get credit', body: 'Work together, ship it, and you both get a project page you can put on a resume.' }
+      ],
+      roles: [
+        { task: 'Onboarding screens', role: 'UI/UX design', hrs: '~5 hrs' },
+        { task: 'Sign-in + database', role: 'Backend', hrs: '~8 hrs' },
+        { task: 'Which steps do users skip?', role: 'Data science', hrs: '~4 hrs' },
+        { task: 'Landing page copy', role: 'Writing', hrs: '~2 hrs' },
+        { task: 'TestFlight build', role: 'Mobile', hrs: '~6 hrs' },
+        { task: 'Five user interviews', role: 'User testing', hrs: '~3 hrs' }
+      ],
+      points: [
+        { title: 'Not a cofounder search', body: "A few hours on a defined piece is easy to say yes to. Joining someone's startup isn't." },
+        { title: 'People you can meet', body: 'Everyone signs in with a Tufts email, so you can grab a table at Tisch instead of chasing strangers.' },
+        { title: 'Credit that counts', body: 'Every contribution is logged on the project page, with a note from the person you helped.' }
+      ],
+      faqs: [
+        { q: 'Who can join?', a: 'Any current Tufts student with a @tufts.edu email, undergrad or grad, any major. Designers, writers and pre-meds with a good idea are as welcome as CS majors.' },
+        { q: 'Does anyone get paid?', a: 'No. Pickup is for side projects and learning. You trade a few hours of help for credit, portfolio work and a teammate.' },
+        { q: 'Who owns the project?', a: 'The person who posts it. Before you start, agree in writing on what the helper gets credit for and what happens if the project turns into a business.' },
+        { q: 'When does it open?', a: 'Once the waitlist has enough projects and helpers to match. Everyone on the list gets an email first.' }
+      ],
+      intents: intents,
+      skills: ['UI/UX design', 'Frontend', 'Backend', 'Data science', 'ML', 'Mobile', 'Marketing', 'Other']
+    };
+  }
+}
+</script>
+</body>
+</html>

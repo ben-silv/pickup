@@ -1,0 +1,32 @@
+import { expect, test } from "@playwright/test";
+
+test("landing page loads, has no sideways scroll, and links to sign-in", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Someone on the Hill");
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+  expect(overflow).toBeLessThanOrEqual(0);
+  await page.getByRole("link", { name: "Sign in with your Tufts email" }).first().click();
+  await expect(page).toHaveURL(/\/sign-in/);
+});
+
+test("app pages send signed-out visitors to sign-in and remember where they were going", async ({ page }) => {
+  await page.goto("/messages");
+  await expect(page).toHaveURL(/\/sign-in\?next=%2Fmessages/);
+  await expect(page.getByRole("heading", { name: "Sign in" })).toBeVisible();
+});
+
+test("sign-in rejects non-Tufts emails and keeps what was typed", async ({ page }) => {
+  await page.goto("/sign-in");
+  const email = page.getByLabel("Tufts email");
+  await email.fill("someone@gmail.com");
+  await page.getByRole("button", { name: "Email me a sign-in link" }).click();
+  await expect(page.locator("#sign-in-error")).toHaveText("Use your @tufts.edu email.");
+  await expect(email).toHaveValue("someone@gmail.com");
+  await expect(email).toBeFocused();
+});
+
+test("an expired link sends you back with an explanation", async ({ page }) => {
+  await page.goto("/auth/callback?code=expired");
+  await expect(page).toHaveURL(/\/sign-in\?error=link/);
+  await expect(page.locator("#sign-in-error")).toContainText("expired");
+});

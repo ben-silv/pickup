@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Pickup · Post a project</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500..800&amp;family=Montserrat:wght@400..800&amp;family=Archivo:wdth,wght@62..125,400..900&amp;display=swap">
+<style>
+body{margin:0}
+.pk{font-family:'Montserrat',Arial,sans-serif;color:#002E6D;background:#F7F5F2;-webkit-font-smoothing:antialiased;min-height:100%}
+.pk .d{font-family:'Playfair Display',Georgia,serif;font-weight:600;letter-spacing:-0.01em;line-height:1.05;margin:0;text-wrap:balance}
+.pk .m{font-family:'Archivo','Arial Narrow',sans-serif;font-stretch:78%;font-weight:700;letter-spacing:.07em;text-transform:uppercase;font-size:13px;line-height:1.4}
+.pk p{margin:0}
+.pk input,.pk select,.pk textarea,.pk button{font:inherit}
+.pk .in{border:1.5px solid #D9DEE7;background:#F8F6F3;border-radius:16px;padding:13px 15px;font-size:16px;color:#002E6D;width:100%;box-sizing:border-box}
+.pk .lab{display:flex;flex-direction:column;gap:8px;font-weight:600;font-size:15px;min-width:0}
+.pk .hint{font-weight:400;font-size:14px;color:#45577A}
+.pk .glass{background:linear-gradient(180deg,rgba(255,255,255,.64) 0%,rgba(255,255,255,.36) 100%);-webkit-backdrop-filter:blur(22px) saturate(180%);backdrop-filter:blur(22px) saturate(180%);border:1px solid rgba(255,255,255,.72);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(255,255,255,.35),inset 0 0 18px rgba(255,255,255,.25),0 10px 30px rgba(0,30,80,.16)}
+.pk .glass-dark{background:linear-gradient(180deg,rgba(24,74,146,.80) 0%,rgba(0,46,109,.88) 100%);-webkit-backdrop-filter:blur(18px) saturate(170%);backdrop-filter:blur(18px) saturate(170%);border:1px solid rgba(255,255,255,.4);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.5),inset 0 -1px 0 rgba(255,255,255,.14),inset 0 0 14px rgba(120,170,235,.25),0 8px 24px rgba(0,30,80,.25);color:#FFFFFF}
+.pk a:focus-visible,.pk button:focus-visible,.pk input:focus-visible,.pk select:focus-visible,.pk textarea:focus-visible{outline:3px solid #002E6D;outline-offset:3px}
+a{color:#002E6D}a:hover{color:#3E8EDE}
+</style>
+</helmet>
+<div class="pk" style="width: 100%">
+  <div style="background: #3E8EDE; padding: 16px clamp(16px, 3vw, 32px) 120px">
+    <nav class="glass" aria-label="Main" style="max-width: 1240px; margin: 0 auto; border-radius: 999px; padding: 8px 8px 8px 22px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
+      <a href="Landing.dc.html" style="display: flex; align-items: center; gap: 26px; text-decoration: none">
+        <span aria-hidden="true" style="width: 15px; height: 15px; border-radius: 50%; background: #002E6D; box-shadow: 19px 0 0 #3E8EDE; display: inline-block"></span>
+        <span class="d" style="font-size: 24px">Pickup</span>
+      </a>
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 4px">
+        <a href="Feed.dc.html" style="text-decoration: none; font-weight: 700; font-size: 15px; padding: 11px 16px; border-radius: 999px">Browse</a>
+        <a href="Post.dc.html" aria-current="page" style="text-decoration: none; font-weight: 700; font-size: 15px; padding: 11px 16px; border-radius: 999px; background: rgba(0,46,109,0.1)">Post a project</a>
+        <a href="Messages.dc.html" style="text-decoration: none; font-weight: 700; font-size: 15px; padding: 11px 16px; border-radius: 999px; display: inline-flex; align-items: center; gap: 8px">Messages <span style="background: #002E6D; color: #FFFFFF; border-radius: 999px; font-size: 12px; padding: 2px 8px">2</span></a>
+        <a href="Profile.dc.html" aria-label="Your profile" style="text-decoration: none; width: 44px; height: 44px; border-radius: 50%; background: #002E6D; color: #FFFFFF; display: grid; place-items: center; font-weight: 700; font-size: 15px; margin-left: 4px">BS</a>
+      </div>
+    </nav>
+    <div style="max-width: 1240px; margin: 56px auto 0; display: flex; flex-direction: column; gap: 14px">
+      <h1 class="d" style="font-size: clamp(44px, 6vw, 76px); color: #FFFFFF">Post a project</h1>
+      <p style="font-size: 20px; font-weight: 700; color: #FFFFFF; max-width: 44ch">Say what you’re building and the one thing you need help with. Small asks get answered fastest.</p>
+    </div>
+  </div>
+
+  <main style="padding: 0 clamp(16px, 3vw, 32px) 96px">
+    <div style="max-width: 1240px; margin: -88px auto 0; display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+      <form aria-label="New project" style="flex: 999 1 600px; min-width: 0; background: #FFFFFF; border-radius: 32px; padding: clamp(22px, 3.5vw, 40px); display: flex; flex-direction: column; gap: 28px; box-shadow: 0 12px 32px rgba(0,30,80,0.08)">
+
+        <section style="display: flex; flex-direction: column; gap: 18px">
+          <h2 class="d" style="font-size: 28px">The project</h2>
+          <label class="lab">Project name<input class="in" type="text" value="Dewick wait-time tracker"></label>
+          <label class="lab">One-line pitch <span class="hint">Shown on the feed. Under 120 characters.</span><input class="in" type="text" value="Live line length at the dining halls."></label>
+          <fieldset style="border: 0; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px">
+            <legend style="font-weight: 600; font-size: 15px; padding: 0; margin-bottom: 10px">How far along is it?</legend>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px">
+              <sc-for list="{{stages}}" as="s" hint-placeholder-count="4">
+                <button type="button" aria-pressed="{{s.pressed}}" onClick="{{s.pick}}" style="border: 1.5px solid {{s.border}}; background: {{s.bg}}; color: {{s.ink}}; border-radius: 999px; padding: 10px 18px; font-size: 15px; font-weight: 700; cursor: pointer">{{s.label}}</button>
+              </sc-for>
+            </div>
+          </fieldset>
+          <label class="lab">What it does and why <textarea class="in" rows="4" style="resize: vertical">I built the first version in a weekend with Cursor. It reads swipe-in counts and estimates the wait. It works, but it looks like a spreadsheet.</textarea></label>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px">
+            <label class="lab">Prototype link <span class="hint">Optional</span><input class="in" type="url" placeholder="https://"></label>
+            <label class="lab">Code repo <span class="hint">Optional</span><input class="in" type="url" placeholder="https://github.com/…"></label>
+          </div>
+          <label class="lab" style="cursor: pointer">Screenshots <span class="hint">Optional. PNG or JPG, up to 3.</span>
+            <span style="border: 2px dashed #B9C3D3; border-radius: 20px; padding: 28px; display: flex; flex-direction: column; align-items: center; gap: 8px; background: #F8F6F3; color: #45577A; font-weight: 600">
+              <svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#45577A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 001 1h14a1 1 0 001-1v-3"/></svg>
+              Drop images or choose files
+              <input type="file" accept="image/*" multiple style="position: absolute; left: -9999px">
+            </span>
+          </label>
+        </section>
+
+        <section style="display: flex; flex-direction: column; gap: 16px; border-top: 1.5px solid #E6E1DA; padding-top: 28px">
+          <div style="display: flex; flex-direction: column; gap: 6px">
+            <h2 class="d" style="font-size: 28px">Roles you need</h2>
+            <p style="font-size: 15px; color: #45577A">One row per role. Say exactly what’s needed and roughly how long it takes.</p>
+          </div>
+          <sc-for list="{{roles}}" as="r" hint-placeholder-count="1">
+            <div style="background: #F7F5F2; border-radius: 22px; padding: 18px; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; align-items: end">
+              <label class="lab">Role
+                <select class="in"><option>UI/UX design</option><option>Frontend</option><option>Backend</option><option>Data science</option><option>ML</option><option>Mobile</option><option>Copywriting</option><option>User testing</option><option>Other</option></select>
+              </label>
+              <label class="lab" style="grid-column: span 2">What’s needed<input class="in" type="text" placeholder="{{r.placeholder}}"></label>
+              <label class="lab">Hours (est.)<input class="in" type="number" min="1" max="40" value="{{r.hours}}"></label>
+              <sc-if value="{{r.removable}}" hint-placeholder-val="{{false}}">
+                <button type="button" onClick="{{r.remove}}" style="justify-self: start; border: 0; background: transparent; color: #002E6D; font-weight: 700; font-size: 14px; text-decoration: underline; cursor: pointer; padding: 12px 0">Remove role</button>
+              </sc-if>
+            </div>
+          </sc-for>
+          <button type="button" onClick="{{addRole}}" class="glass" style="align-self: flex-start; color: #002E6D; font-weight: 700; font-size: 15px; padding: 12px 20px; border-radius: 999px; cursor: pointer">+ Add another role</button>
+        </section>
+
+        <section style="display: flex; flex-direction: column; gap: 18px; border-top: 1.5px solid #E6E1DA; padding-top: 28px">
+          <label style="display: flex; gap: 12px; align-items: flex-start; font-size: 15px; line-height: 1.5; cursor: pointer">
+            <input type="checkbox" style="margin-top: 3px; width: 18px; height: 18px; accent-color: #002E6D">
+            <span>I’ll agree with helpers on credit and ownership before work starts. <a href="#" style="font-weight: 700">Use the template</a></span>
+          </label>
+          <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center">
+            <a href="Project.dc.html" class="glass-dark" style="text-decoration: none; font-weight: 700; font-size: 17px; padding: 16px 28px; border-radius: 999px">Publish project</a>
+            <button type="button" style="border: 1.5px solid #D9DEE7; background: #FFFFFF; color: #002E6D; font-weight: 700; font-size: 16px; padding: 15px 24px; border-radius: 999px; cursor: pointer">Save draft</button>
+          </div>
+        </section>
+      </form>
+
+      <aside style="flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
+        <section style="background: #002E6D; color: #FFFFFF; border-radius: 28px; padding: 26px; display: flex; flex-direction: column; gap: 14px">
+          <h2 class="d" style="font-size: 26px; color: #FFFFFF">Asks that get answered</h2>
+          <ul style="margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 10px; font-size: 16px; line-height: 1.55; color: #E6EEF9">
+            <li>One role, one deliverable. “3 onboarding screens”, not “help with design”.</li>
+            <li>Under 10 hours. Bigger jobs can be split into two roles.</li>
+            <li>Show what exists. A screenshot or link doubles replies.</li>
+          </ul>
+        </section>
+        <section style="background: #FFFFFF; border-radius: 28px; padding: 24px; display: flex; flex-direction: column; gap: 12px">
+          <p class="m" style="color: #45577A">Preview on the feed</p>
+          <p class="d" style="font-size: 22px">Dewick wait-time tracker</p>
+          <p style="font-size: 15px; color: #45577A">Live line length at the dining halls.</p>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center">
+            <span style="background: #E3EEFA; border-radius: 999px; padding: 6px 12px; font-weight: 700; font-size: 14px">UI/UX design</span>
+            <span style="font-size: 14px; color: #45577A">~5 hrs</span>
+          </div>
+        </section>
+      </aside>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1900}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { stage: 'Prototype', roleIds: [1], nextId: 2 };
+  }
+  renderVals() {
+    const stages = ['Idea', 'Mockup', 'Prototype', 'Live'].map((label) => {
+      const on = this.state.stage === label;
+      return { label, pressed: on ? 'true' : 'false', bg: on ? '#002E6D' : '#FFFFFF', ink: on ? '#FFFFFF' : '#002E6D', border: on ? '#002E6D' : '#D9DEE7', pick: () => this.setState({ stage: label }) };
+    });
+    const placeholders = ['Redesign the home and settings screens', 'Set up sign-in and a database', 'Write the App Store description'];
+    const ids = this.state.roleIds;
+    const roles = ids.map((id, i) => ({
+      placeholder: placeholders[i % placeholders.length],
+      hours: i === 0 ? 5 : '',
+      removable: ids.length > 1,
+      remove: () => this.setState({ roleIds: ids.filter((x) => x !== id) })
+    }));
+    const addRole = () => this.setState({ roleIds: ids.concat([this.state.nextId]), nextId: this.state.nextId + 1 });
+    return { stages, roles, addRole };
+  }
+}
+</script>
+</body>
+</html>

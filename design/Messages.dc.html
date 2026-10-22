@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Pickup · Messages</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500..800&amp;family=Montserrat:wght@400..800&amp;family=Archivo:wdth,wght@62..125,400..900&amp;display=swap">
+<style>
+body{margin:0}
+.pk{font-family:'Montserrat',Arial,sans-serif;color:#002E6D;background:#F7F5F2;-webkit-font-smoothing:antialiased;min-height:100%}
+.pk .d{font-family:'Playfair Display',Georgia,serif;font-weight:600;letter-spacing:-0.01em;line-height:1.05;margin:0;text-wrap:balance}
+.pk .m{font-family:'Archivo','Arial Narrow',sans-serif;font-stretch:78%;font-weight:700;letter-spacing:.07em;text-transform:uppercase;font-size:13px;line-height:1.4}
+.pk p{margin:0}
+.pk input,.pk button{font:inherit}
+.pk .glass{background:linear-gradient(180deg,rgba(255,255,255,.64) 0%,rgba(255,255,255,.36) 100%);-webkit-backdrop-filter:blur(22px) saturate(180%);backdrop-filter:blur(22px) saturate(180%);border:1px solid rgba(255,255,255,.72);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(255,255,255,.35),inset 0 0 18px rgba(255,255,255,.25),0 10px 30px rgba(0,30,80,.16)}
+.pk .glass-dark{background:linear-gradient(180deg,rgba(24,74,146,.80) 0%,rgba(0,46,109,.88) 100%);-webkit-backdrop-filter:blur(18px) saturate(170%);backdrop-filter:blur(18px) saturate(170%);border:1px solid rgba(255,255,255,.4);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.5),inset 0 -1px 0 rgba(255,255,255,.14),inset 0 0 14px rgba(120,170,235,.25),0 8px 24px rgba(0,30,80,.25);color:#FFFFFF}
+.pk a:focus-visible,.pk button:focus-visible,.pk input:focus-visible{outline:3px solid #002E6D;outline-offset:3px}
+a{color:#002E6D}a:hover{color:#3E8EDE}
+</style>
+</helmet>
+<div class="pk" style="width: 100%">
+  <div style="background: #3E8EDE; padding: 16px clamp(16px, 3vw, 32px) 96px">
+    <nav class="glass" aria-label="Main" style="max-width: 1240px; margin: 0 auto; border-radius: 999px; padding: 8px 8px 8px 22px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
+      <a href="Landing.dc.html" style="display: flex; align-items: center; gap: 26px; text-decoration: none">
+        <span aria-hidden="true" style="width: 15px; height: 15px; border-radius: 50%; background: #002E6D; box-shadow: 19px 0 0 #3E8EDE; display: inline-block"></span>
+        <span class="d" style="font-size: 24px">Pickup</span>
+      </a>
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 4px">
+        <a href="Feed.dc.html" style="text-decoration: none; font-weight: 700; font-size: 15px; padding: 11px 16px; border-radius: 999px">Browse</a>
+        <a href="Post.dc.html" style="text-decoration: none; font-weight: 700; font-size: 15px; padding: 11px 16px; border-radius: 999px">Post a project</a>
+        <a href="Messages.dc.html" aria-current="page" style="text-decoration: none; font-weight: 700; font-size: 15px; padding: 11px 16px; border-radius: 999px; background: rgba(0,46,109,0.1); display: inline-flex; align-items: center; gap: 8px">Messages <span style="background: #002E6D; color: #FFFFFF; border-radius: 999px; font-size: 12px; padding: 2px 8px">2</span></a>
+        <a href="Profile.dc.html" aria-label="Your profile" style="text-decoration: none; width: 44px; height: 44px; border-radius: 50%; background: #002E6D; color: #FFFFFF; display: grid; place-items: center; font-weight: 700; font-size: 15px; margin-left: 4px">BS</a>
+      </div>
+    </nav>
+    <h1 class="d" style="max-width: 1240px; margin: 48px auto 0; font-size: clamp(44px, 6vw, 72px); color: #FFFFFF">Messages</h1>
+  </div>
+
+  <main style="padding: 0 clamp(16px, 3vw, 32px) 64px">
+    <div style="max-width: 1240px; margin: -64px auto 0; display: flex; flex-wrap: wrap; gap: 20px; align-items: stretch">
+
+      <!-- Conversation list -->
+      <section aria-label="Conversations" style="flex: 1 1 320px; min-width: 0; background: #FFFFFF; border-radius: 28px; padding: 12px; display: flex; flex-direction: column; gap: 4px; box-shadow: 0 12px 32px rgba(0,30,80,0.08)">
+        <sc-for list="{{convos}}" as="c" hint-placeholder-count="4">
+          <button type="button" onClick="{{c.pick}}" aria-current="{{c.current}}" style="text-align: left; border: 0; background: {{c.bg}}; color: #002E6D; border-radius: 20px; padding: 14px; display: flex; gap: 12px; align-items: flex-start; cursor: pointer">
+            <span aria-hidden="true" style="flex: none; width: 44px; height: 44px; border-radius: 50%; background: {{c.avatarBg}}; color: {{c.avatarInk}}; display: grid; place-items: center; font-weight: 700; font-size: 15px">{{c.initials}}</span>
+            <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px">
+              <span style="display: flex; justify-content: space-between; gap: 8px"><span style="font-weight: 700; font-size: 15px">{{c.name}}</span><span style="font-size: 13px; color: #45577A">{{c.time}}</span></span>
+              <span style="font-size: 13px; color: #45577A">{{c.project}}</span>
+              <span style="font-size: 14px; color: #45577A; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{c.last}}</span>
+            </span>
+            <sc-if value="{{c.unread}}" hint-placeholder-val="{{false}}"><span aria-label="Unread" style="flex: none; width: 10px; height: 10px; border-radius: 50%; background: #3E8EDE; margin-top: 6px"></span></sc-if>
+          </button>
+        </sc-for>
+      </section>
+
+      <!-- Thread -->
+      <section aria-label="Conversation" style="flex: 999 1 560px; min-width: 0; background: #FFFFFF; border-radius: 28px; display: flex; flex-direction: column; min-height: 640px; box-shadow: 0 12px 32px rgba(0,30,80,0.08); overflow: hidden">
+        <header style="padding: 20px 24px; border-bottom: 1.5px solid #E6E1DA; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px">
+          <div style="display: flex; flex-direction: column; gap: 4px">
+            <span style="font-weight: 700; font-size: 18px">{{thread.name}}</span>
+            <a href="Project.dc.html" style="font-size: 14px; text-underline-offset: 3px">{{thread.project}}</a>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center">
+            <span class="m" style="background: {{thread.statusBg}}; color: {{thread.statusInk}}; border-radius: 999px; padding: 6px 12px; font-size: 11px">{{thread.status}}</span>
+            <button type="button" class="glass" style="color: #002E6D; font-weight: 700; font-size: 14px; padding: 10px 16px; border-radius: 999px; cursor: pointer">Mark role filled</button>
+          </div>
+        </header>
+
+        <div style="flex: 1; padding: 24px; display: flex; flex-direction: column; gap: 12px; background: #FBFAF8">
+          <sc-for list="{{thread.messages}}" as="msg" hint-placeholder-count="5">
+            <sc-if value="{{msg.system}}" hint-placeholder-val="{{false}}">
+              <p class="m" style="align-self: center; background: #E3EEFA; border-radius: 999px; padding: 7px 14px; font-size: 11px; text-align: center">{{msg.text}}</p>
+            </sc-if>
+            <sc-if value="{{msg.bubble}}" hint-placeholder-val="{{true}}">
+              <div style="align-self: {{msg.align}}; max-width: min(76%, 520px); display: flex; flex-direction: column; gap: 4px; align-items: {{msg.align}}">
+                <p style="background: {{msg.bg}}; color: {{msg.ink}}; border-radius: {{msg.radius}}; padding: 12px 16px; font-size: 15px; line-height: 1.5">{{msg.text}}</p>
+                <span style="font-size: 12px; color: #45577A">{{msg.time}}</span>
+              </div>
+            </sc-if>
+          </sc-for>
+        </div>
+
+        <div style="padding: 16px; border-top: 1.5px solid #E6E1DA; display: flex; gap: 10px; align-items: center">
+          <label style="flex: 1; min-width: 0">
+            <span style="position: absolute; left: -9999px">Message</span>
+            <input type="text" value="{{draft}}" onChange="{{onDraft}}" placeholder="Write a message" style="width: 100%; box-sizing: border-box; border: 1.5px solid #D9DEE7; background: #F8F6F3; border-radius: 999px; padding: 14px 18px; font-size: 16px; color: #002E6D">
+          </label>
+          <button type="button" onClick="{{send}}" class="glass-dark" style="font-weight: 700; font-size: 15px; padding: 14px 22px; border-radius: 999px; cursor: pointer">Send</button>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = {
+      current: 'maya',
+      draft: '',
+      threads: {
+        maya: [
+          { system: true, text: 'Maya offered to help · UI/UX design · ~5 hrs' },
+          { from: 'them', text: 'Designed two apps for my HCI class. Free this weekend, could have screens by Sunday.', time: 'Tue 4:12 PM' },
+          { system: true, text: 'You accepted the offer' },
+          { from: 'me', text: 'Amazing, welcome aboard. Prototype link is on the project page. Biggest problem is the home screen.', time: 'Tue 4:30 PM' },
+          { from: 'them', text: 'Got it. I’ll send three directions tomorrow night. Want to meet at Tisch Thursday to pick one?', time: 'Tue 5:02 PM' }
+        ],
+        theo: [
+          { system: true, text: 'Theo offered to help · UI/UX design · ~5 hrs' },
+          { from: 'them', text: 'First real project, but I’ve been doing Figma tutorials all semester. Would love to try.', time: 'Tue 6:40 PM' }
+        ],
+        chris: [
+          { system: true, text: 'Role filled · Backend · 6 hrs' },
+          { from: 'them', text: 'API caching is live. Lunch rush should be fine now.', time: 'Mon 1:15 PM' },
+          { from: 'me', text: 'Legend. Leaving you a credit note now.', time: 'Mon 1:20 PM' }
+        ]
+      }
+    };
+  }
+  renderVals() {
+    const meta = {
+      maya: { name: 'Maya R.', initials: 'MR', project: 'Dewick wait-time tracker · UI/UX design', status: 'Offer accepted', statusBg: '#98D5C7', statusInk: '#002E6D', avatar: ['#002E6D', '#FFFFFF'], unread: true },
+      theo: { name: 'Theo K.', initials: 'TK', project: 'Dewick wait-time tracker · UI/UX design', status: 'Offer pending', statusBg: '#F2EDE7', statusInk: '#002E6D', avatar: ['#CFE2F6', '#002E6D'], unread: true },
+      chris: { name: 'Chris N.', initials: 'CN', project: 'Dewick wait-time tracker · Backend', status: 'Role filled', statusBg: '#98D5C7', statusInk: '#002E6D', avatar: ['#3E8EDE', '#FFFFFF'], unread: false }
+    };
+    const ids = ['maya', 'theo', 'chris'];
+    const convos = ids.map((id) => {
+      const msgs = this.state.threads[id].filter((m) => !m.system);
+      const last = msgs[msgs.length - 1];
+      const on = this.state.current === id;
+      return {
+        name: meta[id].name, initials: meta[id].initials, project: meta[id].project.split(' · ')[0],
+        last: (last.from === 'me' ? 'You: ' : '') + last.text, time: last.time.split(' ')[0],
+        unread: meta[id].unread && !on, current: on ? 'true' : 'false', bg: on ? '#E3EEFA' : '#FFFFFF',
+        avatarBg: meta[id].avatar[0], avatarInk: meta[id].avatar[1],
+        pick: () => this.setState({ current: id, draft: '' })
+      };
+    });
+    const m = meta[this.state.current];
+    const messages = this.state.threads[this.state.current].map((x) => {
+      if (x.system) return { system: true, bubble: false, text: x.text };
+      const mine = x.from === 'me';
+      return {
+        system: false, bubble: true, text: x.text, time: x.time,
+        align: mine ? 'flex-end' : 'flex-start',
+        bg: mine ? '#002E6D' : '#FFFFFF', ink: mine ? '#FFFFFF' : '#002E6D',
+        radius: mine ? '20px 20px 6px 20px' : '20px 20px 20px 6px'
+      };
+    });
+    const send = () => {
+      const text = this.state.draft.trim();
+      if (!text) return;
+      const id = this.state.current;
+      const next = Object.assign({}, this.state.threads, { [id]: this.state.threads[id].concat([{ from: 'me', text, time: 'Just now' }]) });
+      this.setState({ threads: next, draft: '' });
+    };
+    return {
+      convos, draft: this.state.draft, send,
+      onDraft: (e) => this.setState({ draft: e.target.value }),
+      thread: { name: m.name, project: m.project, status: m.status, statusBg: m.statusBg, statusInk: m.statusInk, messages }
+    };
+  }
+}
+</script>
+</body>
+</html>

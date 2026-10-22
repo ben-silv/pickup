@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Pickup · Dewick wait-time tracker</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500..800&amp;family=Montserrat:wght@400..800&amp;family=Archivo:wdth,wght@62..125,400..900&amp;display=swap">
+<style>
+body{margin:0}
+.pk{font-family:'Montserrat',Arial,sans-serif;color:#002E6D;background:#F7F5F2;-webkit-font-smoothing:antialiased;min-height:100%}
+.pk .d{font-family:'Playfair Display',Georgia,serif;font-weight:600;letter-spacing:-0.01em;line-height:1.05;margin:0;text-wrap:balance}
+.pk .m{font-family:'Archivo','Arial Narrow',sans-serif;font-stretch:78%;font-weight:700;letter-spacing:.07em;text-transform:uppercase;font-size:13px;line-height:1.4}
+.pk p{margin:0}
+.pk input,.pk select,.pk textarea,.pk button{font:inherit}
+.pk .glass{background:linear-gradient(180deg,rgba(255,255,255,.64) 0%,rgba(255,255,255,.36) 100%);-webkit-backdrop-filter:blur(22px) saturate(180%);backdrop-filter:blur(22px) saturate(180%);border:1px solid rgba(255,255,255,.72);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(255,255,255,.35),inset 0 0 18px rgba(255,255,255,.25),0 10px 30px rgba(0,30,80,.16)}
+.pk .glass-dark{background:linear-gradient(180deg,rgba(24,74,146,.80) 0%,rgba(0,46,109,.88) 100%);-webkit-backdrop-filter:blur(18px) saturate(170%);backdrop-filter:blur(18px) saturate(170%);border:1px solid rgba(255,255,255,.4);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.5),inset 0 -1px 0 rgba(255,255,255,.14),inset 0 0 14px rgba(120,170,235,.25),0 8px 24px rgba(0,30,80,.25);color:#FFFFFF}
+.pk a:focus-visible,.pk button:focus-visible,.pk textarea:focus-visible{outline:3px solid #002E6D;outline-offset:3px}
+a{color:#002E6D}a:hover{color:#3E8EDE}
+</style>
+</helmet>
+<div class="pk" style="width: 100%">
+  <div style="background: #3E8EDE; padding: 16px clamp(16px, 3vw, 32px) 64px">
+    <nav class="glass" aria-label="Main" style="max-width: 1240px; margin: 0 auto; border-radius: 999px; padding: 8px 8px 8px 22px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
+      <a href="Landing.dc.html" style="display: flex; align-items: center; gap: 26px; text-decoration: none">
+        <span aria-hidden="true" style="width: 15px; height: 15px; border-radius: 50%; background: #002E6D; box-shadow: 19px 0 0 #3E8EDE; display: inline-block"></span>
+        <span class="d" style="font-size: 24px">Pickup</span>
+      </a>
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 4px">
+        <a href="Feed.dc.html" style="text-decoration: none; font-weight: 700; font-size: 15px; padding: 11px 16px; border-radius: 999px">Browse</a>
+        <a href="Post.dc.html" style="text-decoration: none; font-weight: 700; font-size: 15px; padding: 11px 16px; border-radius: 999px">Post a project</a>
+        <a href="Messages.dc.html" style="text-decoration: none; font-weight: 700; font-size: 15px; padding: 11px 16px; border-radius: 999px; display: inline-flex; align-items: center; gap: 8px">Messages <span style="background: #002E6D; color: #FFFFFF; border-radius: 999px; font-size: 12px; padding: 2px 8px">2</span></a>
+        <a href="Profile.dc.html" aria-label="Your profile" style="text-decoration: none; width: 44px; height: 44px; border-radius: 50%; background: #002E6D; color: #FFFFFF; display: grid; place-items: center; font-weight: 700; font-size: 15px; margin-left: 4px">BS</a>
+      </div>
+    </nav>
+
+    <div style="max-width: 1240px; margin: 48px auto 0; display: flex; flex-direction: column; gap: 18px">
+      <a href="Feed.dc.html" style="align-self: flex-start; color: #FFFFFF; font-weight: 700; font-size: 16px; text-underline-offset: 4px">← All open roles</a>
+      <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center">
+        <span class="m" style="background: #CFE2F6; border-radius: 999px; padding: 6px 12px">Prototype</span>
+        <span class="m" style="background: #002E6D; color: #FFFFFF; border-radius: 999px; padding: 6px 12px">2 open roles</span>
+      </div>
+      <h1 class="d" style="font-size: clamp(44px, 6vw, 80px); color: #FFFFFF; max-width: 16ch">Dewick wait-time tracker</h1>
+      <p style="font-size: 21px; font-weight: 700; color: #FFFFFF; max-width: 46ch">Live line length at the dining halls, so you know whether to walk over now or in twenty minutes.</p>
+      <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px">
+        <a href="#" class="glass" style="text-decoration: none; font-weight: 700; font-size: 15px; padding: 12px 18px; border-radius: 999px">Try the prototype ↗</a>
+        <a href="#" class="glass" style="text-decoration: none; font-weight: 700; font-size: 15px; padding: 12px 18px; border-radius: 999px">GitHub repo ↗</a>
+      </div>
+    </div>
+  </div>
+
+  <main style="padding: 40px clamp(16px, 3vw, 32px) 96px">
+    <div style="max-width: 1240px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+
+      <!-- Main column -->
+      <div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 24px">
+        <figure style="margin: 0; height: 380px; background: #002E6D; border-radius: 32px; position: relative; overflow: hidden; display: flex; align-items: flex-end; justify-content: center; gap: 20px; padding-top: 40px; box-sizing: border-box">
+          <div style="width: 210px; height: 92%; background: #FFFFFF; border: 7px solid #3E8EDE; border-bottom: 0; border-radius: 30px 30px 0 0; padding: 18px 14px 0; box-sizing: border-box; display: flex; flex-direction: column; gap: 10px">
+            <span class="m" style="font-size: 10px; color: #45577A">Dewick · now</span>
+            <span class="d" style="font-size: 30px">12 min</span>
+            <div style="height: 10px; border-radius: 99px; background: #E3EEFA"><div style="width: 62%; height: 100%; border-radius: 99px; background: #3E8EDE"></div></div>
+            <span class="m" style="font-size: 10px; color: #45577A; margin-top: 8px">Carmichael · now</span>
+            <span class="d" style="font-size: 30px">3 min</span>
+            <div style="height: 10px; border-radius: 99px; background: #E3EEFA"><div style="width: 18%; height: 100%; border-radius: 99px; background: #3E8EDE"></div></div>
+          </div>
+          <figcaption class="m glass" style="position: absolute; top: 18px; left: 18px; border-radius: 999px; padding: 8px 14px; background: linear-gradient(180deg, rgba(255,255,255,0.86), rgba(255,255,255,0.64))">Screenshot · current prototype</figcaption>
+        </figure>
+
+        <section style="background: #FFFFFF; border-radius: 28px; padding: clamp(22px, 3vw, 32px); display: flex; flex-direction: column; gap: 14px">
+          <h2 class="d" style="font-size: 30px">About the project</h2>
+          <p style="font-size: 17px; line-height: 1.65; color: #45577A; max-width: 64ch">I built the first version in a weekend with Cursor. It reads swipe-in counts from the dining API and estimates the wait. It works, but it looks like a spreadsheet, and people bounce off the home screen. I want it ready to share in the class GroupMes before finals.</p>
+        </section>
+
+        <section style="display: flex; flex-direction: column; gap: 14px">
+          <h2 class="d" style="font-size: 30px">Open roles</h2>
+          <sc-for list="{{roles}}" as="r" hint-placeholder-count="2">
+            <article style="background: #FFFFFF; border-radius: 28px; padding: clamp(22px, 3vw, 28px); display: flex; flex-direction: column; gap: 14px">
+              <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px">
+                <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center">
+                  <span style="background: #E3EEFA; border-radius: 999px; padding: 7px 14px; font-weight: 700; font-size: 15px">{{r.role}}</span>
+                  <span style="font-size: 15px; color: #45577A">{{r.scope}}</span>
+                </div>
+                <button type="button" onClick="{{r.toggle}}" class="glass-dark" style="font-weight: 700; font-size: 15px; padding: 12px 20px; border-radius: 999px; cursor: pointer">{{r.cta}}</button>
+              </div>
+              <p style="font-size: 16px; line-height: 1.6; color: #45577A; max-width: 64ch">{{r.need}}</p>
+              <sc-if value="{{r.open}}" hint-placeholder-val="{{false}}">
+                <div style="border-top: 1.5px solid #E6E1DA; padding-top: 16px; display: flex; flex-direction: column; gap: 12px">
+                  <label style="display: flex; flex-direction: column; gap: 8px; font-weight: 600; font-size: 15px">Why you’re a good fit
+                    <textarea rows="3" placeholder="Link something you’ve made and say when you could start." style="border: 1.5px solid #D9DEE7; background: #F8F6F3; border-radius: 16px; padding: 13px 15px; font-size: 16px; color: #002E6D; resize: vertical"></textarea>
+                  </label>
+                  <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center">
+                    <a href="Messages.dc.html" class="glass-dark" style="text-decoration: none; font-weight: 700; font-size: 15px; padding: 12px 20px; border-radius: 999px">Send offer</a>
+                    <span style="font-size: 14px; color: #45577A">Jamie gets a message and can accept or decline.</span>
+                  </div>
+                </div>
+              </sc-if>
+            </article>
+          </sc-for>
+        </section>
+
+        <section style="display: flex; flex-direction: column; gap: 14px">
+          <h2 class="d" style="font-size: 30px">Credits</h2>
+          <article style="background: #FFFFFF; border-radius: 28px; padding: clamp(22px, 3vw, 28px); display: flex; gap: 14px; align-items: flex-start">
+            <span aria-hidden="true" style="flex: none; position: relative; width: 44px; height: 44px; border-radius: 50%; background: #3E8EDE; color: #FFFFFF; display: grid; place-items: center; font-weight: 700">CN
+              <span style="position: absolute; right: -4px; bottom: -4px; width: 22px; height: 22px; border-radius: 50%; background: #98D5C7; border: 2.5px solid #FFFFFF; display: grid; place-items: center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#002E6D" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+            </span>
+            <div style="display: flex; flex-direction: column; gap: 6px">
+              <span style="font-weight: 700; font-size: 16px">Chris N. · Backend · 6 hrs <span class="m" style="margin-left: 6px; background: #98D5C7; border-radius: 999px; padding: 3px 9px; font-size: 11px">Filled</span></span>
+              <p style="font-size: 16px; line-height: 1.6; color: #45577A">“Wired up the dining API and cached it so the app stopped timing out at lunch.” · Jamie</p>
+            </div>
+          </article>
+        </section>
+      </div>
+
+      <!-- Side column -->
+      <aside style="flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
+        <section style="background: #FFFFFF; border-radius: 28px; padding: 24px; display: flex; flex-direction: column; gap: 16px">
+          <h2 class="m" style="margin: 0; color: #45577A">Team</h2>
+          <div style="display: flex; gap: 12px; align-items: center">
+            <span aria-hidden="true" style="width: 44px; height: 44px; border-radius: 50%; background: #CFE2F6; display: grid; place-items: center; font-weight: 700">JL</span>
+            <div style="display: flex; flex-direction: column"><span style="font-weight: 700">Jamie L.</span><span style="font-size: 14px; color: #45577A">Owner · CS ’28</span></div>
+          </div>
+          <div style="display: flex; gap: 12px; align-items: center">
+            <span aria-hidden="true" style="width: 44px; height: 44px; border-radius: 50%; background: #3E8EDE; color: #FFFFFF; display: grid; place-items: center; font-weight: 700">CN</span>
+            <div style="display: flex; flex-direction: column"><span style="font-weight: 700">Chris N.</span><span style="font-size: 14px; color: #45577A">Backend · CS ’27</span></div>
+          </div>
+        </section>
+
+        <!-- Owner-only panel -->
+        <section style="background: #FFFFFF; border: 2px solid #CFE2F6; border-radius: 28px; padding: 24px; display: flex; flex-direction: column; gap: 16px">
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px">
+            <h2 class="d" style="font-size: 24px">Offers</h2>
+            <span class="m" style="background: #F2EDE7; border-radius: 999px; padding: 5px 10px; font-size: 11px">Only you see this</span>
+          </div>
+          <sc-for list="{{offers}}" as="o" hint-placeholder-count="2">
+            <div style="border-top: 1.5px solid #E6E1DA; padding-top: 16px; display: flex; flex-direction: column; gap: 10px">
+              <div style="display: flex; gap: 10px; align-items: center">
+                <span aria-hidden="true" style="width: 38px; height: 38px; border-radius: 50%; background: #002E6D; color: #FFFFFF; display: grid; place-items: center; font-weight: 700; font-size: 14px">{{o.initials}}</span>
+                <div style="display: flex; flex-direction: column"><span style="font-weight: 700; font-size: 15px">{{o.name}}</span><span style="font-size: 13px; color: #45577A">{{o.meta}}</span></div>
+              </div>
+              <p style="font-size: 15px; line-height: 1.55; color: #45577A">{{o.note}}</p>
+              <sc-if value="{{o.pending}}" hint-placeholder-val="{{true}}">
+                <div style="display: flex; gap: 8px">
+                  <button type="button" onClick="{{o.accept}}" class="glass-dark" style="font-weight: 700; font-size: 14px; padding: 10px 18px; border-radius: 999px; cursor: pointer">Accept</button>
+                  <button type="button" onClick="{{o.decline}}" style="border: 1.5px solid #D9DEE7; background: #FFFFFF; color: #002E6D; font-weight: 700; font-size: 14px; padding: 10px 18px; border-radius: 999px; cursor: pointer">Decline</button>
+                </div>
+              </sc-if>
+              <sc-if value="{{o.decided}}" hint-placeholder-val="{{false}}">
+                <span class="m" style="align-self: flex-start; background: {{o.badgeBg}}; color: {{o.badgeInk}}; border-radius: 999px; padding: 5px 11px; font-size: 11px">{{o.badge}}</span>
+              </sc-if>
+            </div>
+          </sc-for>
+        </section>
+      </aside>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1900}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { openRole: null, decisions: {} };
+  }
+  renderVals() {
+    const roles = [
+      { id: 'ux', role: 'UI/UX design', scope: '3 screens · ~5 hrs', need: 'Redesign the home, dining hall and settings screens so a first-time user gets it in five seconds. Figma or code, either works.' },
+      { id: 'copy', role: 'Copywriting', scope: 'App Store text · ~2 hrs', need: 'A short description and five screenshot captions. Funny is good, cringe is not.' }
+    ].map((r) => {
+      const open = this.state.openRole === r.id;
+      return Object.assign({}, r, { open, cta: open ? 'Cancel' : 'Offer to help', toggle: () => this.setState({ openRole: open ? null : r.id }) });
+    });
+    const decide = (id, v) => () => this.setState({ decisions: Object.assign({}, this.state.decisions, { [id]: v }) });
+    const offers = [
+      { id: 'maya', initials: 'MR', name: 'Maya R.', meta: "UI/UX design · Studio Art '28", note: 'Designed two apps for my HCI class. Free this weekend, could have screens by Sunday.' },
+      { id: 'tom', initials: 'TK', name: 'Theo K.', meta: "UI/UX design · CS '29", note: 'First real project, but I’ve been doing Figma tutorials all semester. Would love to try.' }
+    ].map((o) => {
+      const d = this.state.decisions[o.id];
+      return Object.assign({}, o, {
+        pending: !d, decided: !!d,
+        badge: d === 'accepted' ? 'Accepted · chat opened' : 'Declined, with thanks',
+        badgeBg: d === 'accepted' ? '#98D5C7' : '#F2EDE7', badgeInk: '#002E6D',
+        accept: decide(o.id, 'accepted'), decline: decide(o.id, 'declined')
+      });
+    });
+    return { roles, offers };
+  }
+}
+</script>
+</body>
+</html>
