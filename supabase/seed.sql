@@ -26,9 +26,9 @@ on conflict (id) do nothing;
 update public.profiles p
 set full_name = v.full_name, major = v.major, class_year = v.class_year, skills = v.skills::public.role_category[]
 from (values
-  ('5eed0000-0000-4000-8000-000000000001'::uuid, 'Jamie Lee',    'CS',      '2028', '{frontend}'),
-  ('5eed0000-0000-4000-8000-000000000002'::uuid, 'Priya Kapoor', 'CS',      '2027', '{design,frontend}'),
-  ('5eed0000-0000-4000-8000-000000000003'::uuid, 'Sam Okafor',   'Biology', '2028', '{data}')
+  ('5eed0000-0000-4000-8000-000000000001'::uuid, 'Jamie Lee',    'Computer Science', '2028', '{frontend}'),
+  ('5eed0000-0000-4000-8000-000000000002'::uuid, 'Priya Kapoor', 'Computer Science', '2027', '{design,frontend}'),
+  ('5eed0000-0000-4000-8000-000000000003'::uuid, 'Sam Okafor',   'Biology',          '2028', '{data}')
 ) as v (id, full_name, major, class_year, skills)
 where p.id = v.id;
 

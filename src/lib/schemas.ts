@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { CATEGORIES, CLASS_YEARS, STAGES, TUFTS_EMAIL } from "./vocab";
+import { CATEGORIES, CLASS_YEARS, MAJORS, STAGES, TUFTS_EMAIL } from "./vocab";
 import { FEED_SORTS, sanitizeSearch } from "./feed";
 
 /**
@@ -56,10 +56,17 @@ export const completeRoleInputSchema = z.object({
   note: trimmed(1, 400, "Write a short credit note.", "Keep the note under 400 characters."),
 });
 
+/** Name, class year and major are required for everyone (first sign-in asks for them on /welcome). */
+const requiredBasics = {
+  fullName: trimmed(1, 80, "Add your name.", "Keep your name under 80 characters."),
+  classYear: z.enum(CLASS_YEARS, { error: "Pick your class year." }),
+  major: z.string().refine((m) => MAJORS.includes(m), "Pick your major from the list."),
+};
+
+export const onboardingSchema = z.object(requiredBasics);
+
 export const profileInputSchema = z.object({
-  fullName: z.string().trim().max(80, "Keep your name under 80 characters."),
-  classYear: z.enum(CLASS_YEARS, { error: "Pick a class year." }).nullable(),
-  major: z.string().trim().max(80, "Keep your major under 80 characters.").transform((s) => s || null),
+  ...requiredBasics,
   bio: z.string().trim().max(400, "Keep your bio under 400 characters.").transform((s) => s || null),
   skills: z.array(z.enum(CATEGORIES)).max(CATEGORIES.length),
   openToRequests: z.boolean(),
@@ -92,3 +99,4 @@ export type RoleInput = z.output<typeof roleInputSchema>;
 export type OfferInput = z.output<typeof offerInputSchema>;
 export type MessageInput = z.output<typeof messageInputSchema>;
 export type ProfileInput = z.output<typeof profileInputSchema>;
+export type OnboardingInput = z.output<typeof onboardingSchema>;

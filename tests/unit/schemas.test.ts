@@ -41,10 +41,10 @@ describe("offer, message and profile inputs", () => {
   });
 
   it("only allows https GitHub links on profiles", () => {
-    const base = { fullName: "Ben", classYear: "2028", major: "", bio: "", skills: ["backend"], openToRequests: true, hoursPerWeek: "4" };
+    const base = { fullName: "Ben", classYear: "2028", major: "Computer Science", bio: "", skills: ["backend"], openToRequests: true, hoursPerWeek: "4" };
     expect(profileInputSchema.safeParse({ ...base, githubUrl: "http://github.com/x" }).success).toBe(false);
     const ok = profileInputSchema.parse({ ...base, githubUrl: "" });
-    expect(ok).toMatchObject({ githubUrl: null, major: null, hoursPerWeek: 4 });
+    expect(ok).toMatchObject({ githubUrl: null, major: "Computer Science", hoursPerWeek: 4 });
   });
 });
 

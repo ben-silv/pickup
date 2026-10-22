@@ -4,7 +4,9 @@ import Link from "next/link";
 import { startTransition, useActionState, useEffect, useRef, type FormEvent } from "react";
 import { updateProfile } from "./actions";
 import { idleState } from "@/lib/action-state";
-import { CATEGORIES, CATEGORY_LABEL, CLASS_YEARS, CLASS_YEAR_LABEL, type Category } from "@/lib/vocab";
+import { CATEGORIES, CATEGORY_LABEL, type Category } from "@/lib/vocab";
+import { knownMajor } from "@/lib/onboarding";
+import { BasicsFields } from "@/components/forms/BasicsFields";
 
 type Values = {
   fullName: string;
@@ -55,29 +57,7 @@ export function ProfileForm({ values }: { values: Values }) {
         <input name="fullName" type="text" maxLength={80} autoComplete="name" defaultValue={values.fullName} aria-invalid={invalid("fullName")} aria-describedby={describedBy("fullName")} />
       </label>
       {errorText("fullName")}
-      <div className="field-grid">
-        <div className="stack-sm">
-          <label className="field">
-            <span>Class year</span>
-            <select name="classYear" defaultValue={values.classYear ?? ""} aria-invalid={invalid("classYear")} aria-describedby={describedBy("classYear")}>
-              <option value="">Not set</option>
-              {CLASS_YEARS.map((y) => (
-                <option key={y} value={y}>
-                  {CLASS_YEAR_LABEL[y]}
-                </option>
-              ))}
-            </select>
-          </label>
-          {errorText("classYear")}
-        </div>
-        <div className="stack-sm">
-          <label className="field">
-            <span>Major</span>
-            <input name="major" type="text" maxLength={80} defaultValue={values.major ?? ""} aria-invalid={invalid("major")} aria-describedby={describedBy("major")} />
-          </label>
-          {errorText("major")}
-        </div>
-      </div>
+      <BasicsFields classYear={values.classYear ?? ""} major={knownMajor(values.major)} errors={errors} />
       <label className="field">
         <span>
           Bio <span className="hint">Under 400 characters</span>

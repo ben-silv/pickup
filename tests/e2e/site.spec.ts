@@ -59,3 +59,26 @@ test("profiles need sign-in", async ({ page }) => {
   await expect(page).toHaveURL(/\/sign-in\?next=%2Fpeople%2F5eed0000-0000-4000-8000-000000000001/);
   await expect(page.getByRole("heading", { name: "Sign in" })).toBeVisible();
 });
+
+test("account menu opens on hover and tap and offers sign-in when signed out", async ({ page, isMobile }) => {
+  await page.goto("/");
+  const trigger = page.getByRole("button", { name: "Account menu" });
+  if (isMobile) await trigger.tap();
+  else await trigger.hover();
+  const signIn = page.locator(".menu-panel").getByRole("link", { name: "Sign in", exact: true });
+  await expect(signIn).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(signIn).toBeHidden();
+  // Hover then click (what people do with a mouse) must leave it open, not toggle it shut.
+  if (!isMobile) await page.mouse.move(0, 400);
+  if (!isMobile) await trigger.hover();
+  await trigger.click();
+  await expect(signIn).toBeVisible();
+  await signIn.click();
+  await expect(page).toHaveURL(/\/sign-in/);
+});
+
+test("the welcome step needs sign-in first", async ({ page }) => {
+  await page.goto("/welcome");
+  await expect(page).toHaveURL(/\/sign-in\?next=%2Fwelcome/);
+});

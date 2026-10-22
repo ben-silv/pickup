@@ -1,5 +1,5 @@
 /** Pages that need a signed-in Tufts student. */
-export const PROTECTED_PREFIXES = ["/browse", "/post", "/messages", "/profile", "/projects", "/people"] as const;
+export const PROTECTED_PREFIXES = ["/browse", "/post", "/messages", "/profile", "/projects", "/people", "/welcome"] as const;
 
 export const DEFAULT_AFTER_SIGN_IN = "/browse";
 

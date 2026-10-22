@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Logo } from "../Logo";
+import { ProfileMenu } from "../ProfileMenu";
+import type { MenuUser } from "@/lib/nav";
 
 const links = [
   { href: "/browse", label: "Browse" },
@@ -10,7 +12,7 @@ const links = [
   { href: "/messages", label: "Messages" },
 ];
 
-export function AppNav({ initials }: { initials: string }) {
+export function AppNav({ user }: { user: MenuUser }) {
   const pathname = usePathname();
   const active = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
   return (
@@ -19,13 +21,11 @@ export function AppNav({ initials }: { initials: string }) {
         <Logo href="/browse" />
         <div className="nav-links">
           {links.map((l) => (
-            <Link key={l.href} href={l.href} className="nav-link" aria-current={active(l.href) ? "page" : undefined}>
+            <Link key={l.href} href={l.href} className="nav-link hide-sm" aria-current={active(l.href) ? "page" : undefined}>
               {l.label}
             </Link>
           ))}
-          <Link href="/profile" className="avatar avatar-navy nav-avatar" aria-label="Your profile" aria-current={active("/profile") ? "page" : undefined}>
-            {initials}
-          </Link>
+          <ProfileMenu user={user} />
         </div>
       </nav>
     </div>

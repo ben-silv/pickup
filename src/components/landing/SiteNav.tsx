@@ -1,5 +1,6 @@
-import Link from "next/link";
 import { Logo } from "../Logo";
+import { ProfileMenu } from "../ProfileMenu";
+import { getMenuUser } from "@/lib/nav-user";
 
 const links = [
   { href: "#how", label: "How it works" },
@@ -8,7 +9,8 @@ const links = [
 ];
 
 /** Frosted-glass menu that sticks to the top while the page scrolls underneath. */
-export function SiteNav() {
+export async function SiteNav() {
+  const user = await getMenuUser();
   return (
     <div className="nav-dock">
       <nav className="nav glass" aria-label="Main">
@@ -19,9 +21,7 @@ export function SiteNav() {
               {l.label}
             </a>
           ))}
-          <Link href="/sign-in" className="btn btn-sm glass-dark">
-            Sign in
-          </Link>
+          <ProfileMenu user={user} />
         </div>
       </nav>
     </div>

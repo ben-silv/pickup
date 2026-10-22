@@ -444,3 +444,38 @@ code { font-family: ui-monospace, Menlo, monospace; font-size: 0.9em; background
   .btn, .btn:hover, .faq-plus { transition: none; transform: none; }
   .switch, .switch::before { transition: none; }
 }
+
+/* ---- Profile menu (nav avatar dropdown) ---------------------------------- */
+.profile-menu { position: relative; margin-left: 4px; }
+.profile-trigger { width: 44px; height: 44px; border: 0; cursor: pointer; font: inherit; font-weight: 700; font-size: 15px; }
+.profile-trigger-guest { border-radius: 50%; display: grid; place-items: center; background: rgba(0, 46, 109, 0.1); color: var(--navy); }
+.profile-trigger:hover, .profile-trigger[aria-expanded="true"] { box-shadow: 0 0 0 3px var(--white); }
+.menu-panel {
+  position: absolute; right: 0; top: calc(100% + 12px); z-index: 40; min-width: 248px; max-width: calc(100vw - 32px);
+  border-radius: 22px; padding: 8px; display: flex; flex-direction: column; gap: 2px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.97) 0%, rgba(255, 255, 255, 0.9) 100%);
+}
+.menu-panel[hidden] { display: none; }
+/* Invisible bridge so the menu stays open while the mouse moves from the avatar to the panel. */
+.menu-panel::before { content: ""; position: absolute; left: 0; right: 0; top: -14px; height: 14px; }
+.menu-head { display: flex; flex-direction: column; gap: 2px; padding: 10px 14px 12px; min-width: 0; overflow-wrap: anywhere; }
+.menu-item {
+  display: block; width: 100%; text-align: left; text-decoration: none; border: 0; background: none; cursor: pointer;
+  font: inherit; font-weight: 600; font-size: 15px; color: var(--navy); padding: 11px 14px; border-radius: 14px;
+}
+.menu-item:hover, .menu-item:focus-visible { background: rgba(0, 46, 109, 0.08); }
+.menu-sep { border: 0; border-top: 1.5px solid var(--line); margin: 6px 8px; }
+
+/* Phones: the dropdown spans the nav bar instead of hanging off the avatar. */
+@media (max-width: 699px) {
+  .profile-menu { position: static; }
+  .menu-panel { left: 8px; right: 8px; min-width: 0; max-width: none; }
+}
+@media (min-width: 700px) {
+  .menu-panel .show-sm { display: none; }
+}
+
+/* ---- Welcome (first sign-in) -------------------------------------------- */
+.welcome-card { max-width: 560px; }
+.field select:invalid, .field select option[value=""] { color: var(--muted); }
+.field select option { color: var(--navy); }

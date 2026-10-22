@@ -50,3 +50,41 @@ export const OFFER_STATUSES = ["pending", "accepted", "declined", "withdrawn"] a
 export type ProjectStatus = (typeof PROJECT_STATUSES)[number];
 export type RoleStatus = (typeof ROLE_STATUSES)[number];
 export type OfferStatus = (typeof OFFER_STATUSES)[number];
+
+/**
+ * Tufts undergraduate majors for the profile dropdown, grouped as in the course catalog.
+ * Sources: as.tufts.edu/academics/undergraduate-studies/majors-and-minors and the School of Engineering.
+ * Stored as the label text in profiles.major (max 80 characters).
+ */
+export const MAJOR_GROUPS = [
+  {
+    label: "Arts and Sciences",
+    majors: [
+      "Africana Studies", "American Studies", "Ancient World Studies", "Anthropology", "Applied Mathematics",
+      "Applied Physics", "Arabic", "Archaeology", "Architectural Studies", "Art", "Astrophysics", "Biochemistry",
+      "Biology", "Biomedical Sciences", "Biopsychology", "Biotechnology", "Chemical Physics", "Chemistry",
+      "Child Study and Human Development", "Chinese", "Civic Studies", "Classical Studies", "Clinical Psychology",
+      "Cognitive and Brain Sciences", "Community Health", "Computer Science", "Economics", "Education",
+      "Engineering Psychology / Human Factors Engineering", "English", "Environmental Geology",
+      "Environmental Studies", "Film and Media Studies", "French", "Geological Sciences", "German", "Greek",
+      "Greek and Latin", "History", "History of Art and Architecture", "Interdisciplinary Studies",
+      "International Literary and Visual Studies", "International Relations", "Italian Studies", "Japanese",
+      "Judaic Studies", "Latin", "Latin American Studies", "Mathematics", "Middle Eastern Studies", "Music",
+      "Music, Sound, and Culture", "Philosophy", "Physics", "Political Science", "Psychology",
+      "Quantitative Economics", "Race, Colonialism, and Diaspora Studies", "Religion", "Romance Studies",
+      "Russian and Eastern European Studies", "Russian Language and Cultural Studies",
+      "Science, Technology, and Society", "Sociology", "Spanish", "Theatre and Performance Studies",
+      "Women's, Gender, and Sexuality Studies",
+    ],
+  },
+  {
+    label: "Engineering",
+    majors: [
+      "Biomedical Engineering", "Chemical Engineering", "Civil Engineering", "Computer Engineering", "Data Science",
+      "Electrical Engineering", "Environmental Engineering", "Mechanical Engineering",
+    ],
+  },
+  { label: "Other", majors: ["Undeclared", "Other / not listed"] },
+] as const;
+
+export const MAJORS = MAJOR_GROUPS.flatMap((g) => g.majors) as readonly string[];

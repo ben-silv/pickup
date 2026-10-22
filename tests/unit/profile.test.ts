@@ -9,7 +9,7 @@ function form(entries: [string, string][]) {
 }
 
 describe("profileFormValues", () => {
-  it("turns blank selects and numbers into 'not set' and reads the checkboxes", () => {
+  it("reads the checkboxes, and requires class year and major", () => {
     const values = profileFormValues(
       form([
         ["fullName", "Ben Silver"],
@@ -24,10 +24,13 @@ describe("profileFormValues", () => {
       ]),
     );
     expect(values).toMatchObject({ classYear: null, hoursPerWeek: null, skills: ["backend", "data"], openToRequests: false });
-    expect(profileInputSchema.parse(values)).toEqual({
+    const result = profileInputSchema.safeParse(values);
+    expect(result.success).toBe(false);
+    expect(result.error?.issues.map((i) => i.path[0])).toEqual(["classYear", "major"]);
+    expect(profileInputSchema.parse({ ...values, classYear: "2028", major: "Computer Science" })).toEqual({
       fullName: "Ben Silver",
-      classYear: null,
-      major: null,
+      classYear: "2028",
+      major: "Computer Science",
       bio: null,
       skills: ["backend", "data"],
       openToRequests: false,
@@ -38,13 +41,13 @@ describe("profileFormValues", () => {
 
   it("parses a filled-in form", () => {
     const values = profileFormValues(
-      form([["fullName", "Ben"], ["classYear", "2028"], ["openToRequests", "on"], ["hoursPerWeek", "4"], ["githubUrl", "https://github.com/ben"]]),
+      form([["fullName", "Ben"], ["classYear", "2028"], ["major", "Computer Science"], ["openToRequests", "on"], ["hoursPerWeek", "4"], ["githubUrl", "https://github.com/ben"]]),
     );
     expect(profileInputSchema.parse(values)).toMatchObject({ classYear: "2028", openToRequests: true, hoursPerWeek: 4 });
   });
 
   it("rejects out-of-range hours and unknown skills with readable messages", () => {
-    const bad = profileInputSchema.safeParse(profileFormValues(form([["fullName", "Ben"], ["hoursPerWeek", "41"]])));
+    const bad = profileInputSchema.safeParse(profileFormValues(form([["fullName", "Ben"], ["classYear", "2028"], ["major", "Biology"], ["hoursPerWeek", "41"]])));
     expect(bad.success).toBe(false);
     expect(bad.error?.issues[0]?.message).toBe("Up to 40 hours a week.");
     expect(profileInputSchema.safeParse(profileFormValues(form([["fullName", "Ben"], ["skills", "juggling"]]))).success).toBe(false);
