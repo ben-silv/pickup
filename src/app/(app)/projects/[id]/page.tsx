@@ -13,7 +13,7 @@ import { CATEGORY_LABEL, STAGE_LABEL, type Category, type OfferStatus, type Proj
 import { avatarTone, initials, ownerName, ownerYear, scopeLabel } from "@/lib/feed";
 import { OFFER_BADGE, byRole, firstName, hasConversation, hrs, openRolesLabel, roleViewerState, type Person } from "@/lib/project";
 
-export const metadata: Metadata = { title: "Project · Pickup" };
+export const metadata: Metadata = { title: "Project · Project Pickup" };
 
 const PERSON = "id, full_name, class_year, major";
 

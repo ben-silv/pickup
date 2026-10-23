@@ -13,7 +13,7 @@ import { ownerName } from "@/lib/feed";
 import { firstName } from "@/lib/project";
 import { canSend, threadStatus, type ChatMessage } from "@/lib/messages";
 
-export const metadata: Metadata = { title: "Messages · Pickup" };
+export const metadata: Metadata = { title: "Messages · Project Pickup" };
 
 const THREAD_LIMIT = 500;
 

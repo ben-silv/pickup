@@ -1,4 +1,4 @@
-/* Pickup — global styles. Rules live in CLAUDE.md. Mobile-first: base = phone, min-width queries scale up.
+/* Project Pickup — global styles. Rules live in CLAUDE.md. Mobile-first: base = phone, min-width queries scale up.
    Look: Tufts Blue ground, Jumbo Blue accents, light-blue tags, Aurora Green only for success,
    Playfair Display headlines + Montserrat body + condensed Archivo labels, liquid-glass menu and buttons. */
 
@@ -158,6 +158,8 @@ code { font-family: ui-monospace, Menlo, monospace; font-size: 0.9em; background
 /* ---- Logo & nav --------------------------------------------------------- */
 .logo { display: inline-flex; align-items: center; gap: 26px; text-decoration: none; }
 .logo .display { font-size: 24px; }
+/* The longer "Project Pickup" wordmark: a touch smaller on the narrowest phones so the menu button stays on the same row. */
+@media (max-width: 359px) { .logo .display { font-size: 20px; } }
 .logo-light { color: var(--white); }
 .logo-dots { width: 15px; height: 15px; border-radius: 50%; background: var(--navy); box-shadow: 19px 0 0 var(--tufts-blue); display: inline-block; }
 .logo-light .logo-dots, .logo-dots.light { background: var(--white); box-shadow: 19px 0 0 var(--tufts-blue); }

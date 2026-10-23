@@ -1,8 +1,8 @@
-# Pickup
+# Project Pickup
 
 [![CI](https://github.com/ben-silv/pickup/actions/workflows/ci.yml/badge.svg)](https://github.com/ben-silv/pickup/actions/workflows/ci.yml)
 
-Pickup is a Tufts-only app where students post app and website projects and ask classmates for one scoped role ("UI/UX design · 3 screens · ~5 hrs"). Helpers send an offer, the owner accepts or declines, they chat, and when the work ships the owner leaves a credit note that shows up on the helper's profile.
+Project Pickup is a Tufts-only app where students post app and website projects and ask classmates for one scoped role ("UI/UX design · 3 screens · ~5 hrs"). Helpers send an offer, the owner accepts or declines, they chat, and when the work ships the owner leaves a credit note that shows up on the helper's profile.
 
 **Stack:** Next.js 15 (App Router) · React 19 · TypeScript · Supabase (Postgres, Auth, Realtime) · Row Level Security · Zod · Vitest · Playwright · GitHub Actions · Vercel
 

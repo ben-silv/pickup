@@ -10,10 +10,10 @@ import { ownerName } from "@/lib/feed";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const parsed = personIdSchema.safeParse((await params).id);
-  if (!parsed.success) return { title: "Profile · Pickup" };
+  if (!parsed.success) return { title: "Profile · Project Pickup" };
   const supabase = await createClient();
   const { data } = await supabase.from("profiles").select("full_name").eq("id", parsed.data).maybeSingle<{ full_name: string }>();
-  return { title: `${data?.full_name.trim() ? ownerName(data.full_name) : "Profile"} · Pickup` };
+  return { title: `${data?.full_name.trim() ? ownerName(data.full_name) : "Profile"} · Project Pickup` };
 }
 
 /** Someone's public profile: read-only, published projects and credits. */

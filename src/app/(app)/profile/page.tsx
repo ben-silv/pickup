@@ -8,7 +8,7 @@ import { loadProfile } from "./data";
 import { createClient, getUser } from "@/lib/supabase/server";
 import { signOut } from "../actions";
 
-export const metadata: Metadata = { title: "Profile · Pickup" };
+export const metadata: Metadata = { title: "Profile · Project Pickup" };
 
 export default async function ProfilePage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const user = await getUser();

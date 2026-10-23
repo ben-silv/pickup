@@ -8,10 +8,10 @@ import { GlassLight } from "@/components/GlassLight";
 import { ScrollState } from "@/components/ScrollState";
 
 export const metadata: Metadata = {
-  title: "Pickup · Build with Tufts students",
+  title: "Project Pickup · Build with Tufts students",
   description: "Post your app or website project, ask for one role, and team up with another Tufts student.",
   openGraph: {
-    title: "Pickup · Build with Tufts students",
+    title: "Project Pickup · Build with Tufts students",
     description: "Post your project, name the role and the hours, and team up with another Tufts student.",
     type: "website",
   },

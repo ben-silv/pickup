@@ -5,7 +5,7 @@ import { ResetPasswordForm } from "./ResetPasswordForm";
 import { getUser } from "@/lib/supabase/server";
 import { supabaseConfigured } from "@/lib/env";
 
-export const metadata: Metadata = { title: "New password · Pickup" };
+export const metadata: Metadata = { title: "New password · Project Pickup" };
 export const dynamic = "force-dynamic";
 
 export default async function ResetPasswordPage() {

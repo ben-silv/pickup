@@ -3,7 +3,7 @@ import { exampleFeed } from "@/content";
 /** Three big rounded tiles: a photo slot and two product shots. */
 export function ImageBand() {
   return (
-    <section className="section-top" aria-label="Pickup in use">
+    <section className="section-top" aria-label="Project Pickup in use">
       <div className="wrap tiles">
         <figure className="tile tile-wide tile-cream">
           {/* Replace with a real photo (next/image from /public), see CLAUDE.md → Images. */}
@@ -15,10 +15,10 @@ export function ImageBand() {
           <figcaption className="label tile-caption">Photo · two students at a table in Tisch, one laptop, one sketchbook</figcaption>
         </figure>
 
-        <figure className="tile tile-blue tile-phone" role="img" aria-label="The Pickup feed on a phone">
+        <figure className="tile tile-blue tile-phone" role="img" aria-label="The Project Pickup feed on a phone">
           <div className="phone">
             <div className="phone-head">
-              <span className="display">Pickup</span>
+              <span className="display">Project Pickup</span>
               <span className="label muted tiny">Open roles</span>
             </div>
             {exampleFeed.map((f) => (

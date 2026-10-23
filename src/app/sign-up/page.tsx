@@ -3,7 +3,7 @@ import { Logo } from "@/components/Logo";
 import { SignUpForm } from "./SignUpForm";
 import { safeNextPath } from "@/lib/auth/paths";
 
-export const metadata: Metadata = { title: "Create an account · Pickup" };
+export const metadata: Metadata = { title: "Create an account · Project Pickup" };
 
 export default async function SignUpPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const next = safeNextPath((await searchParams).next);

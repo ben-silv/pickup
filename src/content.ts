@@ -32,7 +32,7 @@ export const points = [
 
 export const faqs = [
   { q: "Who can join?", a: "Any current Tufts student with a @tufts.edu email, undergrad or grad, any major. Designers, writers and pre-meds with a good idea are as welcome as CS majors." },
-  { q: "Does anyone get paid?", a: "No. Pickup is for side projects and learning. You trade a few hours of help for credit, portfolio work and a teammate." },
+  { q: "Does anyone get paid?", a: "No. Project Pickup is for side projects and learning. You trade a few hours of help for credit, portfolio work and a teammate." },
   { q: "Who owns the project?", a: "The person who posts it. Before you start, agree in writing on what the helper gets credit for and what happens if the project turns into a business." },
   { q: "How do I sign in?", a: "Enter your Tufts email and we send you a one-time link. No passwords. The first link creates your account." },
 ];

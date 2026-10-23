@@ -114,7 +114,7 @@ export function SignInForm({ next, linkError, initialMode }: { next: string; lin
         )}
       </div>
       <p className="auth-switch">
-        New to Pickup? <Link href={signUpHref}>Create an account</Link>
+        New to Project Pickup? <Link href={signUpHref}>Create an account</Link>
       </p>
     </div>
   );

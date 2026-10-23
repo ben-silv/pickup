@@ -7,7 +7,7 @@ import { supabaseConfigured } from "@/lib/env";
 import { safeNextPath } from "@/lib/auth/paths";
 import { knownMajor, setupNeeds } from "@/lib/onboarding";
 
-export const metadata: Metadata = { title: "Welcome · Pickup" };
+export const metadata: Metadata = { title: "Welcome · Project Pickup" };
 export const dynamic = "force-dynamic";
 
 export default async function WelcomePage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {

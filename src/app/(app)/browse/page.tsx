@@ -7,7 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { feedQuerySchema } from "@/lib/schemas";
 import { FEED_LIMIT, countLabel, searchFilter, type FeedRow } from "@/lib/feed";
 
-export const metadata: Metadata = { title: "Browse · Pickup" };
+export const metadata: Metadata = { title: "Browse · Project Pickup" };
 
 export default async function BrowsePage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const { skill, q, sort } = feedQuerySchema.parse(await searchParams);

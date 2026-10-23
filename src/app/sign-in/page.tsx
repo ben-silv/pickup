@@ -3,7 +3,7 @@ import { Logo } from "@/components/Logo";
 import { SignInForm, type SignInMode } from "./SignInForm";
 import { safeNextPath } from "@/lib/auth/paths";
 
-export const metadata: Metadata = { title: "Sign in · Pickup" };
+export const metadata: Metadata = { title: "Sign in · Project Pickup" };
 
 export default async function SignInPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const params = await searchParams;

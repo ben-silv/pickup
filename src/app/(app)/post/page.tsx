@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { PageBand } from "@/components/app/PageBand";
 import { PostForm } from "./PostForm";
 
-export const metadata: Metadata = { title: "Post a project · Pickup" };
+export const metadata: Metadata = { title: "Post a project · Project Pickup" };
 
 export default function PostPage() {
   return (

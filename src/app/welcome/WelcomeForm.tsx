@@ -36,7 +36,7 @@ export function WelcomeForm({ next, email, needsBasics, needsPassword, fullName,
   return (
     <form ref={formRef} action={action} onSubmit={onSubmit} noValidate className="stack-md">
       <div className="stack-sm">
-        <h1 className="display" style={{ fontSize: 38 }}>{needsBasics ? "Welcome to Pickup" : "Pick a password"}</h1>
+        <h1 className="display" style={{ fontSize: 38 }}>{needsBasics ? "Welcome to Project Pickup" : "Pick a password"}</h1>
         <p className="muted">
           {needsBasics
             ? "Tell classmates who you are and pick a password. Your name, year and major show on your projects and offers."

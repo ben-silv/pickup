@@ -9,7 +9,7 @@ export function HowItWorks() {
       <div className="wrap stack-xl">
         <div className="section-head">
           <h2 className="display h2" style={{ maxWidth: "12ch" }}>Three steps. A few hours.</h2>
-          <p className="lead muted">Pickup is for small, scoped asks. That makes yes an easy answer.</p>
+          <p className="lead muted">Project Pickup is for small, scoped asks. That makes yes an easy answer.</p>
         </div>
         <ol className="step-grid">
           {steps.map((s, i) => (
@@ -114,7 +114,7 @@ export function Footer() {
         <div className="stack-sm" style={{ maxWidth: 520 }}>
           <span className="footer-logo">
             <i className="logo-dots light" aria-hidden="true" />
-            <span className="display">Pickup</span>
+            <span className="display">Project Pickup</span>
           </span>
           <p>A student project for Tufts students. Not affiliated with or endorsed by Tufts University. Example posts and people are illustrations.</p>
         </div>

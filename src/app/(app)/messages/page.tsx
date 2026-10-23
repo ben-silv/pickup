@@ -5,7 +5,7 @@ import { ConversationList } from "./ConversationList";
 import { loadConversations } from "./conversations";
 import { createClient, getUser } from "@/lib/supabase/server";
 
-export const metadata: Metadata = { title: "Messages · Pickup" };
+export const metadata: Metadata = { title: "Messages · Project Pickup" };
 
 export default async function MessagesPage() {
   const user = await getUser();

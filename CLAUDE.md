@@ -1,9 +1,10 @@
-# Pickup — project rules
+# Project Pickup — project rules
 
 Claude reads this file at the start of every session in this folder. Follow it over your own defaults. If a request conflicts with it, say so before doing anything.
 
 ## What this is
-Pickup is a Tufts-only app where students post app/website projects and ask classmates for one scoped role ("UI/UX design · 3 screens · ~5 hrs"). Helpers send an offer, the owner accepts or declines, they chat, and when the work is done the owner marks the role filled and leaves a credit note. Audience: Tufts students, mostly on phones.
+The product name is **Project Pickup** (plain "Pickup" read like pickup sports). Use the full name in titles, the logo and copy; code, folders and the repo stay `pickup`.
+Project Pickup is a Tufts-only app where students post app/website projects and ask classmates for one scoped role ("UI/UX design · 3 screens · ~5 hrs"). Helpers send an offer, the owner accepts or declines, they chat, and when the work is done the owner marks the role filled and leaves a credit note. Audience: Tufts students, mostly on phones.
 
 Approved screens live in `design/` (see `design/README.md`). They are the spec for layout and copy.
 
