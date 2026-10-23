@@ -22,6 +22,8 @@
   --line: #D9DEE7;
   --line-warm: #E6E1DA;
   --error: #A3201C;
+  --error-dark: #861A17;   /* hover on the red confirm button */
+  --error-soft: #FBEDEC;   /* hover on red outline buttons */
   --on-blue: #FFFFFF;      /* only bold ≥19px or regular ≥24px on Tufts Blue */
 
   --display: "Playfair Display Variable", "Playfair Display", Georgia, serif;
@@ -576,3 +578,18 @@ code { font-family: ui-monospace, Menlo, monospace; font-size: 0.9em; background
 .privacy ul { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 10px; }
 .privacy p, .privacy li { max-width: 65ch; line-height: 1.6; }
 .delete-button { align-self: flex-start; }
+/* Destructive actions (delete account): red text, red confirm button, and the confirm pop-up. */
+.danger-text { color: var(--error); }
+.btn-danger { color: var(--error); border-color: currentColor; }
+.btn-danger-solid { background: var(--error); color: var(--white); border: 0; }
+@media (hover: hover) {
+  .btn-danger:hover { background: var(--error-soft); }
+  .btn-danger-solid:not(:disabled):hover { background: var(--error-dark); }
+}
+.confirm-dialog {
+  width: min(460px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); overflow: auto;
+  border: 0; border-radius: var(--radius-lg); padding: clamp(22px, 4vw, 32px);
+  background: var(--white); color: var(--navy); box-shadow: 0 24px 60px rgba(0, 30, 80, 0.3);
+}
+.confirm-dialog::backdrop { background: rgba(0, 30, 80, 0.45); }
+.dialog-actions { justify-content: flex-end; }

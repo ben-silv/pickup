@@ -78,7 +78,7 @@ Final direction from the Claude Design canvas: calm, roomy pages (Dirtywave) wit
 | `--brown` | `#63493A` | Tiny accents only |
 
 - No yellow or orange.
-- Red (`--error`) only for errors and the small unread dot on Messages.
+- Red (`--error`) only for errors, the small unread dot on Messages, and destructive actions (Delete account and its confirm pop-up).
 - **Contrast on Tufts Blue:** white text only if bold ≥19px or regular ≥24px. Small labels on blue sit in a navy pill. Never Tufts Blue text on white under 24px.
 - Single light theme by design. No dark mode.
 
