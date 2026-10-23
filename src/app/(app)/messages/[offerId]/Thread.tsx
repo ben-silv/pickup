@@ -2,6 +2,7 @@
 
 import { startTransition, useActionState, useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { sendMessage } from "../actions";
+import { markThreadRead } from "../../actions";
 import { idleState } from "@/lib/action-state";
 import { buildTimeline, isChatMessage, mergeMessages, messageTime, unansweredLeft, type ChatMessage, type TimelineInput } from "@/lib/messages";
 import { createClient } from "@/lib/supabase/browser";
@@ -23,6 +24,12 @@ export function Thread({ offerId, initialMessages, timeline, canSend, closedNote
   const bodyRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const sentRef = useRef("");
+
+  // Opening the conversation marks it read (clears the red dot); so does each new message from them while it's open.
+  const fromThem = live.filter((m) => m.sender_id !== timeline.viewerId).length;
+  useEffect(() => {
+    void markThreadRead(offerId);
+  }, [offerId, fromThem]);
 
   // New messages for this conversation stream in through Supabase Realtime (RLS still applies).
   useEffect(() => {

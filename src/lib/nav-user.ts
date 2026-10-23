@@ -2,6 +2,7 @@ import "server-only";
 import { createClient } from "@/lib/supabase/server";
 import { supabaseConfigured } from "@/lib/env";
 import { menuUser, type MenuUser } from "./nav";
+import { hasUnread } from "./unread";
 
 /** The signed-in student for the profile menu, or null when signed out (or Supabase isn't set up). */
 export async function getMenuUser(): Promise<MenuUser | null> {
@@ -10,6 +11,9 @@ export async function getMenuUser(): Promise<MenuUser | null> {
   const { data } = await supabase.auth.getUser();
   const user = data.user;
   if (!user) return null;
-  const { data: profile } = await supabase.from("profiles").select("full_name, email").eq("id", user.id).maybeSingle();
-  return menuUser(profile?.full_name, profile?.email ?? user.email);
+  const [{ data: profile }, unread] = await Promise.all([
+    supabase.from("profiles").select("full_name, email").eq("id", user.id).maybeSingle(),
+    hasUnread(supabase),
+  ]);
+  return { ...menuUser(profile?.full_name, profile?.email ?? user.email), id: user.id, unread };
 }

@@ -5,12 +5,16 @@ import { usePathname } from "next/navigation";
 import { useEffect, useId, useRef, useState, type PointerEvent } from "react";
 import { signOut } from "@/app/(app)/actions";
 import type { MenuUser } from "@/lib/nav";
+import { useUnread } from "./useUnread";
 
 /**
  * Avatar (or person icon when signed out) with a dropdown. Opens on hover with a mouse, and on
  * click/tap or Enter for touch and keyboard. Escape, clicking outside or tabbing away closes it.
  */
-export function ProfileMenu({ user }: { user: MenuUser | null }) {
+export function ProfileMenu({ user, unread }: { user: MenuUser | null; unread?: boolean }) {
+  // The app nav passes its own live value; on the landing page the menu tracks it itself.
+  const ownUnread = useUnread(unread === undefined ? user : null);
+  const hasNew = Boolean(user) && (unread ?? ownUnread);
   const [open, setOpen] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -86,9 +90,10 @@ export function ProfileMenu({ user }: { user: MenuUser | null }) {
         className={user ? "avatar avatar-navy profile-trigger" : "profile-trigger profile-trigger-guest"}
         aria-expanded={open}
         aria-controls={panelId}
-        aria-label={user ? `Account menu for ${user.name}` : "Account menu"}
+        aria-label={user ? `Account menu for ${user.name}${hasNew ? ", new messages" : ""}` : "Account menu"}
         onClick={onClick}
       >
+        {hasNew ? <span className="unread-dot" aria-hidden="true" /> : null}
         {user ? (
           user.initials
         ) : (
@@ -112,7 +117,15 @@ export function ProfileMenu({ user }: { user: MenuUser | null }) {
             <hr className="menu-sep show-sm" />
             <Link href="/profile?edit=1" className="menu-item">Edit profile</Link>
             <Link href="/profile#projects-heading" className="menu-item">Your projects</Link>
-            <Link href="/messages" className="menu-item">Messages</Link>
+            <Link href="/messages" className="menu-item">
+              Messages
+              {hasNew ? (
+                <>
+                  <span className="unread-dot inline" aria-hidden="true" />
+                  <span className="sr-only"> (new)</span>
+                </>
+              ) : null}
+            </Link>
             <Link href="/reset-password" className="menu-item">Change password</Link>
             <hr className="menu-sep" />
             <form action={signOut}>

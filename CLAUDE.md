@@ -54,6 +54,7 @@ Tables: `profiles` (1 per auth user, created by trigger, Tufts emails only), `pr
   `resend_offer` reopens a withdrawn offer: 1-hour cooldown, at most 2 resends per role (constants mirrored in `src/lib/project.ts`).
   Messages: a trigger caps a helper at 5 messages on a pending offer until the owner replies or accepts (`UNANSWERED_LIMIT` in `src/lib/messages.ts`).
   Safety: `report_conversation(p_offer, p_reason, p_details)` writes `reports` (reviewed by the admin in the Supabase dashboard); `block_in_conversation` / `unblock_in_conversation` manage `blocks`. A block (either way) stops messages via a restrictive policy and offers via `can_offer_on`; `blocked_between` stays private so nobody can probe who blocked whom.
+  Unread: `thread_reads` remembers when each person last opened a conversation; `unread_offer_ids()` drives the red dot, `mark_thread_read(p_offer)` clears it (called when a conversation opens).
   Never add an UPDATE policy that would let users skip these.
 - Changing the schema = new migration + matching Zod change + a test in `tests/db/access-rules.test.ts` for any new rule.
 
@@ -74,6 +75,7 @@ Final direction from the Claude Design canvas: calm, roomy pages (Dirtywave) wit
 | `--brown` | `#63493A` | Tiny accents only |
 
 - No yellow or orange.
+- Red (`--error`) only for errors and the small unread dot on Messages.
 - **Contrast on Tufts Blue:** white text only if bold ≥19px or regular ≥24px. Small labels on blue sit in a navy pill. Never Tufts Blue text on white under 24px.
 - Single light theme by design. No dark mode.
 

@@ -29,7 +29,15 @@ export function ConversationList({ list, failed, current, secondary = false }: {
                 </span>
                 <span className="msg-item-text">
                   <span className="row-between">
-                    <span className="person-name">{c.other ? ownerName(c.other.full_name) : "A Tufts student"}</span>
+                    <span className="person-name">
+                      {c.unread ? (
+                        <>
+                          <span className="unread-dot inline" aria-hidden="true" />
+                          <span className="sr-only">New: </span>
+                        </>
+                      ) : null}
+                      {c.other ? ownerName(c.other.full_name) : "A Tufts student"}
+                    </span>
                     <span className="msg-time">{shortTime(c.activityAt)}</span>
                   </span>
                   <span className="msg-meta">

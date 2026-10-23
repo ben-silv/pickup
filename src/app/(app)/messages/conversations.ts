@@ -4,6 +4,7 @@ import type { Category, OfferStatus, RoleStatus } from "@/lib/vocab";
 import { CATEGORY_LABEL } from "@/lib/vocab";
 import type { Person } from "@/lib/project";
 import { byActivity, lastMessageByOffer, latest, threadStatus, type ChatMessage } from "@/lib/messages";
+import { unreadOfferIds } from "@/lib/unread";
 
 type Supabase = Awaited<ReturnType<typeof createClient>>;
 
@@ -39,6 +40,8 @@ export type Conversation = {
   last: string;
   activityAt: string;
   status: { label: string; success: boolean };
+  /** Something new from the other person since I last opened it. */
+  unread: boolean;
 };
 
 /**
@@ -71,6 +74,7 @@ export async function loadConversations(supabase: Supabase, viewerId: string): P
         .overrideTypes<ChatMessage[], { merge: false }>()
     : { data: [], error: null };
   if (msgError) console.error("messages: last-message query failed", msgError);
+  const unread = await unreadOfferIds(supabase);
   const lastByOffer = lastMessageByOffer(messages ?? []);
 
   const list = (offers ?? []).map((o): Conversation => {
@@ -87,6 +91,7 @@ export async function loadConversations(supabase: Supabase, viewerId: string): P
       last: `${lastMine ? "You: " : ""}${lastText}`,
       activityAt: latest(o.created_at, o.decided_at, o.resent_at, lastMsg?.created_at),
       status: threadStatus(o.status, o.role?.status ?? "closed", viewerIsHelper),
+      unread: unread.has(o.id),
     };
   });
   return { list: byActivity(list), failed: false };

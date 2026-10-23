@@ -558,3 +558,13 @@ code { font-family: ui-monospace, Menlo, monospace; font-size: 0.9em; background
 .safety-block { border-top: 1.5px solid var(--line-warm); padding-top: 14px; }
 .thread-head:has(.reveal[open]) .thread-actions { flex-basis: 100%; }
 .safety-panel .btn { align-self: flex-start; }
+
+/* Red dot for unread messages: on the Messages link, the account button and unread conversations.
+   The one use of red outside errors (it uses the --error token). */
+.nav-link, .profile-trigger { position: relative; }
+.unread-dot { position: absolute; top: 4px; right: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--error); box-shadow: 0 0 0 2px var(--white); pointer-events: none; }
+.unread-dot.inline { position: static; display: inline-block; vertical-align: middle; margin: 0 8px 2px 0; box-shadow: none; }
+.profile-trigger .unread-dot { top: 0; right: 0; }
+.menu-item .unread-dot.inline { margin: 0 0 2px 8px; }
+/* In the app nav on wider screens the Messages link carries the dot, so the account button doesn't repeat it. */
+@media (min-width: 700px) { .nav-app .profile-trigger .unread-dot { display: none; } }

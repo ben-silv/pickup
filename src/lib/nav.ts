@@ -1,5 +1,12 @@
 /** Who the profile menu shows. Pure, so it's unit-tested and safe in client components. */
-export type MenuUser = { name: string; email: string; initials: string };
+export type MenuUser = {
+  name: string;
+  email: string;
+  initials: string;
+  /** Set for the signed-in menu: who I am (to ignore my own messages) and whether a conversation is unread. */
+  id?: string;
+  unread?: boolean;
+};
 
 export function menuUser(fullName: string | null | undefined, email: string | null | undefined): MenuUser {
   const name = (fullName ?? "").trim();

@@ -337,6 +337,39 @@ describe.skipIf(!url)("database access rules", () => {
     });
   });
 
+  describe("unread conversations", () => {
+    it("flags new offers and messages from the other person until the conversation is opened", async () => {
+      const ben = await newUser("ben@tufts.edu");
+      const maya = await newUser("maya@tufts.edu");
+      const theo = await newUser("theo@tufts.edu");
+      const { roleId } = await newProject(ben);
+      const id = await offer(maya, roleId);
+      const unread = async (who: string) => (await as(who, (c) => c.query("select unread_offer_ids() as id"))).rows.map((r) => r.id);
+      const open = (who: string) => as(who, (c) => c.query("select mark_thread_read($1)", [id]));
+      const say = (who: string) => as(who, (c) => c.query("insert into messages (offer_id, sender_id, body) values ($1, $2, 'hi')", [id, who]));
+
+      // A new offer is unread for the owner, not for the helper who sent it.
+      expect(await unread(ben)).toEqual([id]);
+      expect(await unread(maya)).toEqual([]);
+      await open(ben);
+      expect(await unread(ben)).toEqual([]);
+
+      // Your own messages never count; theirs do until you open the conversation.
+      await say(ben);
+      expect(await unread(ben)).toEqual([]);
+      expect(await unread(maya)).toEqual([id]);
+      await open(maya);
+      expect(await unread(maya)).toEqual([]);
+
+      // Outsiders see nothing and can't create read markers.
+      expect(await unread(theo)).toEqual([]);
+      await open(theo);
+      const { rows } = await admin("select count(*)::int as n from thread_reads where user_id = $1", [theo]);
+      expect(rows[0].n).toBe(0);
+      await expect(as(maya, (c) => c.query("insert into thread_reads (user_id, offer_id) values ($1, $2)", [maya, id]))).rejects.toThrow(/permission denied/);
+    });
+  });
+
   describe("reports and blocks", () => {
     it("lets someone in a conversation report it once, and only see their own reports", async () => {
       const ben = await newUser("ben@tufts.edu");
