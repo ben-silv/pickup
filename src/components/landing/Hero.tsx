@@ -16,8 +16,8 @@ export function Hero() {
             Everybody gets credit.
           </p>
           <div className="cta-row">
-            <Link href="/sign-in" className="btn btn-lg glass-dark" data-track="hero_sign_in">
-              Sign in with your Tufts email
+            <Link href="/sign-up" className="btn btn-lg glass-dark" data-track="hero_sign_up">
+              Join with your Tufts email
             </Link>
             <Link href="/browse" className="hero-note">
               Browse open roles →

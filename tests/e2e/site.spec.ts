@@ -1,12 +1,12 @@
 import { expect, test } from "@playwright/test";
 
-test("landing page loads, has no sideways scroll, and links to sign-in", async ({ page }) => {
+test("landing page loads, has no sideways scroll, and links to creating an account", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("heading", { level: 1 })).toContainText("Someone on the Hill");
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
   expect(overflow).toBeLessThanOrEqual(0);
-  await page.getByRole("link", { name: "Sign in with your Tufts email" }).first().click();
-  await expect(page).toHaveURL(/\/sign-in/);
+  await page.getByRole("link", { name: "Join with your Tufts email" }).first().click();
+  await expect(page).toHaveURL(/\/sign-up/);
 });
 
 test("app pages send signed-out visitors to sign-in and remember where they were going", async ({ page }) => {
@@ -26,43 +26,41 @@ test("sign-in rejects non-Tufts emails and keeps what was typed", async ({ page 
   await expect(email).toBeFocused();
 });
 
-test("create account checks the password length, keeps the email across tabs, and can show the password", async ({ page }) => {
+test("forgot password asks for a Tufts email and comes back to sign in", async ({ page }) => {
   await page.goto("/sign-in");
-  await page.getByLabel("Tufts email").fill("jumbo@tufts.edu");
-  await page.getByRole("button", { name: "Create account" }).first().click();
-  await expect(page.getByRole("heading", { name: "Create your account" })).toBeVisible();
-  await expect(page.getByLabel("Tufts email")).toHaveValue("jumbo@tufts.edu");
-  const password = page.getByLabel("Password", { exact: true });
-  await password.fill("short");
-  await expect(password).toHaveAttribute("type", "password");
-  await page.getByRole("button", { name: "Show password" }).click();
-  await expect(password).toHaveAttribute("type", "text");
-  await page.locator("form").getByRole("button", { name: "Create account" }).click();
-  await expect(page.locator("#sign-in-error")).toHaveText("Use at least 8 characters.");
-  await expect(password).toBeFocused();
-  await expect(password).toHaveValue("short");
-});
-
-test("the sign-up link opens Create account, and forgot password asks for a Tufts email", async ({ page }) => {
-  await page.goto("/sign-in?mode=signup");
-  await expect(page.getByRole("heading", { name: "Create your account" })).toBeVisible();
-  await page.getByRole("button", { name: "Sign in", exact: true }).first().click();
   await page.getByRole("button", { name: "Forgot password?" }).click();
   await expect(page.getByRole("heading", { name: "Reset your password" })).toBeVisible();
   await page.getByLabel("Tufts email").fill("someone@gmail.com");
   await page.getByRole("button", { name: "Email me a reset link" }).click();
   await expect(page.locator("#sign-in-error")).toHaveText("Use your @tufts.edu email.");
+  await page.getByRole("button", { name: "Back to sign in" }).click();
+  await expect(page.getByRole("heading", { name: "Sign in" })).toBeVisible();
+  await expect(page.getByLabel("Tufts email")).toHaveValue("someone@gmail.com");
 });
 
-test("the email-link option still rejects non-Tufts emails", async ({ page }) => {
-  await page.goto("/sign-in");
-  await page.getByRole("button", { name: "Email me a sign-in link instead" }).click();
+test("creating an account is its own page: email first, no password field, Tufts only", async ({ page }) => {
+  await page.goto("/sign-in?next=%2Fpost");
+  await page.getByRole("link", { name: "Create an account" }).click();
+  await expect(page).toHaveURL(/\/sign-up\?next=%2Fpost/);
+  await expect(page.getByRole("heading", { name: "Create your account" })).toBeVisible();
+  await expect(page.getByLabel(/password/i)).toHaveCount(0);
   const email = page.getByLabel("Tufts email");
   await email.fill("someone@gmail.com");
-  await page.getByRole("button", { name: "Email me a sign-in link" }).click();
-  await expect(page.locator("#sign-in-error")).toHaveText("Use your @tufts.edu email.");
+  await page.getByRole("button", { name: "Send confirmation link" }).click();
+  await expect(page.locator("#sign-up-error")).toHaveText("Use your @tufts.edu email.");
   await expect(email).toHaveValue("someone@gmail.com");
   await expect(email).toBeFocused();
+  await page.getByRole("link", { name: "Sign in", exact: true }).click();
+  await expect(page).toHaveURL(/\/sign-in\?next=%2Fpost/);
+});
+
+test("the sign-in password field can be shown", async ({ page }) => {
+  await page.goto("/sign-in");
+  const password = page.getByLabel("Password", { exact: true });
+  await password.fill("secret pass");
+  await expect(password).toHaveAttribute("type", "password");
+  await page.getByRole("button", { name: "Show password" }).click();
+  await expect(password).toHaveAttribute("type", "text");
 });
 
 test("an expired link sends you back with an explanation", async ({ page }) => {

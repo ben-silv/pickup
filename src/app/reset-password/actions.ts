@@ -10,7 +10,7 @@ export async function saveNewPassword(_prev: AuthState, form: FormData): Promise
   const supabase = supabaseConfigured() ? await createClient() : null;
   const result = await setNewPassword(
     { password: form.get("password") },
-    { update: supabase ? (password) => supabase.auth.updateUser({ password }) : null },
+    { update: supabase ? (password) => supabase.auth.updateUser({ password, data: { password_set: true } }) : null },
   );
   if (result) return result;
   redirect("/browse");

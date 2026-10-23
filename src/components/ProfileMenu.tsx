@@ -126,6 +126,7 @@ export function ProfileMenu({ user }: { user: MenuUser | null }) {
               <span className="muted small">Tufts students only</span>
             </div>
             <Link href="/sign-in" className="menu-item">Sign in</Link>
+            <Link href="/sign-up" className="menu-item">Create an account</Link>
             <Link href="/browse" className="menu-item">Browse open roles</Link>
           </>
         )}

@@ -8,7 +8,7 @@ export const metadata: Metadata = { title: "Sign in · Pickup" };
 export default async function SignInPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const params = await searchParams;
   const next = safeNextPath(params.next);
-  const mode: SignInMode = params.mode === "signup" ? "signup" : params.mode === "forgot" ? "forgot" : "signin";
+  const mode: SignInMode = params.mode === "forgot" ? "forgot" : "signin";
   return (
     <main className="sign-in">
       <div className="sign-in-shape one" aria-hidden="true" />

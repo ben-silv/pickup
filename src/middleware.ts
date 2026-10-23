@@ -12,7 +12,7 @@ export async function middleware(request: NextRequest) {
     url.search = `?next=${encodeURIComponent(pathname + search)}`;
     return NextResponse.redirect(url);
   }
-  if (user && pathname === "/sign-in") {
+  if (user && (pathname === "/sign-in" || pathname === "/sign-up")) {
     const url = request.nextUrl.clone();
     url.pathname = DEFAULT_AFTER_SIGN_IN;
     url.search = "";

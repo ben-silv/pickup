@@ -541,10 +541,10 @@ code { font-family: ui-monospace, Menlo, monospace; font-size: 0.9em; background
 }
 
 /* ---- Sign-in modes ------------------------------------------------------ */
-.auth-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px; border-radius: var(--pill); background: rgba(0, 46, 109, 0.08); }
-.auth-tab { border: 0; border-radius: var(--pill); padding: 11px 8px; background: transparent; color: var(--navy); font-weight: 700; font-size: 15px; white-space: nowrap; cursor: pointer; transition: background-color 0.2s ease; }
-@media (hover: hover) { .auth-tab:hover { background: rgba(255, 255, 255, 0.5); } }
-.auth-tab[aria-pressed="true"] { background: var(--white); box-shadow: 0 2px 8px rgba(0, 30, 80, 0.12); }
+.auth-switch { border-top: 1.5px solid rgba(0, 46, 109, 0.12); padding-top: 18px; font-weight: 600; font-size: 15px; }
+.auth-switch a { font-weight: 700; }
+.auth-steps { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 6px 14px; color: var(--muted); }
+.auth-steps [aria-current="step"] { color: var(--navy); }
 .auth-links { display: flex; flex-wrap: wrap; gap: 0 20px; }
 .field-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
 .field-row .link-button { padding: 0; }

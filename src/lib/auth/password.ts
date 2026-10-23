@@ -1,4 +1,4 @@
-import { createAccountSchema, newPasswordSchema, passwordSignInSchema, signInSchema } from "@/lib/schemas";
+import { newPasswordSchema, passwordSignInSchema, signInSchema } from "@/lib/schemas";
 import { safeNextPath } from "./paths";
 import type { AuthState } from "./auth-state";
 
@@ -43,48 +43,12 @@ export async function passwordSignIn(
     return {
       status: "error",
       field: "password",
-      message: "Wrong email or password. If you've only used email links before, choose \"Forgot password\" to set one.",
+      message: "Wrong email or password.",
     };
   }
   console.error("password sign-in failed", error);
   return { status: "error", message: "Couldn't sign you in. Try again in a minute." };
 }
-
-export type SignUpResult = {
-  error: AuthErr;
-  /** Signed in straight away (only when email confirmation is turned off in Supabase). */
-  signedIn: boolean;
-  /** Supabase hides existing accounts by returning a user with no identities and sending nothing. */
-  alreadyRegistered: boolean;
-};
-
-/** Creates an account; Supabase emails a confirmation link. Returns null when the user is already signed in. */
-export async function createAccount(
-  input: { email: unknown; password: unknown; next: unknown },
-  deps: { signUp: ((email: string, password: string, redirectTo: string) => Promise<SignUpResult>) | null; origin: string },
-): Promise<AuthState | null> {
-  const parsed = createAccountSchema.safeParse({ email: input.email ?? "", password: input.password ?? "" });
-  if (!parsed.success) return invalid(parsed.error.issues);
-  if (!deps.signUp) return notConnected;
-
-  const res = await deps.signUp(parsed.data.email, parsed.data.password, callbackUrl(deps.origin, input.next));
-  if (res.error) {
-    if (res.error.status === 429) return tooMany;
-    if (res.error.code === "weak_password") return { status: "error", field: "password", message: "Pick a stronger password." };
-    if (res.error.code === "user_already_exists") return alreadyRegistered;
-    console.error("sign-up failed", res.error);
-    return { status: "error", message: "Couldn't create your account. Try again in a minute." };
-  }
-  if (res.alreadyRegistered) return alreadyRegistered;
-  if (res.signedIn) return null;
-  return { status: "sent", email: parsed.data.email, kind: "confirm" };
-}
-
-const alreadyRegistered: AuthState = {
-  status: "error",
-  field: "email",
-  message: "That email already has an account. Sign in, or choose \"Forgot password\" to set a new one.",
-};
 
 /** Emails a link that signs the user in and opens the set-a-new-password page. */
 export async function requestPasswordReset(

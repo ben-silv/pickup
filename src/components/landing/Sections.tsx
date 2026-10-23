@@ -97,10 +97,10 @@ export function FinalCta() {
           Get in on the <span className="hl">first round.</span>
         </h2>
         <p className="lead muted" style={{ maxWidth: "40ch" }}>
-          Sign in with your Tufts email, post what you&apos;re building or pick up a role. It takes about a minute.
+          Join with your Tufts email, post what you&apos;re building or pick up a role. It takes about a minute.
         </p>
-        <Link href="/sign-in" className="btn btn-lg glass-dark" data-track="final_sign_in">
-          Sign in with your Tufts email
+        <Link href="/sign-up" className="btn btn-lg glass-dark" data-track="final_sign_up">
+          Join with your Tufts email
         </Link>
       </div>
     </section>

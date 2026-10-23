@@ -29,8 +29,6 @@ export const passwordSignInSchema = signInSchema.extend({
   password: z.string().min(1, "Enter your password."),
 });
 
-export const createAccountSchema = signInSchema.extend({ password: passwordSchema });
-
 export const newPasswordSchema = z.object({ password: passwordSchema });
 
 export const roleInputSchema = z.object({
@@ -78,6 +76,14 @@ const requiredBasics = {
 };
 
 export const onboardingSchema = z.object(requiredBasics);
+
+/** The welcome step asks only for what's missing: the basics, a password, or both. */
+export function setupSchema(needs: { basics: boolean; password: boolean }) {
+  return z.object({
+    ...(needs.basics ? requiredBasics : {}),
+    ...(needs.password ? { password: passwordSchema } : {}),
+  });
+}
 
 export const profileInputSchema = z.object({
   ...requiredBasics,

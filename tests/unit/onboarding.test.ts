@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { isProfileComplete, knownMajor } from "@/lib/onboarding";
-import { onboardingSchema } from "@/lib/schemas";
+import { hasPassword, isProfileComplete, knownMajor, needsSetup, setupNeeds } from "@/lib/onboarding";
+import { onboardingSchema, setupSchema } from "@/lib/schemas";
 import { MAJORS, MAJOR_GROUPS } from "@/lib/vocab";
 
 describe("isProfileComplete", () => {
@@ -41,5 +41,31 @@ describe("majors list", () => {
     expect(MAJORS.every((m) => m.length <= 80)).toBe(true);
     expect(MAJOR_GROUPS.map((g) => g.label)).toEqual(["Arts and Sciences", "Engineering", "Other"]);
     expect(MAJORS).toContain("Computer Science");
+  });
+});
+
+describe("account setup", () => {
+  const complete = { full_name: "Ben Silver", class_year: "2028", major: "Computer Science" };
+  const withPassword = { user_metadata: { password_set: true } };
+
+  it("only counts a password once it has been recorded", () => {
+    expect(hasPassword(withPassword)).toBe(true);
+    expect(hasPassword({ user_metadata: {} })).toBe(false);
+    expect(hasPassword({ user_metadata: { password_set: "true" } })).toBe(false);
+    expect(hasPassword(null)).toBe(false);
+  });
+
+  it("asks new accounts for both, and existing link-only accounts for just a password", () => {
+    expect(setupNeeds(null, { user_metadata: {} })).toEqual({ basics: true, password: true });
+    expect(setupNeeds(complete, { user_metadata: {} })).toEqual({ basics: false, password: true });
+    expect(setupNeeds({ ...complete, major: "CS" }, withPassword)).toEqual({ basics: true, password: false });
+    expect(needsSetup(complete, withPassword)).toBe(false);
+  });
+
+  it("validates only the missing parts", () => {
+    const both = setupSchema({ basics: true, password: true }).safeParse({ fullName: "", classYear: "2028", major: "Biology", password: "short" });
+    expect(both.error?.issues.map((i) => i.path[0])).toEqual(["fullName", "password"]);
+    expect(setupSchema({ basics: false, password: true }).safeParse({ password: "long enough" }).success).toBe(true);
+    expect(setupSchema({ basics: true, password: false }).safeParse({ ...{ fullName: "Ben", classYear: "2028", major: "Biology" } }).success).toBe(true);
   });
 });

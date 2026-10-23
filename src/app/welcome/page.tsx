@@ -5,7 +5,7 @@ import { WelcomeForm } from "./WelcomeForm";
 import { createClient, getUser } from "@/lib/supabase/server";
 import { supabaseConfigured } from "@/lib/env";
 import { safeNextPath } from "@/lib/auth/paths";
-import { isProfileComplete, knownMajor } from "@/lib/onboarding";
+import { knownMajor, setupNeeds } from "@/lib/onboarding";
 
 export const metadata: Metadata = { title: "Welcome · Pickup" };
 export const dynamic = "force-dynamic";
@@ -17,7 +17,8 @@ export default async function WelcomePage({ searchParams }: { searchParams: Prom
 
   const supabase = await createClient();
   const { data: profile } = await supabase.from("profiles").select("full_name, class_year, major").eq("id", user.id).maybeSingle();
-  if (isProfileComplete(profile)) redirect(next);
+  const needs = setupNeeds(profile, user);
+  if (!needs.basics && !needs.password) redirect(next);
 
   return (
     <main className="sign-in">
@@ -29,6 +30,9 @@ export default async function WelcomePage({ searchParams }: { searchParams: Prom
       <section className="sign-in-card welcome-card glass">
         <WelcomeForm
           next={next}
+          email={user.email ?? ""}
+          needsBasics={needs.basics}
+          needsPassword={needs.password}
           fullName={profile?.full_name ?? ""}
           classYear={profile?.class_year ?? ""}
           major={knownMajor(profile?.major)}
