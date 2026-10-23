@@ -91,6 +91,10 @@ Push to GitHub, import the repo in Vercel, add the two `NEXT_PUBLIC_SUPABASE_*` 
 - [ ] Messages with live updates (`design/Messages.dc.html`)
 - [ ] Profile editing and credits (`design/Profile.dc.html`)
 
+## Later
+
+- [ ] Automatic message screening: check messages, offer notes and posts with OpenAI's free moderation API (`omni-moderation-latest`) before saving. Refuse clearly abusive text, auto-file a report for borderline text, let messages through if the API is down. Needs `OPENAI_API_KEY` (Sensitive) in Vercel and a privacy note.
+
 ## Working on this with Claude Code
 
 `CLAUDE.md` holds the design system, architecture and code rules, plus a recipe for building each Phase 2 screen. Claude Code reads it at the start of every session.
