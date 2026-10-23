@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient, getUser } from "@/lib/supabase/server";
-import { completeRoleInputSchema, messageInputSchema } from "@/lib/schemas";
+import { completeRoleInputSchema, messageInputSchema, offerIdSchema, reportInputSchema } from "@/lib/schemas";
 import { friendlyDbError } from "@/lib/db-errors";
 import { fieldErrors, type ActionState } from "@/lib/action-state";
 
@@ -19,7 +19,10 @@ export async function sendMessage(_prev: ActionState, form: FormData): Promise<A
     console.error("sendMessage failed", error);
     return {
       status: "error",
-      message: friendlyDbError(error, "Couldn't send your message. Try again.", { "42501": "This conversation is closed, so messages can't be sent." }),
+      message: friendlyDbError(error, "Couldn't send your message. Try again.", {
+        // Row-level security refusal: the offer is closed, or one of you blocked the other.
+        "42501": "This conversation is closed, so messages can't be sent.",
+      }),
     };
   }
   revalidatePath(`/messages/${parsed.data.offerId}`);
@@ -54,4 +57,45 @@ export async function completeRole(_prev: ActionState, form: FormData): Promise<
   revalidatePath("/projects/[id]", "page");
   revalidatePath("/profile");
   return { status: "done", message: "Role filled. Your credit note is on their profile." };
+}
+
+/** Report the other person in a conversation. Reviewed by the site admin in Supabase (reports table). */
+export async function reportConversation(_prev: ActionState, form: FormData): Promise<ActionState> {
+  const parsed = reportInputSchema.safeParse({ offerId: form.get("offerId"), reason: form.get("reason"), details: form.get("details") ?? "" });
+  if (!parsed.success) return { status: "error", message: parsed.error.issues[0]?.message ?? "Pick a reason." };
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("report_conversation", {
+    p_offer: parsed.data.offerId,
+    p_reason: parsed.data.reason,
+    p_details: parsed.data.details,
+  });
+  if (error) {
+    console.error("report_conversation failed", error);
+    return { status: "error", message: friendlyDbError(error, "Couldn't send your report. Try again.") };
+  }
+  return { status: "done", message: "Thanks for telling us. We'll look into it." };
+}
+
+async function blockRpc(fn: "block_in_conversation" | "unblock_in_conversation", form: FormData, fallback: string): Promise<ActionState> {
+  const offerId = offerIdSchema.safeParse(form.get("offerId"));
+  if (!offerId.success) return { status: "error", message: fallback };
+  const supabase = await createClient();
+  const { error } = await supabase.rpc(fn, { p_offer: offerId.data });
+  if (error) {
+    console.error(`${fn} failed`, error);
+    return { status: "error", message: friendlyDbError(error, fallback) };
+  }
+  revalidatePath(`/messages/${offerId.data}`);
+  revalidatePath("/messages");
+  revalidatePath("/projects/[id]", "page");
+  return { status: "done", message: "Done." };
+}
+
+/** Block the other person: closes this conversation and any pending offers between you, and stops new ones. */
+export async function blockPerson(_prev: ActionState, form: FormData): Promise<ActionState> {
+  return blockRpc("block_in_conversation", form, "Couldn't block them. Try again.");
+}
+
+export async function unblockPerson(_prev: ActionState, form: FormData): Promise<ActionState> {
+  return blockRpc("unblock_in_conversation", form, "Couldn't unblock them. Try again.");
 }

@@ -337,6 +337,57 @@ describe.skipIf(!url)("database access rules", () => {
     });
   });
 
+  describe("reports and blocks", () => {
+    it("lets someone in a conversation report it once, and only see their own reports", async () => {
+      const ben = await newUser("ben@tufts.edu");
+      const maya = await newUser("maya@tufts.edu");
+      const theo = await newUser("theo@tufts.edu");
+      const { roleId } = await newProject(ben);
+      const id = await offer(maya, roleId);
+      const report = (who: string) => as(who, (c) => c.query("select report_conversation($1, 'harassment', 'Rude messages')", [id]));
+
+      await expect(report(theo)).rejects.toThrow(/conversations you're in/);
+      await report(ben);
+      await expect(report(ben)).rejects.toThrow(/already reported/);
+      const { rows } = await admin("select reporter_id, reported_id, reason from reports");
+      expect(rows).toEqual([{ reporter_id: ben, reported_id: maya, reason: "harassment" }]);
+
+      expect((await as(maya, (c) => c.query("select * from reports"))).rowCount).toBe(0);
+      await expect(as(ben, (c) => c.query("insert into reports (reporter_id, reported_id, reason) values ($1, $2, 'spam')", [ben, maya]))).rejects.toThrow(
+        /permission denied/,
+      );
+    });
+
+    it("blocking closes the conversation both ways, closes pending offers and stops new ones", async () => {
+      const ben = await newUser("ben@tufts.edu");
+      const maya = await newUser("maya@tufts.edu");
+      const { roleId } = await newProject(ben);
+      const { roleId: mayaRole } = await newProject(maya);
+      const id = await offer(maya, roleId);
+      const benOffer = await offer(ben, mayaRole);
+      const say = (who: string) => as(who, (c) => c.query("insert into messages (offer_id, sender_id, body) values ($1, $2, 'hi')", [id, who]));
+
+      await say(ben);
+      await as(ben, (c) => c.query("select block_in_conversation($1)", [id]));
+      await expect(say(maya)).rejects.toThrow(/row-level security/);
+      await expect(say(ben)).rejects.toThrow(/row-level security/);
+      const statuses = await admin("select id, status from offers");
+      expect(Object.fromEntries(statuses.rows.map((r) => [r.id, r.status]))).toEqual({ [id]: "declined", [benOffer]: "withdrawn" });
+
+      // Maya can't see the block, and can't offer on Ben's other roles.
+      expect((await as(maya, (c) => c.query("select * from blocks"))).rowCount).toBe(0);
+      const other = await as(ben, async (c) => {
+        const { rows } = await c.query("select project_id from roles where id = $1", [roleId]);
+        return (await c.query("insert into roles (project_id, category, need, hours) values ($1, 'backend', 'Set up the API', 4) returning id", [rows[0].project_id])).rows[0].id as string;
+      });
+      await expect(offer(maya, other)).rejects.toThrow(/row-level security/);
+      await expect(as(maya, (c) => c.query("select blocked_between($1, $2)", [ben, maya]))).rejects.toThrow(/permission denied/);
+
+      await as(ben, (c) => c.query("select unblock_in_conversation($1)", [id]));
+      await offer(maya, other);
+    });
+  });
+
   describe("messages", () => {
     it("caps a helper at 5 unanswered messages on a pending offer, until the owner replies", async () => {
       const ben = await newUser("ben@tufts.edu");

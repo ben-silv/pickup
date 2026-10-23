@@ -47,6 +47,16 @@ export const PROJECT_STATUSES = ["draft", "published", "archived"] as const;
 export const ROLE_STATUSES = ["open", "in_progress", "filled", "closed"] as const;
 export const OFFER_STATUSES = ["pending", "accepted", "declined", "withdrawn"] as const;
 
+/** Postgres enum report_reason. */
+export const REPORT_REASONS = ["spam", "harassment", "inappropriate", "other"] as const;
+export type ReportReason = (typeof REPORT_REASONS)[number];
+export const REPORT_REASON_LABEL: Record<ReportReason, string> = {
+  spam: "Spam or a scam",
+  harassment: "Harassment or threats",
+  inappropriate: "Inappropriate or offensive",
+  other: "Something else",
+};
+
 export type ProjectStatus = (typeof PROJECT_STATUSES)[number];
 export type RoleStatus = (typeof ROLE_STATUSES)[number];
 export type OfferStatus = (typeof OFFER_STATUSES)[number];

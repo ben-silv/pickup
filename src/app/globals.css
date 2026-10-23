@@ -552,3 +552,8 @@ code { font-family: ui-monospace, Menlo, monospace; font-size: 0.9em; background
 .field-row .link-button { padding: 0; }
 .field-hint { font-weight: 400; }
 .confirm-button { width: 100%; }
+/* Report or block panel in a conversation header. */
+.safety-panel { display: flex; flex-direction: column; gap: 18px; padding-top: 14px; max-width: 480px; }
+.safety-block { border-top: 1.5px solid var(--line-warm); padding-top: 14px; }
+.thread-head:has(.reveal[open]) .thread-actions { flex-basis: 100%; }
+.safety-panel .btn { align-self: flex-start; }

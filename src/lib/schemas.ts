@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { CATEGORIES, CLASS_YEARS, MAJORS, STAGES, TUFTS_EMAIL } from "./vocab";
+import { CATEGORIES, CLASS_YEARS, MAJORS, REPORT_REASONS, STAGES, TUFTS_EMAIL } from "./vocab";
 import { FEED_SORTS, sanitizeSearch } from "./feed";
 
 /**
@@ -72,6 +72,13 @@ export const resendOfferInputSchema = z.object({ offerId: z.uuid(), note: offerN
 export const messageInputSchema = z.object({
   offerId: z.uuid(),
   body: trimmed(1, 2000, "Write a message first.", "Keep messages under 2,000 characters."),
+});
+
+/** Reporting a conversation (report_conversation). Details are optional; the 500 limit matches the reports table. */
+export const reportInputSchema = z.object({
+  offerId: z.uuid(),
+  reason: z.enum(REPORT_REASONS, { error: "Pick a reason." }),
+  details: z.string().trim().max(500, "Keep the details under 500 characters."),
 });
 
 /** Owner marks a role filled and leaves a credit note (complete_role). Limits match the credits table. */

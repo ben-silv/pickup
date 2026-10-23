@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { completeRoleInputSchema, messageInputSchema, offerInputSchema, profileInputSchema, projectInputSchema } from "@/lib/schemas";
+import { completeRoleInputSchema, messageInputSchema, offerInputSchema, profileInputSchema, projectInputSchema, reportInputSchema } from "@/lib/schemas";
 
 const role = { category: "design", need: "Redesign three screens", hours: "5" };
 const project = {
@@ -58,5 +58,15 @@ describe("completeRoleInputSchema", () => {
     expect(completeRoleInputSchema.safeParse({ ...ok, note: "   " }).success).toBe(false);
     expect(completeRoleInputSchema.safeParse({ ...ok, note: "x".repeat(401) }).success).toBe(false);
     expect(completeRoleInputSchema.safeParse({ ...ok, roleId: "nope" }).success).toBe(false);
+  });
+});
+
+describe("reportInputSchema", () => {
+  const offerId = "5eed0000-0000-4000-8000-0000000000d1";
+  it("needs a known reason; details are optional and capped", () => {
+    expect(reportInputSchema.parse({ offerId, reason: "harassment", details: "  rude  " })).toEqual({ offerId, reason: "harassment", details: "rude" });
+    expect(reportInputSchema.safeParse({ offerId, reason: "", details: "" }).error?.issues[0]?.message).toBe("Pick a reason.");
+    expect(reportInputSchema.safeParse({ offerId, reason: "other", details: "x".repeat(501) }).success).toBe(false);
+    expect(reportInputSchema.safeParse({ offerId: "nope", reason: "spam", details: "" }).success).toBe(false);
   });
 });

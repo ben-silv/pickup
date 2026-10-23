@@ -6,6 +6,7 @@ import { ConversationList } from "../ConversationList";
 import { OFFER_SELECT, loadConversations, type OfferThreadRow } from "../conversations";
 import { Thread } from "./Thread";
 import { MarkFilledForm } from "./MarkFilledForm";
+import { SafetyMenu } from "./SafetyMenu";
 import { createClient, getUser } from "@/lib/supabase/server";
 import { offerIdSchema } from "@/lib/schemas";
 import { CATEGORY_LABEL } from "@/lib/vocab";
@@ -57,10 +58,24 @@ export default async function ThreadPage({ params }: { params: Promise<{ offerId
       : { data: null, error: null };
   if (creditError) console.error("thread: credit query failed", creditError);
 
+  // Blocks: mine are visible to me (RLS); conversation_blocked() says whether either of us blocked the other.
+  const [blockedRes, mineRes] = await Promise.all([
+    supabase.rpc("conversation_blocked", { p_offer: offerId }),
+    other ? supabase.from("blocks").select("blocked_id").eq("blocked_id", other.id).maybeSingle() : Promise.resolve({ data: null, error: null }),
+  ]);
+  if (blockedRes.error) console.error("thread: block check failed", blockedRes.error);
+  if (mineRes.error) console.error("thread: my block query failed", mineRes.error);
+  const blocked = blockedRes.data === true;
+  const blockedByMe = Boolean(mineRes.data);
+  const otherFirst = viewerIsHelper ? ownerFirst : helperFirst;
+
   const status = threadStatus(offer.status, role?.status ?? "closed", viewerIsHelper);
   const roleLabel = role ? CATEGORY_LABEL[role.category] : "Role";
-  const closedNote =
-    offer.status === "declined"
+  const closedNote = blockedByMe
+    ? `You blocked ${otherFirst}, so this conversation is closed.`
+    : blocked
+      ? "This conversation is closed."
+      : offer.status === "declined"
       ? "This offer was declined, so the conversation is closed."
       : viewerIsHelper
         ? "You withdrew this offer, so the conversation is closed. You can send a new one from the project page."
@@ -90,15 +105,16 @@ export default async function ThreadPage({ params }: { params: Promise<{ offerId
             </div>
             <div className="row-wrap thread-actions">
               <span className={`label badge ${status.success ? "badge-success" : "badge-neutral"}`}>{status.label}</span>
-              {isOwner && role && offer.status === "accepted" && role.status === "in_progress" ? (
+              {isOwner && role && offer.status === "accepted" && role.status === "in_progress" && !blocked ? (
                 <MarkFilledForm roleId={role.id} offerId={offerId} defaultHours={role.hours} helperFirst={helperFirst} />
               ) : null}
+              {other ? <SafetyMenu offerId={offerId} otherFirst={otherFirst} blockedByMe={blockedByMe} /> : null}
             </div>
           </header>
           <Thread
             offerId={offerId}
             initialMessages={messages}
-            canSend={canSend(offer.status)}
+            canSend={canSend(offer.status) && !blocked}
             closedNote={closedNote}
             timeline={{
               viewerId: user.id,
