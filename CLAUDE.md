@@ -80,7 +80,10 @@ Final direction from the Claude Design canvas: calm, roomy pages (Dirtywave) wit
 - Radii: tiles 36px, cards 28px, form inputs 16px, buttons/tags/nav fully pill-shaped. Search boxes and selects in filter bars are pill-shaped too (as in the designs).
 - **Liquid glass** (`.glass` light, `.glass-dark` navy): the menu, all primary buttons, chips and the sign-in card. Don't invent new glass variants; don't put glass on plain white areas where it can't be seen.
 - Depth from color blocks; cards get at most the one soft shadow in `.card`.
-- Motion: buttons lift 2px on hover; nothing else moves. Respect `prefers-reduced-motion`.
+- Hover changes shade, never position: `.btn.glass-dark` gets a bit darker, `.btn.glass` a bit brighter, `.btn-outline` gets a paper fill (all in `globals.css`). Nothing lifts or scales.
+- Two signature animations, and only these two: the **glass light** (`GlassLight` moves a soft highlight under the mouse on `.glass`/`.glass-dark`), and the **hero post stack** (`HeroStack` shuffles example posts every 4.5s, pauses on hover/focus, has a Next button). Don't add more motion without asking.
+- State transitions (not decoration) are fine: the menu bar docks flush to the top once the page scrolls (`ScrollState` sets `data-scrolled` on `<html>`).
+- Respect `prefers-reduced-motion`: both animations and all transitions switch off.
 
 ### Components to reuse
 `Logo`, `RoleTag` (light-blue role pill + hours: use it wherever a role appears), `Elephant` (original art, never next to the word "Tufts"), `PageBand` (blue header on app pages, content below uses `.overlap`), `.card`, `.field`, `.btn` + `.glass-dark`, `.badge-success`, `.avatar-*`, `.pill-*`.

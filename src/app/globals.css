@@ -70,11 +70,28 @@ code { font-family: ui-monospace, Menlo, monospace; font-size: 0.9em; background
 .small { font-size: 15px; }
 .tiny { font-size: 10px; }
 .error-text { color: var(--error); font-weight: 700; font-size: 15px; }
-.hl { background: var(--sky); color: var(--navy); border-radius: 0.16em; padding: 0 0.1em; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+/* Highlight band sized to the letters (not the font's full box), so on tight display headlines it doesn't cover the line above. */
+.hl {
+  color: var(--navy); border-radius: 0.16em; padding: 0 0.1em;
+  background: linear-gradient(var(--sky), var(--sky)) 0 72% / 100% 0.86em no-repeat;
+  -webkit-box-decoration-break: clone; box-decoration-break: clone;
+}
 
 /* ---- Liquid glass ------------------------------------------------------- */
+/* Registered properties so hover shades and the cursor light fade smoothly instead of snapping. */
+@property --g-top { syntax: "<color>"; inherits: false; initial-value: rgba(255, 255, 255, 0.64); }
+@property --g-bottom { syntax: "<color>"; inherits: false; initial-value: rgba(255, 255, 255, 0.36); }
+@property --shine { syntax: "<number>"; inherits: false; initial-value: 0; }
+
+.glass, .glass-dark {
+  /* Cursor light: a soft radial highlight at --mx/--my (set by GlassLight), faded in by --shine. */
+  background:
+    radial-gradient(circle 140px at var(--mx, 50%) var(--my, 50%), rgb(255 255 255 / calc(var(--shine) * var(--shine-max))), transparent 70%),
+    linear-gradient(180deg, var(--g-top) 0%, var(--g-bottom) 100%);
+  transition: --g-top 0.2s ease, --g-bottom 0.2s ease, --shine 0.3s ease;
+}
 .glass {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.64) 0%, rgba(255, 255, 255, 0.36) 100%);
+  --g-top: rgba(255, 255, 255, 0.64); --g-bottom: rgba(255, 255, 255, 0.36); --shine-max: 0.55;
   -webkit-backdrop-filter: blur(22px) saturate(180%); backdrop-filter: blur(22px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.72);
   box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.95), inset 0 -1px 0 rgba(255, 255, 255, 0.35),
@@ -82,22 +99,28 @@ code { font-family: ui-monospace, Menlo, monospace; font-size: 0.9em; background
   color: var(--navy);
 }
 .glass-dark {
-  background: linear-gradient(180deg, rgba(24, 74, 146, 0.8) 0%, rgba(0, 46, 109, 0.88) 100%);
+  --g-top: rgba(24, 74, 146, 0.8); --g-bottom: rgba(0, 46, 109, 0.88); --shine-max: 0.22;
   -webkit-backdrop-filter: blur(18px) saturate(170%); backdrop-filter: blur(18px) saturate(170%);
   border: 1px solid rgba(255, 255, 255, 0.4);
   box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.5), inset 0 -1px 0 rgba(255, 255, 255, 0.14),
     inset 0 0 14px rgba(120, 170, 235, 0.25), 0 8px 24px rgba(0, 30, 80, 0.25);
   color: var(--white);
 }
+@media (hover: hover) {
+  .glass:hover, .glass-dark:hover { --shine: 1; }
+  /* Hover = a slightly different shade, never movement. */
+  .btn.glass-dark:hover { --g-top: rgba(14, 58, 124, 0.9); --g-bottom: rgba(0, 34, 84, 0.95); }
+  .btn.glass:hover { --g-top: rgba(255, 255, 255, 0.82); --g-bottom: rgba(255, 255, 255, 0.56); }
+}
 
 /* ---- Buttons & pills ---------------------------------------------------- */
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; cursor: pointer;
   font-weight: 700; font-size: 16px; line-height: 1; padding: 16px 26px; border-radius: var(--pill);
-  transition: transform 0.15s ease, filter 0.15s ease;
 }
-.btn:hover { transform: translateY(-2px); filter: brightness(1.06); }
-.btn:disabled { opacity: 0.6; cursor: progress; transform: none; }
+.btn-outline { transition: background-color 0.2s ease, border-color 0.2s ease; }
+@media (hover: hover) { .btn-outline:hover { background: var(--paper); border-color: #B9C3D3; } }
+.btn:disabled { opacity: 0.6; cursor: progress; }
 .btn-sm { font-size: 15px; padding: 13px 20px; }
 .btn-lg { font-size: 18px; padding: 19px 32px; }
 .btn-outline { border: 1.5px solid var(--line); background: var(--white); color: var(--navy); }
@@ -441,7 +464,9 @@ code { font-family: ui-monospace, Menlo, monospace; font-size: 0.9em; background
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .btn, .btn:hover, .faq-plus { transition: none; transform: none; }
+  .btn, .faq-plus, .glass, .glass-dark, .hero-card { transition: none; }
+  .glass, .glass-dark { --shine: 0; }
+  .nav { transition: none; }
   .switch, .switch::before { transition: none; }
 }
 
@@ -479,3 +504,38 @@ code { font-family: ui-monospace, Menlo, monospace; font-size: 0.9em; background
 .welcome-card { max-width: 560px; }
 .field select:invalid, .field select option[value=""] { color: var(--muted); }
 .field select option { color: var(--navy); }
+
+/* ---- Hero example-post stack ---------------------------------------------- */
+.hero-card {
+  position: absolute; left: 50%; top: 50%; width: min(84%, 410px); color: var(--navy); background: var(--white);
+  border-radius: var(--radius-lg); padding: 22px; display: flex; flex-direction: column; gap: 14px;
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s ease, box-shadow 0.7s ease;
+}
+.hero-card[data-pos="0"] { z-index: 3; transform: translate(-54%, -46%) rotate(-3deg); box-shadow: 0 24px 50px rgba(0, 20, 60, 0.28); }
+.hero-card[data-pos="1"] { z-index: 2; transform: translate(-44%, -60%) rotate(5deg) scale(0.94); background: var(--cream); }
+.hero-card[data-pos="2"] { z-index: 1; transform: translate(-50%, -64%) rotate(9deg) scale(0.88); opacity: 0; }
+.hero-card[data-pos="1"] .fake-button, .hero-card[data-pos="1"] .muted.small { opacity: 0.55; }
+.hero-next { position: absolute; right: max(18px, env(safe-area-inset-right, 0px)); bottom: 18px; z-index: 4; }
+
+/* ---- Menu bar docks to the top once you scroll ---------------------------- */
+.nav { transition: top 0.3s cubic-bezier(0.22, 1, 0.36, 1), border-radius 0.3s ease, padding-top 0.3s ease, --g-top 0.3s ease, --g-bottom 0.3s ease, --shine 0.3s ease; }
+:root[data-scrolled] .nav {
+  top: 0;
+  border-radius: 0 0 26px 26px;
+  border-top-color: transparent;
+  padding-top: calc(8px + env(safe-area-inset-top, 0px)); /* stays clear of a phone's notch */
+  /* A little more frosted while content scrolls underneath, so the links stay readable. */
+  --g-top: rgba(255, 255, 255, 0.84);
+  --g-bottom: rgba(255, 255, 255, 0.7);
+}
+
+/* Browse header's main action: bigger and bright white so it pops against the Tufts Blue band. */
+.btn-post { font-size: 20px; padding: 22px 36px; gap: 10px; }
+.btn.glass.btn-post {
+  --g-top: rgba(255, 255, 255, 0.98); --g-bottom: rgba(255, 255, 255, 0.88);
+  color: var(--navy);
+  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 1), 0 12px 32px rgba(0, 30, 80, 0.28);
+}
+@media (hover: hover) {
+  .btn.glass.btn-post:hover { --g-top: rgba(236, 244, 252, 1); --g-bottom: rgba(207, 226, 246, 0.95); }
+}

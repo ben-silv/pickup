@@ -82,3 +82,13 @@ test("the welcome step needs sign-in first", async ({ page }) => {
   await page.goto("/welcome");
   await expect(page).toHaveURL(/\/sign-in\?next=%2Fwelcome/);
 });
+
+test("the menu bar docks to the top after scrolling and floats back at the top", async ({ page }) => {
+  await page.goto("/");
+  const nav = page.getByRole("navigation", { name: "Main" });
+  await expect.poll(async () => (await nav.boundingBox())?.y).toBeGreaterThan(10);
+  await page.mouse.wheel(0, 900);
+  await expect.poll(async () => Math.round((await nav.boundingBox())?.y ?? -1)).toBe(0);
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await expect.poll(async () => (await nav.boundingBox())?.y).toBeGreaterThan(10);
+});

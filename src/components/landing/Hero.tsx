@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { heroChips } from "@/content";
-import { RoleTag } from "../RoleTag";
+import { HeroStack } from "./HeroStack";
 
 export function Hero() {
   return (
@@ -25,28 +25,7 @@ export function Hero() {
           </div>
         </div>
 
-        <div className="hero-visual" role="img" aria-label="Example post: Dewick wait-time tracker asking for a UI/UX designer for about five hours">
-          <div className="hero-circle top" aria-hidden="true" />
-          <div className="hero-circle bottom" aria-hidden="true" />
-          <div className="post post-back">
-            <p className="label muted">Posted · CS 15 study-group matcher</p>
-            <RoleTag role="Backend dev" scope="auth + database · ~8 hrs" />
-          </div>
-          <div className="post post-front">
-            <div className="person">
-              <span className="avatar avatar-sky" aria-hidden="true">JL</span>
-              <span className="person-text">
-                <strong>Jamie L. · CS &apos;28</strong>
-                <span className="label muted">Prototype live</span>
-              </span>
-            </div>
-            <p className="display post-title">Dewick wait-time tracker</p>
-            <p className="muted small">Built with Cursor. Shows live line length at the dining halls. The screens need a real designer.</p>
-            <RoleTag role="UI/UX designer" scope="3 screens · ~5 hrs" />
-            <span className="fake-button">I can help</span>
-          </div>
-          <span className="label sticker glass">Example post</span>
-        </div>
+        <HeroStack />
       </div>
 
       <ul className="wrap chip-row" aria-label="Roles people ask for">

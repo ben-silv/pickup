@@ -30,7 +30,14 @@ export default async function BrowsePage({ searchParams }: { searchParams: Promi
       <PageBand
         title="Open roles"
         lede="Small, scoped asks from Tufts students. Pick one you can finish in a weekend."
-        actions={<Link href="/post" className="btn glass-dark">Post a project</Link>}
+        actions={
+          <Link href="/post" className="btn btn-lg btn-post glass">
+            <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+              <path d="M12 5v14M5 12h14" />
+            </svg>
+            Post a project
+          </Link>
+        }
       />
       <main className="wrap overlap stack-md">
         <FeedFilters skill={skill} q={q} sort={sort} />

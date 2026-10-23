@@ -36,3 +36,37 @@ export const faqs = [
   { q: "Who owns the project?", a: "The person who posts it. Before you start, agree in writing on what the helper gets credit for and what happens if the project turns into a business." },
   { q: "How do I sign in?", a: "Enter your Tufts email and we send you a one-time link. No passwords. The first link creates your account." },
 ];
+
+/** Example posts the hero card stack shuffles through. Illustrations, not real students. */
+export const heroPosts = [
+  {
+    initials: "JL",
+    tone: "avatar-sky",
+    person: "Jamie L. · CS '28",
+    stage: "Prototype live",
+    title: "Dewick wait-time tracker",
+    blurb: "Built with Cursor. Shows live line length at the dining halls. The screens need a real designer.",
+    role: "UI/UX designer",
+    scope: "3 screens · ~5 hrs",
+  },
+  {
+    initials: "PK",
+    tone: "avatar-navy",
+    person: "Priya K. · CS '27",
+    stage: "Mockup",
+    title: "CS 15 study-group matcher",
+    blurb: "Pairs people by section and free time. The front end is done; sign-in and storage are not.",
+    role: "Backend dev",
+    scope: "auth + database · ~8 hrs",
+  },
+  {
+    initials: "SO",
+    tone: "avatar-blue",
+    person: "Sam O. · Biology '28",
+    stage: "Prototype",
+    title: "Wet-lab protocol timer",
+    blurb: "Step timers for bench work, with a semester of usage logs. Which steps do people skip?",
+    role: "Data scientist",
+    scope: "one analysis · ~4 hrs",
+  },
+] as const;

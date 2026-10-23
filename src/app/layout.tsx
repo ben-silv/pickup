@@ -4,6 +4,8 @@ import "@fontsource-variable/montserrat";
 import "@fontsource-variable/archivo/wdth.css";
 import "./globals.css";
 import { Analytics } from "@/components/Analytics";
+import { GlassLight } from "@/components/GlassLight";
+import { ScrollState } from "@/components/ScrollState";
 
 export const metadata: Metadata = {
   title: "Pickup · Build with Tufts students",
@@ -26,6 +28,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         {children}
         <Analytics />
+        <GlassLight />
+        <ScrollState />
       </body>
     </html>
   );
