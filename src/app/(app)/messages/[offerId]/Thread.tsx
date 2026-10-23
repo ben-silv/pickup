@@ -3,7 +3,7 @@
 import { startTransition, useActionState, useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { sendMessage } from "../actions";
 import { idleState } from "@/lib/action-state";
-import { buildTimeline, isChatMessage, mergeMessages, messageTime, type ChatMessage, type TimelineInput } from "@/lib/messages";
+import { buildTimeline, isChatMessage, mergeMessages, messageTime, unansweredLeft, type ChatMessage, type TimelineInput } from "@/lib/messages";
 import { createClient } from "@/lib/supabase/browser";
 import { supabaseConfigured } from "@/lib/env";
 
@@ -42,7 +42,11 @@ export function Thread({ offerId, initialMessages, timeline, canSend, closedNote
     };
   }, [offerId]);
 
-  const items = useMemo(() => buildTimeline({ ...timeline, messages: mergeMessages(initialMessages, live) }), [timeline, initialMessages, live]);
+  const all = useMemo(() => mergeMessages(initialMessages, live), [initialMessages, live]);
+  const items = useMemo(() => buildTimeline({ ...timeline, messages: all }), [timeline, all]);
+  // Anti-spam: before the owner replies, a helper gets a few messages (the database enforces the same limit).
+  const left = unansweredLeft({ viewerIsHelper: timeline.viewerIsHelper, viewerId: timeline.viewerId, offer: timeline.offer, messages: all });
+  const capped = left === 0;
 
   // Keep the newest message in view.
   useEffect(() => {
@@ -98,17 +102,25 @@ export function Thread({ offerId, initialMessages, timeline, canSend, closedNote
               onChange={(e) => setDraft(e.target.value)}
               maxLength={2000}
               autoComplete="off"
-              placeholder="Write a message"
+              placeholder={capped ? `Waiting for ${timeline.ownerFirst}` : "Write a message"}
+              disabled={capped}
               aria-invalid={error ? true : undefined}
-              aria-describedby={error ? "composer-error" : undefined}
+              aria-describedby={[error ? "composer-error" : "", left !== null ? "composer-limit" : ""].filter(Boolean).join(" ") || undefined}
             />
           </label>
-          <button type="submit" className="btn btn-sm glass-dark" disabled={pending}>
+          <button type="submit" className="btn btn-sm glass-dark" disabled={pending || capped}>
             {pending ? "Sending…" : "Send"}
           </button>
           {error ? (
             <p id="composer-error" role="alert" className="error-text composer-error">
               {error}
+            </p>
+          ) : null}
+          {left !== null ? (
+            <p id="composer-limit" className="small muted composer-error">
+              {capped
+                ? `${timeline.ownerFirst} hasn't replied yet. You can send more once they reply or accept your offer.`
+                : `You can send ${left} more ${left === 1 ? "message" : "messages"} until ${timeline.ownerFirst} replies.`}
             </p>
           ) : null}
         </form>

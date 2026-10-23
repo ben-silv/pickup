@@ -10,6 +10,8 @@ import {
   messageTime,
   shortTime,
   threadStatus,
+  unansweredLeft,
+  UNANSWERED_LIMIT,
   type ChatMessage,
 } from "@/lib/messages";
 
@@ -164,5 +166,27 @@ describe("withdrawn offers and resends", () => {
       "Maya withdrew and sent a new offer",
       "them:Back with more time.",
     ]);
+  });
+});
+
+describe("unansweredLeft", () => {
+  const offer = { status: "pending" as const, created_at: "2026-10-20T10:00:00Z", resent_at: null };
+  const mine = (n: number, from = "2026-10-20T11:00:00Z") => Array.from({ length: n }, (_, i) => msg(`m${i}`, new Date(Date.parse(from) + i * 60_000).toISOString(), "helper"));
+
+  it("counts down the helper's messages until the owner writes back", () => {
+    expect(unansweredLeft({ viewerIsHelper: true, viewerId: "helper", offer, messages: [] })).toBe(UNANSWERED_LIMIT);
+    expect(unansweredLeft({ viewerIsHelper: true, viewerId: "helper", offer, messages: mine(3) })).toBe(2);
+    expect(unansweredLeft({ viewerIsHelper: true, viewerId: "helper", offer, messages: mine(7) })).toBe(0);
+  });
+
+  it("lifts the limit once the owner replies or accepts, and never applies to the owner", () => {
+    expect(unansweredLeft({ viewerIsHelper: true, viewerId: "helper", offer, messages: [...mine(5), msg("r", "2026-10-21T10:00:00Z", "owner")] })).toBeNull();
+    expect(unansweredLeft({ viewerIsHelper: true, viewerId: "helper", offer: { ...offer, status: "accepted" }, messages: mine(9) })).toBeNull();
+    expect(unansweredLeft({ viewerIsHelper: false, viewerId: "owner", offer, messages: mine(9) })).toBeNull();
+  });
+
+  it("starts the count again after a resend", () => {
+    const resent = { ...offer, resent_at: "2026-10-22T10:00:00Z" };
+    expect(unansweredLeft({ viewerIsHelper: true, viewerId: "helper", offer: resent, messages: [...mine(5), ...mine(1, "2026-10-22T11:00:00Z")] })).toBe(4);
   });
 });

@@ -338,6 +338,34 @@ describe.skipIf(!url)("database access rules", () => {
   });
 
   describe("messages", () => {
+    it("caps a helper at 5 unanswered messages on a pending offer, until the owner replies", async () => {
+      const ben = await newUser("ben@tufts.edu");
+      const maya = await newUser("maya@tufts.edu");
+      const { roleId } = await newProject(ben);
+      const id = await offer(maya, roleId);
+      const say = (who: string) => as(who, (c) => c.query("insert into messages (offer_id, sender_id, body) values ($1, $2, 'hello?')", [id, who]));
+
+      for (let i = 0; i < 5; i++) await say(maya);
+      await expect(say(maya)).rejects.toThrow(/up to 5 messages/);
+
+      await say(ben);
+      await say(maya);
+      const { rows } = await admin("select count(*)::int as n from messages where offer_id = $1", [id]);
+      expect(rows[0].n).toBe(7);
+    });
+
+    it("lifts the cap once the offer is accepted", async () => {
+      const ben = await newUser("ben@tufts.edu");
+      const maya = await newUser("maya@tufts.edu");
+      const { roleId } = await newProject(ben);
+      const id = await offer(maya, roleId);
+      const say = () => as(maya, (c) => c.query("insert into messages (offer_id, sender_id, body) values ($1, $2, 'update')", [id, maya]));
+      for (let i = 0; i < 5; i++) await say();
+      await as(ben, (c) => c.query("select accept_offer($1)", [id]));
+      await say();
+      await say();
+    });
+
     it("lets only the two people in a conversation read and write it", async () => {
       const ben = await newUser("ben@tufts.edu");
       const maya = await newUser("maya@tufts.edu");

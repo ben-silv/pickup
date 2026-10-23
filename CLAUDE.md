@@ -52,6 +52,7 @@ Tables: `profiles` (1 per auth user, created by trigger, Tufts emails only), `pr
 - Multi-row state changes go through SECURITY DEFINER functions, called with `supabase.rpc(...)`:
   `accept_offer(p_offer)`, `decline_offer(p_offer)`, `withdraw_offer(p_offer)`, `resend_offer(p_offer, p_note)`, `complete_role(p_role, p_hours, p_note)`.
   `resend_offer` reopens a withdrawn offer: 1-hour cooldown, at most 2 resends per role (constants mirrored in `src/lib/project.ts`).
+  Messages: a trigger caps a helper at 5 messages on a pending offer until the owner replies or accepts (`UNANSWERED_LIMIT` in `src/lib/messages.ts`).
   Never add an UPDATE policy that would let users skip these.
 - Changing the schema = new migration + matching Zod change + a test in `tests/db/access-rules.test.ts` for any new rule.
 

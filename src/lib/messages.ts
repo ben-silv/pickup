@@ -56,6 +56,26 @@ export function canSend(status: OfferStatus): boolean {
   return status === "pending" || status === "accepted";
 }
 
+/** Must match supabase/migrations/20261023010000_unanswered_message_limit.sql. */
+export const UNANSWERED_LIMIT = 5;
+
+/**
+ * Messages the helper can still send before the owner replies: a number while the limit applies, null once it doesn't
+ * (the owner has written back, the offer was accepted, or the viewer is the owner). The database enforces the same rule.
+ */
+export function unansweredLeft(t: {
+  viewerIsHelper: boolean;
+  viewerId: string;
+  offer: { status: OfferStatus; created_at: string; resent_at?: string | null };
+  messages: readonly Pick<ChatMessage, "sender_id" | "created_at">[];
+}): number | null {
+  if (!t.viewerIsHelper || t.offer.status !== "pending") return null;
+  if (t.messages.some((m) => m.sender_id !== t.viewerId)) return null;
+  const since = Date.parse(t.offer.resent_at ?? t.offer.created_at);
+  const sent = t.messages.filter((m) => m.sender_id === t.viewerId && Date.parse(m.created_at) >= since).length;
+  return Math.max(0, UNANSWERED_LIMIT - sent);
+}
+
 /** The status pill for a conversation. Green only for success. */
 export function threadStatus(offer: OfferStatus, role: RoleStatus, viewerIsHelper = false): { label: string; success: boolean } {
   if (offer === "accepted" && role === "filled") return { label: "Role filled", success: true };
