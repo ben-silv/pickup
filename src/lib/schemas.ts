@@ -19,6 +19,20 @@ export const signInSchema = z.object({
   email: z.string().trim().toLowerCase().regex(TUFTS_EMAIL, "Use your @tufts.edu email."),
 });
 
+/** Passwords: 8+ characters; 72 is bcrypt's limit (Supabase ignores anything past it). Not trimmed: spaces count. */
+export const passwordSchema = z
+  .string()
+  .min(8, "Use at least 8 characters.")
+  .max(72, "Keep it under 72 characters.");
+
+export const passwordSignInSchema = signInSchema.extend({
+  password: z.string().min(1, "Enter your password."),
+});
+
+export const createAccountSchema = signInSchema.extend({ password: passwordSchema });
+
+export const newPasswordSchema = z.object({ password: passwordSchema });
+
 export const roleInputSchema = z.object({
   category: z.enum(CATEGORIES, { error: "Pick a role." }),
   need: trimmed(5, 200, "Say what's needed in a few words.", "Keep it under 200 characters."),

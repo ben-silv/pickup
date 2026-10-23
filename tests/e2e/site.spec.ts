@@ -19,6 +19,46 @@ test("sign-in rejects non-Tufts emails and keeps what was typed", async ({ page 
   await page.goto("/sign-in");
   const email = page.getByLabel("Tufts email");
   await email.fill("someone@gmail.com");
+  await page.getByLabel("Password", { exact: true }).fill("whatever1");
+  await page.locator("form").getByRole("button", { name: "Sign in", exact: true }).click();
+  await expect(page.locator("#sign-in-error")).toHaveText("Use your @tufts.edu email.");
+  await expect(email).toHaveValue("someone@gmail.com");
+  await expect(email).toBeFocused();
+});
+
+test("create account checks the password length, keeps the email across tabs, and can show the password", async ({ page }) => {
+  await page.goto("/sign-in");
+  await page.getByLabel("Tufts email").fill("jumbo@tufts.edu");
+  await page.getByRole("button", { name: "Create account" }).first().click();
+  await expect(page.getByRole("heading", { name: "Create your account" })).toBeVisible();
+  await expect(page.getByLabel("Tufts email")).toHaveValue("jumbo@tufts.edu");
+  const password = page.getByLabel("Password", { exact: true });
+  await password.fill("short");
+  await expect(password).toHaveAttribute("type", "password");
+  await page.getByRole("button", { name: "Show password" }).click();
+  await expect(password).toHaveAttribute("type", "text");
+  await page.locator("form").getByRole("button", { name: "Create account" }).click();
+  await expect(page.locator("#sign-in-error")).toHaveText("Use at least 8 characters.");
+  await expect(password).toBeFocused();
+  await expect(password).toHaveValue("short");
+});
+
+test("the sign-up link opens Create account, and forgot password asks for a Tufts email", async ({ page }) => {
+  await page.goto("/sign-in?mode=signup");
+  await expect(page.getByRole("heading", { name: "Create your account" })).toBeVisible();
+  await page.getByRole("button", { name: "Sign in", exact: true }).first().click();
+  await page.getByRole("button", { name: "Forgot password?" }).click();
+  await expect(page.getByRole("heading", { name: "Reset your password" })).toBeVisible();
+  await page.getByLabel("Tufts email").fill("someone@gmail.com");
+  await page.getByRole("button", { name: "Email me a reset link" }).click();
+  await expect(page.locator("#sign-in-error")).toHaveText("Use your @tufts.edu email.");
+});
+
+test("the email-link option still rejects non-Tufts emails", async ({ page }) => {
+  await page.goto("/sign-in");
+  await page.getByRole("button", { name: "Email me a sign-in link instead" }).click();
+  const email = page.getByLabel("Tufts email");
+  await email.fill("someone@gmail.com");
   await page.getByRole("button", { name: "Email me a sign-in link" }).click();
   await expect(page.locator("#sign-in-error")).toHaveText("Use your @tufts.edu email.");
   await expect(email).toHaveValue("someone@gmail.com");
@@ -76,6 +116,11 @@ test("account menu opens on hover and tap and offers sign-in when signed out", a
   await expect(signIn).toBeVisible();
   await signIn.click();
   await expect(page).toHaveURL(/\/sign-in/);
+});
+
+test("setting a new password needs sign-in first", async ({ page }) => {
+  await page.goto("/reset-password");
+  await expect(page).toHaveURL(/\/sign-in\?next=%2Freset-password/);
 });
 
 test("the welcome step needs sign-in first", async ({ page }) => {

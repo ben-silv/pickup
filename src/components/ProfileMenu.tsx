@@ -113,6 +113,7 @@ export function ProfileMenu({ user }: { user: MenuUser | null }) {
             <Link href="/profile?edit=1" className="menu-item">Edit profile</Link>
             <Link href="/profile#projects-heading" className="menu-item">Your projects</Link>
             <Link href="/messages" className="menu-item">Messages</Link>
+            <Link href="/reset-password" className="menu-item">Change password</Link>
             <hr className="menu-sep" />
             <form action={signOut}>
               <button type="submit" className="menu-item">Sign out</button>

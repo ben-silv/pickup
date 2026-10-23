@@ -10,7 +10,7 @@ Approved screens live in `design/` (see `design/README.md`). They are the spec f
 ## Stack (don't change without asking)
 - **Next.js 15 (App Router) + React 19 + TypeScript (strict).** Server Components by default; `"use client"` only for state, effects or browser APIs.
 - **Server Actions** for mutations. No API routes unless something outside the site calls them (the only route is `/auth/callback`).
-- **Supabase**: Postgres + Auth (email magic links, Tufts only) + Realtime for messages. Accessed with `@supabase/ssr`:
+- **Supabase**: Postgres + Auth (Tufts email + password, or a one-time email link) + Realtime for messages. Accessed with `@supabase/ssr`:
   - `src/lib/supabase/server.ts` in Server Components/Actions (acts as the signed-in user, so RLS applies)
   - `src/lib/supabase/browser.ts` in Client Components (realtime only)
   - `src/middleware.ts` refreshes the session and guards app pages.
@@ -25,6 +25,7 @@ Approved screens live in `design/` (see `design/README.md`). They are the spec f
 src/app/page.tsx              landing page (public)
 src/app/sign-in/              sign-in page, form, server action
 src/app/auth/callback/        exchanges the email link's code for a session
+src/app/reset-password/       set a new password (reset emails and the account menu land here)
 src/app/(app)/                signed-in app: layout (auth backstop + nav), browse, post, messages, profile
 src/components/landing/       landing sections
 src/components/app/           AppNav, PageBand, ComingNext (delete ComingNext from a page once it's built)
@@ -32,7 +33,7 @@ src/components/               Logo, RoleTag (signature element), Elephant, Analy
 src/content.ts                landing copy lists
 src/lib/vocab.ts              enums shared with Postgres (stages, categories, class years) + labels
 src/lib/schemas.ts            Zod input schemas
-src/lib/auth/                 sign-in logic (pure, tested), safe redirect paths
+src/lib/auth/                 sign-in, sign-up and password logic (pure, tested), safe redirect paths
 src/lib/supabase/             clients
 supabase/migrations/          timestamped SQL; never edit an applied migration, add a new one
 tests/unit, tests/db, tests/e2e

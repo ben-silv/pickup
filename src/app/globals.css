@@ -73,7 +73,7 @@ code { font-family: ui-monospace, Menlo, monospace; font-size: 0.9em; background
 /* Highlight band sized to the letters (not the font's full box), so on tight display headlines it doesn't cover the line above. */
 .hl {
   color: var(--navy); border-radius: 0.16em; padding: 0 0.1em;
-  background: linear-gradient(var(--sky), var(--sky)) 0 72% / 100% 0.86em no-repeat;
+  background: linear-gradient(var(--sky), var(--sky)) 0 78% / 100% 0.98em no-repeat;
   -webkit-box-decoration-break: clone; box-decoration-break: clone;
 }
 
@@ -539,3 +539,13 @@ code { font-family: ui-monospace, Menlo, monospace; font-size: 0.9em; background
 @media (hover: hover) {
   .btn.glass.btn-post:hover { --g-top: rgba(236, 244, 252, 1); --g-bottom: rgba(207, 226, 246, 0.95); }
 }
+
+/* ---- Sign-in modes ------------------------------------------------------ */
+.auth-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px; border-radius: var(--pill); background: rgba(0, 46, 109, 0.08); }
+.auth-tab { border: 0; border-radius: var(--pill); padding: 11px 8px; background: transparent; color: var(--navy); font-weight: 700; font-size: 15px; white-space: nowrap; cursor: pointer; transition: background-color 0.2s ease; }
+@media (hover: hover) { .auth-tab:hover { background: rgba(255, 255, 255, 0.5); } }
+.auth-tab[aria-pressed="true"] { background: var(--white); box-shadow: 0 2px 8px rgba(0, 30, 80, 0.12); }
+.auth-links { display: flex; flex-wrap: wrap; gap: 0 20px; }
+.field-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.field-row .link-button { padding: 0; }
+.field-hint { font-weight: 400; }

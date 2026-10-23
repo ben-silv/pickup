@@ -21,7 +21,7 @@ Decisions worth knowing:
 - **The database is the security boundary.** Every table has RLS and there is no service-role key in the app, so every query runs as the user. Offers and messages are visible only to the helper and the project owner; drafts only to their owner; signed-out visitors see nothing.
 - **Workflow rules live in Postgres functions.** Accepting an offer, declining the others and putting the role in progress happen in one `SECURITY DEFINER` function that checks the caller. Users have no UPDATE permission on those columns, so the rules can't be skipped.
 - **Tufts-only, enforced twice.** The sign-in form rejects non-Tufts emails, and a trigger on `auth.users` refuses to create the account anyway.
-- **Passwordless sign-in** with one-time email links (PKCE). Redirects after sign-in are restricted to same-site paths to prevent open redirects.
+- **Sign-in** with a Tufts email and password (with email confirmation and password reset) or a one-time email link (PKCE). Redirects after sign-in are restricted to same-site paths to prevent open redirects.
 - **Tested at three levels:** unit tests for validation and sign-in logic, database tests that run the real migrations on Postgres and act as different users, and Playwright on desktop and phone.
 
 ```
@@ -73,7 +73,7 @@ DATABASE_URL=postgres://postgres:postgres@localhost:5432/postgres npm run test:d
 4. **Authentication → URL Configuration**:
    - Site URL: `http://localhost:3000` (change to your Vercel URL after deploying)
    - Redirect URLs: add `http://localhost:3000/auth/callback` and, later, `https://<your-site>/auth/callback`
-5. **Authentication → Sign In / Providers → Email**: keep Email enabled. Magic links confirm the address, so no other settings are needed.
+5. **Authentication → Sign In / Providers → Email**: keep Email enabled and **Confirm email** on, and set the minimum password length to 8.
 6. Supabase's built-in email sender is rate-limited (a few emails per hour), which is fine for testing. Before inviting people, add a custom SMTP sender under **Authentication → Emails → SMTP** (Resend has a free tier).
 
 Then sign in at `/sign-in` with your @tufts.edu email.
