@@ -575,3 +575,4 @@ code { font-family: ui-monospace, Menlo, monospace; font-size: 0.9em; background
 .privacy { max-width: 760px; }
 .privacy ul { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 10px; }
 .privacy p, .privacy li { max-width: 65ch; line-height: 1.6; }
+.delete-button { align-self: flex-start; }

@@ -167,3 +167,8 @@ test("the home page says it's open", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByText("For Tufts students · now open")).toBeVisible();
 });
+
+test("the goodbye page after deleting an account is public", async ({ page }) => {
+  await page.goto("/goodbye");
+  await expect(page.getByRole("heading", { name: "Your account is deleted" })).toBeVisible();
+});

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { completeRoleInputSchema, messageInputSchema, offerInputSchema, profileInputSchema, projectInputSchema, reportInputSchema } from "@/lib/schemas";
+import { completeRoleInputSchema, messageInputSchema, offerInputSchema, profileInputSchema, projectInputSchema, reportInputSchema, deleteAccountSchema } from "@/lib/schemas";
 
 const role = { category: "design", need: "Redesign three screens", hours: "5" };
 const project = {
@@ -68,5 +68,14 @@ describe("reportInputSchema", () => {
     expect(reportInputSchema.safeParse({ offerId, reason: "", details: "" }).error?.issues[0]?.message).toBe("Pick a reason.");
     expect(reportInputSchema.safeParse({ offerId, reason: "other", details: "x".repeat(501) }).success).toBe(false);
     expect(reportInputSchema.safeParse({ offerId: "nope", reason: "spam", details: "" }).success).toBe(false);
+  });
+});
+
+describe("deleteAccountSchema", () => {
+  it("only accepts DELETE, in any case", () => {
+    expect(deleteAccountSchema.safeParse({ confirm: " delete " }).success).toBe(true);
+    expect(deleteAccountSchema.safeParse({ confirm: "DELETE" }).success).toBe(true);
+    expect(deleteAccountSchema.safeParse({ confirm: "yes" }).error?.issues[0]?.message).toBe("Type DELETE to confirm.");
+    expect(deleteAccountSchema.safeParse({ confirm: "" }).success).toBe(false);
   });
 });

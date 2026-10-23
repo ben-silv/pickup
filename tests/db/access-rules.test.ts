@@ -337,6 +337,30 @@ describe.skipIf(!url)("database access rules", () => {
     });
   });
 
+  describe("deleting an account", () => {
+    it("removes only the caller and everything they made", async () => {
+      const ben = await newUser("ben@tufts.edu");
+      const maya = await newUser("maya@tufts.edu");
+      const { roleId } = await newProject(ben);
+      const { roleId: mayaRole } = await newProject(maya);
+      const id = await offer(maya, roleId);
+      await offer(ben, mayaRole);
+      await as(maya, (c) => c.query("insert into messages (offer_id, sender_id, body) values ($1, $2, 'hi')", [id, maya]));
+
+      await as(maya, (c) => c.query("select delete_my_account()"));
+
+      const count = async (sql: string) => (await admin(sql)).rows[0].n as number;
+      expect(await count(`select count(*)::int as n from auth.users where id = '${maya}'`)).toBe(0);
+      expect(await count(`select count(*)::int as n from profiles where id = '${maya}'`)).toBe(0);
+      expect(await count("select count(*)::int as n from offers")).toBe(0); // her offer, and Ben's offer on her project
+      expect(await count("select count(*)::int as n from messages")).toBe(0);
+      expect(await count(`select count(*)::int as n from projects where owner_id = '${ben}'`)).toBe(1);
+      expect(await count(`select count(*)::int as n from auth.users where id = '${ben}'`)).toBe(1);
+
+      await expect(as(null, (c) => c.query("select delete_my_account()"))).rejects.toThrow(/permission denied/);
+    });
+  });
+
   describe("example project", () => {
     it("shows the example in the feed until a real project is published, and never takes offers", async () => {
       const ben = await newUser("ben@tufts.edu");

@@ -81,6 +81,14 @@ export const reportInputSchema = z.object({
   details: z.string().trim().max(500, "Keep the details under 500 characters."),
 });
 
+/** Deleting your account: type DELETE to confirm, since it can't be undone. */
+export const deleteAccountSchema = z.object({
+  confirm: z
+    .string()
+    .trim()
+    .refine((s) => s.toUpperCase() === "DELETE", "Type DELETE to confirm."),
+});
+
 /** Owner marks a role filled and leaves a credit note (complete_role). Limits match the credits table. */
 export const completeRoleInputSchema = z.object({
   roleId: z.uuid(),

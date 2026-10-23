@@ -22,8 +22,8 @@ export default function PrivacyPage() {
             <h2 className="display h3">The short version</h2>
             <p>
               Project Pickup is a student project for Tufts students. We collect what the app needs to work, show your messages only to the
-              person you&apos;re talking to, don&apos;t sell anything, and don&apos;t run ads. Email {mail} any time to have your account and
-              everything in it deleted.
+              person you&apos;re talking to, don&apos;t sell anything, and don&apos;t run ads. You can delete your account and everything in it
+              any time from Edit profile.
             </p>
           </section>
 
@@ -85,8 +85,9 @@ export default function PrivacyPage() {
           <section className="stack-sm">
             <h2 className="display h3">Keeping and deleting your data</h2>
             <p>
-              We keep your data while you have an account. Email {mail} from your Tufts address and we&apos;ll delete your account, profile,
-              projects, offers and messages. Messages you sent are removed from the other person&apos;s conversation too.
+              We keep your data while you have an account. To delete it, go to Edit profile and use <strong>Delete account</strong>: your
+              account, profile, projects, offers and messages are removed right away, including messages you sent in other people&apos;s
+              conversations. If you can&apos;t sign in, email {mail} from your Tufts address and we&apos;ll do it for you.
             </p>
           </section>
 

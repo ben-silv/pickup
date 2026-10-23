@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createClient, getUser } from "@/lib/supabase/server";
-import { profileInputSchema } from "@/lib/schemas";
+import { deleteAccountSchema, profileInputSchema } from "@/lib/schemas";
 import { profileFormValues } from "@/lib/profile";
 import { friendlyDbError } from "@/lib/db-errors";
 import { fieldErrors, type ActionState } from "@/lib/action-state";
@@ -38,4 +38,23 @@ export async function updateProfile(_prev: ActionState, form: FormData): Promise
   }
   revalidatePath("/", "layout");
   redirect("/profile");
+}
+
+/** Deletes my account and everything tied to it (delete_my_account), signs me out, and says goodbye. */
+export async function deleteAccount(_prev: ActionState, form: FormData): Promise<ActionState> {
+  const parsed = deleteAccountSchema.safeParse({ confirm: form.get("confirm") ?? "" });
+  if (!parsed.success) return { status: "error", message: parsed.error.issues[0]?.message ?? "Type DELETE to confirm." };
+  const user = await getUser();
+  if (!user) return { status: "error", message: "Your session expired. Sign in again." };
+
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("delete_my_account");
+  if (error) {
+    console.error("delete_my_account failed", error);
+    return { status: "error", message: friendlyDbError(error, "Couldn't delete your account. Try again, or email us.") };
+  }
+  // The user no longer exists; clear this browser's session cookies.
+  await supabase.auth.signOut({ scope: "local" });
+  revalidatePath("/", "layout");
+  redirect("/goodbye");
 }
