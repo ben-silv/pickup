@@ -139,3 +139,30 @@ describe("times (campus time)", () => {
     expect(messageTime("2026-10-20T20:12:00Z")).toBe("Tue 4:12 PM");
   });
 });
+
+describe("withdrawn offers and resends", () => {
+  it("tells the helper it was their withdrawal", () => {
+    expect(threadStatus("withdrawn", "open", true).label).toBe("You withdrew this offer");
+    expect(threadStatus("withdrawn", "open").label).toBe("Withdrawn");
+  });
+
+  it("shows a resent offer's new note under a 'sent a new offer' line", () => {
+    const items = buildTimeline({
+      viewerId: "owner",
+      viewerIsHelper: false,
+      helperFirst: "Maya",
+      ownerFirst: "Jamie",
+      roleLabel: "UI/UX design",
+      roleSummary: "UI/UX design · ~5 hrs",
+      offer: { status: "pending", note: "Back with more time.", created_at: "2026-10-20T10:00:00Z", decided_at: null, resent_at: "2026-10-21T10:00:00Z" },
+      credit: null,
+      messages: [msg("m1", "2026-10-20T11:00:00Z", "helper")],
+    });
+    expect(items.map((i) => (i.kind === "status" ? i.text : `${i.mine ? "me" : "them"}:${i.body}`))).toEqual([
+      "Maya offered to help · UI/UX design · ~5 hrs",
+      "them:body m1",
+      "Maya withdrew and sent a new offer",
+      "them:Back with more time.",
+    ]);
+  });
+});

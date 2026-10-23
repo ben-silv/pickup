@@ -287,6 +287,54 @@ describe.skipIf(!url)("database access rules", () => {
       const { rows } = await admin("select status from offers where id = $1", [id]);
       expect(rows[0].status).toBe("withdrawn");
     });
+
+    it("lets a helper send a withdrawn offer again, after an hour and at most twice", async () => {
+      const ben = await newUser("ben@tufts.edu");
+      const maya = await newUser("maya@tufts.edu");
+      const { roleId } = await newProject(ben);
+      const id = await offer(maya, roleId);
+      const resend = (who: string, note = "Free again this weekend, still keen.") => as(who, (c) => c.query("select resend_offer($1, $2)", [id, note]));
+      const withdrawHourAgo = async () => {
+        await as(maya, (c) => c.query("select withdraw_offer($1)", [id]));
+        await admin("update offers set decided_at = now() - interval '61 minutes' where id = $1", [id]);
+      };
+
+      await expect(resend(maya)).rejects.toThrow(/Only a withdrawn offer/);
+      await as(maya, (c) => c.query("select withdraw_offer($1)", [id]));
+      await expect(resend(maya)).rejects.toThrow(/an hour after withdrawing/);
+      await admin("update offers set decided_at = now() - interval '61 minutes' where id = $1", [id]);
+      await expect(resend(ben)).rejects.toThrow(/Only the person/);
+      await expect(resend(maya, "short")).rejects.toThrow(/10 to 600/);
+
+      await resend(maya);
+      const { rows } = await admin("select status, note, decided_at, resend_count, resent_at from offers where id = $1", [id]);
+      expect(rows[0]).toMatchObject({ status: "pending", note: "Free again this weekend, still keen.", decided_at: null, resend_count: 1 });
+      expect(rows[0].resent_at).not.toBeNull();
+
+      await withdrawHourAgo();
+      await resend(maya);
+      await withdrawHourAgo();
+      await expect(resend(maya)).rejects.toThrow(/twice/);
+    });
+
+    it("won't resend once the role is no longer open, and users can't edit offers directly", async () => {
+      const ben = await newUser("ben@tufts.edu");
+      const maya = await newUser("maya@tufts.edu");
+      const theo = await newUser("theo@tufts.edu");
+      const { roleId } = await newProject(ben);
+      const mayaOffer = await offer(maya, roleId);
+      const theoOffer = await offer(theo, roleId);
+      await as(maya, (c) => c.query("select withdraw_offer($1)", [mayaOffer]));
+      await admin("update offers set decided_at = now() - interval '2 hours' where id = $1", [mayaOffer]);
+      await as(ben, (c) => c.query("select accept_offer($1)", [theoOffer]));
+
+      await expect(as(maya, (c) => c.query("select resend_offer($1, $2)", [mayaOffer, "I could still help out here."]))).rejects.toThrow(
+        /isn't taking offers/,
+      );
+      // No UPDATE policy on offers: the counter and status can only change through the functions.
+      const res = await as(maya, (c) => c.query("update offers set resend_count = 0, status = 'pending' where id = $1", [mayaOffer]));
+      expect(res.rowCount).toBe(0);
+    });
   });
 
   describe("messages", () => {

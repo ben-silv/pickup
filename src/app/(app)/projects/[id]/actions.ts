@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient, getUser } from "@/lib/supabase/server";
-import { offerIdSchema, offerInputSchema, projectIdSchema, projectStatusInputSchema } from "@/lib/schemas";
+import { offerIdSchema, offerInputSchema, projectIdSchema, projectStatusInputSchema, resendOfferInputSchema } from "@/lib/schemas";
 import { friendlyDbError } from "@/lib/db-errors";
 import type { ActionState } from "@/lib/action-state";
 
@@ -31,6 +31,23 @@ export async function sendOffer(_prev: ActionState, form: FormData): Promise<Act
         "42501": "This role isn't taking offers right now.",
       }),
     };
+  }
+  refresh(form.get("projectId"));
+  return { status: "done", message: "Offer sent." };
+}
+
+/** Send a withdrawn offer again. resend_offer() enforces the cooldown, the limit and that the role is still open. */
+export async function resendOffer(_prev: ActionState, form: FormData): Promise<ActionState> {
+  const parsed = resendOfferInputSchema.safeParse({ offerId: form.get("offerId"), note: form.get("note") });
+  if (!parsed.success) return { status: "error", message: parsed.error.issues[0]?.message ?? "Check your offer and try again." };
+  const user = await getUser();
+  if (!user) return signedOut;
+
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("resend_offer", { p_offer: parsed.data.offerId, p_note: parsed.data.note });
+  if (error) {
+    console.error("resendOffer failed", error);
+    return { status: "error", message: friendlyDbError(error, "Couldn't send your offer. Try again.") };
   }
   refresh(form.get("projectId"));
   return { status: "done", message: "Offer sent." };

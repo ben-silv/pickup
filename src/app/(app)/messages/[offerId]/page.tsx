@@ -57,12 +57,14 @@ export default async function ThreadPage({ params }: { params: Promise<{ offerId
       : { data: null, error: null };
   if (creditError) console.error("thread: credit query failed", creditError);
 
-  const status = threadStatus(offer.status, role?.status ?? "closed");
+  const status = threadStatus(offer.status, role?.status ?? "closed", viewerIsHelper);
   const roleLabel = role ? CATEGORY_LABEL[role.category] : "Role";
   const closedNote =
     offer.status === "declined"
       ? "This offer was declined, so the conversation is closed."
-      : "This offer was withdrawn, so the conversation is closed.";
+      : viewerIsHelper
+        ? "You withdrew this offer, so the conversation is closed. You can send a new one from the project page."
+        : "This offer was withdrawn, so the conversation is closed.";
 
   return (
     <>
@@ -105,7 +107,7 @@ export default async function ThreadPage({ params }: { params: Promise<{ offerId
               ownerFirst,
               roleLabel,
               roleSummary: role ? `${roleLabel} · ~${role.hours} ${role.hours === 1 ? "hr" : "hrs"}` : roleLabel,
-              offer: { status: offer.status, note: offer.note, created_at: offer.created_at, decided_at: offer.decided_at },
+              offer: { status: offer.status, note: offer.note, created_at: offer.created_at, decided_at: offer.decided_at, resent_at: offer.resent_at },
               credit: credit ?? null,
             }}
           />

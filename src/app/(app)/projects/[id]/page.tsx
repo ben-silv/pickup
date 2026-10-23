@@ -11,7 +11,7 @@ import { createClient, getUser } from "@/lib/supabase/server";
 import { projectIdSchema } from "@/lib/schemas";
 import { CATEGORY_LABEL, STAGE_LABEL, type Category, type OfferStatus, type ProjectStatus, type RoleStatus, type Stage } from "@/lib/vocab";
 import { avatarTone, initials, ownerName, ownerYear, scopeLabel } from "@/lib/feed";
-import { OFFER_BADGE, byRole, firstName, hasConversation, hrs, openRolesLabel, roleViewerState, type Person } from "@/lib/project";
+import { OFFER_BADGE, byRole, firstName, hasConversation, hrs, minutesLabel, openRolesLabel, resendState, roleViewerState, type Person } from "@/lib/project";
 
 export const metadata: Metadata = { title: "Project · Project Pickup" };
 
@@ -30,7 +30,7 @@ type ProjectRow = {
   owner: Person;
 };
 type RoleRow = { id: string; category: Category; need: string; hours: number; status: RoleStatus; helper: Person | null };
-type OfferRow = { id: string; role_id: string; note: string; status: OfferStatus; helper: Person };
+type OfferRow = { id: string; role_id: string; note: string; status: OfferStatus; decided_at: string | null; resend_count: number; helper: Person };
 type CreditRow = { role_id: string; hours: number; note: string; helper: Person };
 
 export default async function ProjectPage({ params }: { params: Promise<{ id: string }> }) {
@@ -67,7 +67,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
     ? await Promise.all([
         supabase
           .from("offers")
-          .select(`id, role_id, note, status, helper:profiles(${PERSON})`)
+          .select(`id, role_id, note, status, decided_at, resend_count, helper:profiles(${PERSON})`)
           .in("role_id", roleIds)
           .order("created_at")
           .overrideTypes<OfferRow[], { merge: false }>(),
@@ -154,6 +154,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
               listed.map((role) => {
                 const state = roleViewerState(role, { status: project.status, isOwner }, myOffer(role.id));
                 const mine = myOffer(role.id);
+                const resend = mine ? resendState(mine, role.status === "open" && project.status === "published") : null;
                 const count = offersFor.get(role.id)?.filter((o) => o.status === "pending").length ?? 0;
                 return (
                   <article key={role.id} className="card role-item">
@@ -175,7 +176,16 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
                         {state.status === "pending" ? (
                           <ActionButton action={withdrawOffer} fields={fields(mine.id)} label="Withdraw offer" pendingLabel="Withdrawing…" className="btn btn-sm btn-outline" />
                         ) : null}
+                        {resend?.kind === "wait" ? (
+                          <span className="small muted">You can send a new offer {minutesLabel(resend.minutes)}.</span>
+                        ) : null}
+                        {resend?.kind === "used-up" ? (
+                          <span className="small muted">You&apos;ve sent this offer again twice, so it&apos;s closed for this role.</span>
+                        ) : null}
                       </div>
+                    ) : null}
+                    {state.kind === "offered" && mine && resend?.kind === "ready" ? (
+                      <OfferForm roleId={role.id} projectId={projectId} ownerFirstName={ownerFirst} resendOfferId={mine.id} />
                     ) : null}
                     {state.kind === "unavailable" ? <p className="small muted">Not taking offers right now.</p> : null}
                   </article>

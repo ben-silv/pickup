@@ -46,11 +46,12 @@ design/                       approved screens from Claude Design
 ```
 
 ## Data model and security
-Tables: `profiles` (1 per auth user, created by trigger, Tufts emails only), `projects` (draft/published/archived), `roles` (open → in_progress → filled, or closed), `offers` (pending → accepted/declined/withdrawn, one per helper per role), `messages` (one thread per offer), `credits` (one per filled role). View: `open_roles` (the feed).
+Tables: `profiles` (1 per auth user, created by trigger, Tufts emails only), `projects` (draft/published/archived), `roles` (open → in_progress → filled, or closed), `offers` (pending → accepted/declined/withdrawn → pending again via resend, one per helper per role), `messages` (one thread per offer), `credits` (one per filled role). View: `open_roles` (the feed).
 
 - Every table has RLS; the anon key reads nothing. Signed-in users see published projects, all profiles and credits; offers and messages only if they're the helper or the project owner.
 - Multi-row state changes go through SECURITY DEFINER functions, called with `supabase.rpc(...)`:
-  `accept_offer(p_offer)`, `decline_offer(p_offer)`, `withdraw_offer(p_offer)`, `complete_role(p_role, p_hours, p_note)`.
+  `accept_offer(p_offer)`, `decline_offer(p_offer)`, `withdraw_offer(p_offer)`, `resend_offer(p_offer, p_note)`, `complete_role(p_role, p_hours, p_note)`.
+  `resend_offer` reopens a withdrawn offer: 1-hour cooldown, at most 2 resends per role (constants mirrored in `src/lib/project.ts`).
   Never add an UPDATE policy that would let users skip these.
 - Changing the schema = new migration + matching Zod change + a test in `tests/db/access-rules.test.ts` for any new rule.
 

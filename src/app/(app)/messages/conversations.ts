@@ -10,7 +10,7 @@ type Supabase = Awaited<ReturnType<typeof createClient>>;
 const PERSON = "id, full_name, class_year, major";
 
 /** An offer with everything a conversation needs. Role or project is null if the owner has since hidden the project. */
-export const OFFER_SELECT = `id, status, note, created_at, decided_at, helper:profiles(${PERSON}),
+export const OFFER_SELECT = `id, status, note, created_at, decided_at, resent_at, helper:profiles(${PERSON}),
   role:roles(id, category, need, hours, status, project:projects(id, title, owner:profiles(${PERSON})))`;
 
 export type OfferThreadRow = {
@@ -19,6 +19,7 @@ export type OfferThreadRow = {
   note: string;
   created_at: string;
   decided_at: string | null;
+  resent_at: string | null;
   helper: Person;
   role: {
     id: string;
@@ -84,8 +85,8 @@ export async function loadConversations(supabase: Supabase, viewerId: string): P
       projectTitle: o.role?.project?.title ?? "A project that's no longer listed",
       roleLabel: o.role ? CATEGORY_LABEL[o.role.category] : "",
       last: `${lastMine ? "You: " : ""}${lastText}`,
-      activityAt: latest(o.created_at, o.decided_at, lastMsg?.created_at),
-      status: threadStatus(o.status, o.role?.status ?? "closed"),
+      activityAt: latest(o.created_at, o.decided_at, o.resent_at, lastMsg?.created_at),
+      status: threadStatus(o.status, o.role?.status ?? "closed", viewerIsHelper),
     };
   });
   return { list: byActivity(list), failed: false };

@@ -58,6 +58,34 @@ export const OFFER_BADGE: Record<OfferStatus, { mine: string; owner: string; suc
   withdrawn: { mine: "You withdrew this offer", owner: "Withdrawn", success: false },
 };
 
+/** Must match supabase/migrations/20261023000000_resend_offer.sql. */
+export const RESEND_COOLDOWN_MINUTES = 60;
+export const MAX_RESENDS = 2;
+
+export type ResendState = { kind: "ready" } | { kind: "wait"; minutes: number } | { kind: "used-up" } | { kind: "closed" };
+
+/**
+ * After withdrawing, can the helper send a new offer? Null for offers that aren't withdrawn.
+ * The database enforces the same rules; this only decides what to show.
+ */
+export function resendState(
+  offer: { status: OfferStatus; decided_at: string | null; resend_count: number },
+  roleTakingOffers: boolean,
+  now: Date = new Date(),
+): ResendState | null {
+  if (offer.status !== "withdrawn") return null;
+  if (!roleTakingOffers) return { kind: "closed" };
+  if (offer.resend_count >= MAX_RESENDS) return { kind: "used-up" };
+  const withdrawnAt = offer.decided_at ? Date.parse(offer.decided_at) : NaN;
+  const left = Number.isNaN(withdrawnAt) ? 0 : withdrawnAt + RESEND_COOLDOWN_MINUTES * 60_000 - now.getTime();
+  return left > 0 ? { kind: "wait", minutes: Math.ceil(left / 60_000) } : { kind: "ready" };
+}
+
+/** "in 42 minutes" / "in 1 minute" */
+export function minutesLabel(minutes: number): string {
+  return `in ${minutes} ${minutes === 1 ? "minute" : "minutes"}`;
+}
+
 /** Offers that still have a conversation worth opening. */
 export function hasConversation(status: OfferStatus): boolean {
   return status === "pending" || status === "accepted";

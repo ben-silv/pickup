@@ -62,10 +62,12 @@ export const projectInputSchema = z.object({
 /** Which button submitted the post form. */
 export const postIntentSchema = z.enum(["publish", "draft"]).catch("draft");
 
-export const offerInputSchema = z.object({
-  roleId: z.uuid(),
-  note: trimmed(10, 600, "Say why you're a good fit (10+ characters).", "Keep it under 600 characters."),
-});
+const offerNote = trimmed(10, 600, "Say why you're a good fit (10+ characters).", "Keep it under 600 characters.");
+
+export const offerInputSchema = z.object({ roleId: z.uuid(), note: offerNote });
+
+/** Sending a withdrawn offer again (resend_offer). */
+export const resendOfferInputSchema = z.object({ offerId: z.uuid(), note: offerNote });
 
 export const messageInputSchema = z.object({
   offerId: z.uuid(),

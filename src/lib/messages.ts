@@ -57,12 +57,12 @@ export function canSend(status: OfferStatus): boolean {
 }
 
 /** The status pill for a conversation. Green only for success. */
-export function threadStatus(offer: OfferStatus, role: RoleStatus): { label: string; success: boolean } {
+export function threadStatus(offer: OfferStatus, role: RoleStatus, viewerIsHelper = false): { label: string; success: boolean } {
   if (offer === "accepted" && role === "filled") return { label: "Role filled", success: true };
   if (offer === "accepted") return { label: "Offer accepted", success: true };
   if (offer === "pending") return { label: "Offer pending", success: false };
   if (offer === "declined") return { label: "Declined", success: false };
-  return { label: "Withdrawn", success: false };
+  return { label: viewerIsHelper ? "You withdrew this offer" : "Withdrawn", success: false };
 }
 
 export type TimelineInput = {
@@ -72,7 +72,7 @@ export type TimelineInput = {
   /** "UI/UX design · ~5 hrs" */
   roleSummary: string;
   roleLabel: string;
-  offer: { status: OfferStatus; note: string; created_at: string; decided_at: string | null };
+  offer: { status: OfferStatus; note: string; created_at: string; decided_at: string | null; resent_at?: string | null };
   credit: { hours: number; created_at: string } | null;
   messages: readonly ChatMessage[];
   viewerId: string;
@@ -85,10 +85,17 @@ export type TimelineInput = {
 export function buildTimeline(t: TimelineInput): TimelineItem[] {
   const { offer } = t;
   const who = (helperSide: boolean) => (helperSide === t.viewerIsHelper ? "You" : helperSide ? t.helperFirst : t.ownerFirst);
-  const items: TimelineItem[] = [
-    { kind: "status", key: "offered", text: `${who(true)} offered to help · ${t.roleSummary}`, at: offer.created_at },
-    { kind: "message", key: "note", mine: t.viewerIsHelper, body: offer.note, at: offer.created_at },
-  ];
+  // After a resend, the note on the offer is the new one, so it sits under the "sent a new offer" line.
+  const items: TimelineItem[] = offer.resent_at
+    ? [
+        { kind: "status", key: "offered", text: `${who(true)} offered to help · ${t.roleSummary}`, at: offer.created_at },
+        { kind: "status", key: "resent", text: `${who(true)} withdrew and sent a new offer`, at: offer.resent_at },
+        { kind: "message", key: "note", mine: t.viewerIsHelper, body: offer.note, at: offer.resent_at },
+      ]
+    : [
+        { kind: "status", key: "offered", text: `${who(true)} offered to help · ${t.roleSummary}`, at: offer.created_at },
+        { kind: "message", key: "note", mine: t.viewerIsHelper, body: offer.note, at: offer.created_at },
+      ];
   if (offer.decided_at) {
     const text =
       offer.status === "accepted"
