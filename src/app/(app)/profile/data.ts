@@ -52,7 +52,7 @@ export async function loadProfile(supabase: Supabase, personId: string, own: boo
     projects.order("created_at", { ascending: false }).overrideTypes<ProjectTileRow[], { merge: false }>(),
     supabase
       .from("credits")
-      .select("id, hours, note, role:roles(category, project:projects(id, title, owner:profiles(full_name)))")
+      .select("id, hours, note, role:roles(category, project:projects(id, title, owner:profiles!projects_owner_id_fkey(full_name)))")
       .eq("helper_id", personId)
       .order("created_at", { ascending: false })
       .overrideTypes<CreditRow[], { merge: false }>(),

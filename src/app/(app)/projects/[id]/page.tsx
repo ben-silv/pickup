@@ -44,13 +44,13 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
     getUser(),
     supabase
       .from("projects")
-      .select(`id, owner_id, title, pitch, description, stage, prototype_url, repo_url, status, owner:profiles(${PERSON})`)
+      .select(`id, owner_id, title, pitch, description, stage, prototype_url, repo_url, status, owner:profiles!projects_owner_id_fkey(${PERSON})`)
       .eq("id", projectId)
       .maybeSingle()
       .overrideTypes<ProjectRow, { merge: false }>(),
     supabase
       .from("roles")
-      .select(`id, category, need, hours, status, helper:profiles(${PERSON})`)
+      .select(`id, category, need, hours, status, helper:profiles!roles_helper_id_fkey(${PERSON})`)
       .eq("project_id", projectId)
       .order("created_at")
       .overrideTypes<RoleRow[], { merge: false }>(),
@@ -67,13 +67,13 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
     ? await Promise.all([
         supabase
           .from("offers")
-          .select(`id, role_id, note, status, decided_at, resend_count, helper:profiles(${PERSON})`)
+          .select(`id, role_id, note, status, decided_at, resend_count, helper:profiles!offers_helper_id_fkey(${PERSON})`)
           .in("role_id", roleIds)
           .order("created_at")
           .overrideTypes<OfferRow[], { merge: false }>(),
         supabase
           .from("credits")
-          .select(`role_id, hours, note, helper:profiles(${PERSON})`)
+          .select(`role_id, hours, note, helper:profiles!credits_helper_id_fkey(${PERSON})`)
           .in("role_id", roleIds)
           .overrideTypes<CreditRow[], { merge: false }>(),
       ])

@@ -10,9 +10,13 @@ type Supabase = Awaited<ReturnType<typeof createClient>>;
 
 const PERSON = "id, full_name, class_year, major";
 
+/**
+ * Every profile embed names its foreign key (`profiles!offers_helper_id_fkey`): tables like thread_reads link offers
+ * and profiles a second way, and without the hint Supabase refuses the query as ambiguous.
+ */
 /** An offer with everything a conversation needs. Role or project is null if the owner has since hidden the project. */
-export const OFFER_SELECT = `id, status, note, created_at, decided_at, resent_at, helper:profiles(${PERSON}),
-  role:roles(id, category, need, hours, status, project:projects(id, title, owner:profiles(${PERSON})))`;
+export const OFFER_SELECT = `id, status, note, created_at, decided_at, resent_at, helper:profiles!offers_helper_id_fkey(${PERSON}),
+  role:roles(id, category, need, hours, status, project:projects(id, title, owner:profiles!projects_owner_id_fkey(${PERSON})))`;
 
 export type OfferThreadRow = {
   id: string;
