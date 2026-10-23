@@ -72,6 +72,7 @@ export function ProjectTiles({ projects, own, failed }: { projects: ProjectTileR
               <span className="row-wrap">
                 <span className={`label stage stage-${p.stage}`}>{STAGE_LABEL[p.stage]}</span>
                 {p.status === "draft" ? <span className="label badge badge-neutral">Draft</span> : null}
+                {p.is_example ? <span className="label badge badge-neutral">Example</span> : null}
               </span>
               <span className="display h4 tile-title">{p.title}</span>
               <span className="small muted tile-pitch">{p.pitch}</span>

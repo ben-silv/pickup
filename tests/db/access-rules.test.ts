@@ -337,6 +337,36 @@ describe.skipIf(!url)("database access rules", () => {
     });
   });
 
+  describe("example project", () => {
+    it("shows the example in the feed until a real project is published, and never takes offers", async () => {
+      const ben = await newUser("ben@tufts.edu");
+      const maya = await newUser("maya@tufts.edu");
+      const { projectId: exampleId, roleId: exampleRole } = await newProject(ben);
+      await admin("update projects set is_example = true where id = $1", [exampleId]);
+      const feed = async () => (await as(maya, (c) => c.query("select project_id, is_example from open_roles"))).rows;
+
+      expect(await feed()).toEqual([{ project_id: exampleId, is_example: true }]);
+      await expect(offer(maya, exampleRole)).rejects.toThrow(/row-level security/);
+
+      // A draft doesn't count; publishing a real project hides the example.
+      const { projectId: realId } = await newProject(maya, "draft");
+      expect((await feed()).map((r) => r.project_id)).toEqual([exampleId]);
+      await as(maya, (c) => c.query("update projects set status = 'published' where id = $1", [realId]));
+      expect((await feed()).map((r) => r.project_id)).toEqual([realId]);
+    });
+
+    it("can't be set by students", async () => {
+      const ben = await newUser("ben@tufts.edu");
+      const { projectId } = await newProject(ben);
+      await expect(as(ben, (c) => c.query("update projects set is_example = true where id = $1", [projectId]))).rejects.toThrow(/row-level security/);
+      await expect(
+        as(ben, (c) =>
+          c.query("insert into projects (owner_id, title, pitch, stage, is_example) values ($1, 'Fake', 'Pretend this is an example.', 'idea', true)", [ben]),
+        ),
+      ).rejects.toThrow(/row-level security/);
+    });
+  });
+
   describe("unread conversations", () => {
     it("flags new offers and messages from the other person until the conversation is opened", async () => {
       const ben = await newUser("ben@tufts.edu");

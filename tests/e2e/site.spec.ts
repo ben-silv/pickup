@@ -153,3 +153,17 @@ test("the menu bar docks to the top after scrolling and floats back at the top",
   await page.evaluate(() => window.scrollTo(0, 0));
   await expect.poll(async () => (await nav.boundingBox())?.y).toBeGreaterThan(10);
 });
+
+test("the privacy note is public and linked from the footer and sign-up", async ({ page }) => {
+  await page.goto("/");
+  await page.locator(".footer").getByRole("link", { name: "Privacy" }).click();
+  await expect(page).toHaveURL(/\/privacy$/);
+  await expect(page.getByRole("heading", { name: "Privacy", level: 1 })).toBeVisible();
+  await page.goto("/sign-up");
+  await expect(page.getByRole("link", { name: "privacy note" })).toHaveAttribute("href", "/privacy");
+});
+
+test("the home page says it's open", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.getByText("For Tufts students · now open")).toBeVisible();
+});

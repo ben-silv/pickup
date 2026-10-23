@@ -22,6 +22,9 @@ export function FeedCard({ row }: { row: FeedRow }) {
         </div>
         <span className={`label stage stage-${row.stage}`}>{STAGE_LABEL[row.stage]}</span>
       </div>
+      {row.is_example ? (
+        <p className="label pill pill-navy example-tag">Example · not a real project</p>
+      ) : null}
       <h2 className="display feed-title">{row.title}</h2>
       <p className="muted feed-pitch">{row.pitch}</p>
       <div className="feed-card-foot">

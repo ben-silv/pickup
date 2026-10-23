@@ -29,6 +29,7 @@ src/app/sign-up/              create an account: email → confirmation link →
 src/app/auth/confirm/         where email links land: a button spends the one-time token (scanners only open links), then /welcome or onward
 src/app/auth/callback/        older links: exchanges the code for a session, then sends unfinished accounts to /welcome
 src/app/reset-password/       set a new password (reset emails and the account menu land here)
+src/app/privacy/              plain-language privacy note (keep it true to what the app does; bump PRIVACY_UPDATED in src/content.ts)
 src/app/(app)/                signed-in app: layout (auth backstop + nav), browse, post, messages, profile
 src/components/landing/       landing sections
 src/components/app/           AppNav, PageBand, ComingNext (delete ComingNext from a page once it's built)
@@ -55,6 +56,7 @@ Tables: `profiles` (1 per auth user, created by trigger, Tufts emails only), `pr
   Messages: a trigger caps a helper at 5 messages on a pending offer until the owner replies or accepts (`UNANSWERED_LIMIT` in `src/lib/messages.ts`).
   Safety: `report_conversation(p_offer, p_reason, p_details)` writes `reports` (reviewed by the admin in the Supabase dashboard); `block_in_conversation` / `unblock_in_conversation` manage `blocks`. A block (either way) stops messages via a restrictive policy and offers via `can_offer_on`; `blocked_between` stays private so nobody can probe who blocked whom.
   Unread: `thread_reads` remembers when each person last opened a conversation; `unread_offer_ids()` drives the red dot, `mark_thread_read(p_offer)` clears it (called when a conversation opens).
+  Example project: `projects.is_example` (set only in the SQL Editor) is labelled everywhere, never takes offers (`can_offer_on`), and drops out of `open_roles` once any real project is published.
   Never add an UPDATE policy that would let users skip these.
 - Changing the schema = new migration + matching Zod change + a test in `tests/db/access-rules.test.ts` for any new rule.
 

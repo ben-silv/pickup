@@ -7,7 +7,7 @@ export function Hero() {
     <header className="hero">
       <div className="wrap hero-grid">
         <div className="hero-copy">
-          <p className="label pill pill-navy">For Tufts students · opening this spring</p>
+          <p className="label pill pill-navy">For Tufts students · now open</p>
           <h1 className="display hero-title">
             Your app needs a designer. Someone on the Hill <span className="hl">wants in.</span>
           </h1>

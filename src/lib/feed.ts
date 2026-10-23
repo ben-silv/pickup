@@ -23,6 +23,8 @@ export type FeedRow = {
   owner_name: string;
   owner_class_year: string | null;
   owner_major: string | null;
+  /** The sample project shown until real ones are posted. */
+  is_example: boolean;
 };
 
 /** Columns searched by the box ("projects, skills, people"). */

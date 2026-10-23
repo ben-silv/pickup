@@ -3,9 +3,9 @@ import { ProfileMenu } from "../ProfileMenu";
 import { getMenuUser } from "@/lib/nav-user";
 
 const links = [
-  { href: "#how", label: "How it works" },
-  { href: "#roles", label: "Roles" },
-  { href: "#faq", label: "FAQ" },
+  { href: "/#how", label: "How it works" },
+  { href: "/#roles", label: "Roles" },
+  { href: "/#faq", label: "FAQ" },
 ];
 
 /** Frosted-glass menu that sticks to the top while the page scrolls underneath. */

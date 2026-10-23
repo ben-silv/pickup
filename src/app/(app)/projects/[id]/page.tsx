@@ -27,6 +27,7 @@ type ProjectRow = {
   prototype_url: string | null;
   repo_url: string | null;
   status: ProjectStatus;
+  is_example: boolean;
   owner: Person;
 };
 type RoleRow = { id: string; category: Category; need: string; hours: number; status: RoleStatus; helper: Person | null };
@@ -44,7 +45,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
     getUser(),
     supabase
       .from("projects")
-      .select(`id, owner_id, title, pitch, description, stage, prototype_url, repo_url, status, owner:profiles!projects_owner_id_fkey(${PERSON})`)
+      .select(`id, owner_id, title, pitch, description, stage, prototype_url, repo_url, status, is_example, owner:profiles!projects_owner_id_fkey(${PERSON})`)
       .eq("id", projectId)
       .maybeSingle()
       .overrideTypes<ProjectRow, { merge: false }>(),
@@ -111,6 +112,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
             <div className="row-wrap">
               <span className="label pill pill-sky">{STAGE_LABEL[project.stage]}</span>
               <span className="label pill pill-navy">{openRolesLabel(openRoles.length)}</span>
+              {project.is_example ? <span className="label pill pill-navy">Example · not a real project</span> : null}
               {project.status === "draft" ? <span className="label pill pill-navy">Draft · only you can see it</span> : null}
               {project.status === "archived" ? <span className="label pill pill-navy">Archived</span> : null}
             </div>
@@ -135,6 +137,17 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
 
       <main className="wrap overlap-sm split">
         <div className="split-main stack-lg">
+          {project.is_example ? (
+            <section className="card example-note" aria-label="About this example">
+              <p>
+                <strong>This is an example post</strong>, here to show what a project on Project Pickup looks like. The person and project
+                are made up, so it doesn&apos;t take offers. It disappears once real projects are posted.
+              </p>
+              <Link href="/post" className="btn btn-sm glass-dark">
+                Post a real project
+              </Link>
+            </section>
+          ) : null}
           {project.description.trim() ? (
             <section className="card stack-sm">
               <h2 className="display h3">About the project</h2>
@@ -152,7 +165,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
               </p>
             ) : (
               listed.map((role) => {
-                const state = roleViewerState(role, { status: project.status, isOwner }, myOffer(role.id));
+                const state = roleViewerState(role, { status: project.status, isOwner, isExample: project.is_example }, myOffer(role.id));
                 const mine = myOffer(role.id);
                 const resend = mine ? resendState(mine, role.status === "open" && project.status === "published") : null;
                 const count = offersFor.get(role.id)?.filter((o) => o.status === "pending").length ?? 0;
@@ -188,6 +201,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
                       <OfferForm roleId={role.id} projectId={projectId} ownerFirstName={ownerFirst} resendOfferId={mine.id} />
                     ) : null}
                     {state.kind === "unavailable" ? <p className="small muted">Not taking offers right now.</p> : null}
+                    {state.kind === "example" ? <p className="small muted">Example role, so it doesn&apos;t take offers.</p> : null}
                   </article>
                 );
               })

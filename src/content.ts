@@ -70,3 +70,9 @@ export const heroPosts = [
     scope: "one analysis · ~4 hrs",
   },
 ] as const;
+
+/** Where people reach the team (privacy requests, account deletion). Set up forwarding for this address before launch. */
+export const CONTACT_EMAIL = "hello@projpickup.com";
+
+/** Shown on /privacy. Update the date whenever the text changes. */
+export const PRIVACY_UPDATED = "October 23, 2026";

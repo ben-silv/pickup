@@ -83,6 +83,9 @@ export function SignUpForm({ next }: { next: string }) {
       <p className="auth-switch">
         Already have an account? <Link href={signInHref}>Sign in</Link>
       </p>
+      <p className="small muted">
+        Creating an account means you&apos;re OK with how we handle your data, set out in our <Link href="/privacy">privacy note</Link>.
+      </p>
     </div>
   );
 }

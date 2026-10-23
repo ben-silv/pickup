@@ -37,14 +37,17 @@ export type RoleViewerState =
   | { kind: "owner" }
   | { kind: "can-offer" }
   | { kind: "offered"; status: OfferStatus }
-  | { kind: "unavailable" };
+  | { kind: "unavailable" }
+  /** The sample project shown to new students: labelled, and never takes offers. */
+  | { kind: "example" };
 
 export function roleViewerState(
   role: { status: RoleStatus },
-  project: { status: ProjectStatus; isOwner: boolean },
+  project: { status: ProjectStatus; isOwner: boolean; isExample?: boolean },
   myOffer: { status: OfferStatus } | null | undefined,
 ): RoleViewerState {
   if (project.isOwner) return { kind: "owner" };
+  if (project.isExample) return { kind: "example" };
   if (myOffer) return { kind: "offered", status: myOffer.status };
   if (role.status === "open" && project.status === "published") return { kind: "can-offer" };
   return { kind: "unavailable" };

@@ -123,6 +123,7 @@ export function Footer() {
           <a href="#roles">Roles</a>
           <a href="#faq">FAQ</a>
           <Link href="/sign-in">Sign in</Link>
+          <Link href="/privacy">Privacy</Link>
         </div>
       </div>
     </footer>

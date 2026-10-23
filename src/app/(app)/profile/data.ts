@@ -22,6 +22,7 @@ export type ProjectTileRow = {
   pitch: string;
   stage: Stage;
   status: ProjectStatus;
+  is_example: boolean;
   roles: { status: RoleStatus; offers: { status: OfferStatus }[] | null }[];
 };
 
@@ -42,7 +43,7 @@ export const PROFILE_SELECT = "id, full_name, class_year, major, bio, skills, op
 export async function loadProfile(supabase: Supabase, personId: string, own: boolean) {
   let projects = supabase
     .from("projects")
-    .select(own ? "id, title, pitch, stage, status, roles(status, offers(status))" : "id, title, pitch, stage, status, roles(status)")
+    .select(own ? "id, title, pitch, stage, status, is_example, roles(status, offers(status))" : "id, title, pitch, stage, status, is_example, roles(status)")
     .eq("owner_id", personId)
     .neq("status", "archived");
   if (!own) projects = projects.eq("status", "published");

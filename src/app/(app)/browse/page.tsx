@@ -15,7 +15,7 @@ export default async function BrowsePage({ searchParams }: { searchParams: Promi
   const supabase = await createClient();
   let query = supabase
     .from("open_roles")
-    .select("role_id, category, need, hours, created_at, project_id, title, pitch, stage, owner_id, owner_name, owner_class_year, owner_major");
+    .select("role_id, category, need, hours, created_at, project_id, title, pitch, stage, owner_id, owner_name, owner_class_year, owner_major, is_example");
   if (skill) query = query.eq("category", skill);
   const or = searchFilter(q);
   if (or) query = query.or(or);

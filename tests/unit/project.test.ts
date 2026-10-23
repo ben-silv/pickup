@@ -103,3 +103,10 @@ describe("resendState", () => {
     expect(RESEND_COOLDOWN_MINUTES).toBe(60);
   });
 });
+
+describe("example projects", () => {
+  it("never offer the offer form, even on open roles", () => {
+    expect(roleViewerState({ status: "open" }, { status: "published", isOwner: false, isExample: true }, null)).toEqual({ kind: "example" });
+    expect(roleViewerState({ status: "open" }, { status: "published", isOwner: false }, null)).toEqual({ kind: "can-offer" });
+  });
+});

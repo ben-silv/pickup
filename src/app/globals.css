@@ -568,3 +568,10 @@ code { font-family: ui-monospace, Menlo, monospace; font-size: 0.9em; background
 .menu-item .unread-dot.inline { margin: 0 0 2px 8px; }
 /* In the app nav on wider screens the Messages link carries the dot, so the account button doesn't repeat it. */
 @media (min-width: 700px) { .nav-app .profile-trigger .unread-dot { display: none; } }
+/* The sample project: labelled wherever it appears. */
+.example-tag { align-self: flex-start; margin: 0; }
+.example-note { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px 24px; background: var(--sky-soft); box-shadow: none; }
+.example-note p { flex: 1 1 280px; min-width: 0; margin: 0; }
+.privacy { max-width: 760px; }
+.privacy ul { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 10px; }
+.privacy p, .privacy li { max-width: 65ch; line-height: 1.6; }
