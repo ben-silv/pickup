@@ -116,6 +116,24 @@ test("account menu opens on hover and tap and offers sign-in when signed out", a
   await expect(page).toHaveURL(/\/sign-in/);
 });
 
+test("email links wait for a tap, so email scanners can't use them up", async ({ page }) => {
+  const hash = "a3f1c2d4e5b6a7980a1b2c3d4e5f60718293a4b5c6d7e8f9";
+  await page.goto(`/auth/confirm?token_hash=${hash}&type=email`);
+  await expect(page.getByRole("heading", { name: "Confirm your email" })).toBeVisible();
+  await expect(page).toHaveURL(/\/auth\/confirm/);
+  await page.goto(`/auth/confirm?token_hash=${hash}&type=recovery`);
+  await expect(page.getByRole("heading", { name: "Reset your password" })).toBeVisible();
+  // Without Supabase connected, pressing the button explains instead of crashing.
+  await page.getByRole("button", { name: "Continue" }).click();
+  await expect(page.locator(".action-form .error-text")).toContainText("isn't connected");
+});
+
+test("a broken email link explains what to do", async ({ page }) => {
+  await page.goto("/auth/confirm?type=email");
+  await expect(page.getByRole("heading", { name: "That link didn't work" })).toBeVisible();
+  await expect(page.locator(".sign-in-card").getByRole("link", { name: "Create an account" })).toBeVisible();
+});
+
 test("setting a new password needs sign-in first", async ({ page }) => {
   await page.goto("/reset-password");
   await expect(page).toHaveURL(/\/sign-in\?next=%2Freset-password/);

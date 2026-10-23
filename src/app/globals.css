@@ -157,7 +157,7 @@ code { font-family: ui-monospace, Menlo, monospace; font-size: 0.9em; background
 
 /* ---- Logo & nav --------------------------------------------------------- */
 .logo { display: inline-flex; align-items: center; gap: 26px; text-decoration: none; }
-.logo .display { font-size: 24px; }
+.logo .display { font-size: 24px; white-space: nowrap; }
 /* The longer "Project Pickup" wordmark: a touch smaller on the narrowest phones so the menu button stays on the same row. */
 @media (max-width: 359px) { .logo .display { font-size: 20px; } }
 .logo-light { color: var(--white); }
@@ -551,3 +551,4 @@ code { font-family: ui-monospace, Menlo, monospace; font-size: 0.9em; background
 .field-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
 .field-row .link-button { padding: 0; }
 .field-hint { font-weight: 400; }
+.confirm-button { width: 100%; }

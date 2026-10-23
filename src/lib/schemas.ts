@@ -6,6 +6,9 @@ import { FEED_SORTS, sanitizeSearch } from "./feed";
  * Input validation for everything users submit. Mirrors the CHECK constraints in
  * supabase/migrations — change both together.
  */
+/** URL params can repeat (?a=1&a=2); use the first. */
+const firstParam = (v: unknown) => (Array.isArray(v) ? v[0] : v);
+
 const trimmed = (min: number, max: number, tooShort: string, tooLong: string) =>
   z.string().trim().min(min, tooShort).max(max, tooLong);
 
@@ -30,6 +33,15 @@ export const passwordSignInSchema = signInSchema.extend({
 });
 
 export const newPasswordSchema = z.object({ password: passwordSchema });
+
+/** Link types our email templates send to /auth/confirm (Supabase's EmailOtpType values). */
+export const EMAIL_LINK_TYPES = ["email", "signup", "magiclink", "recovery"] as const;
+
+/** The token in an email link. Supabase's token hashes are hex; reject anything else before calling Supabase. */
+export const emailLinkSchema = z.object({
+  tokenHash: z.preprocess(firstParam, z.string().regex(/^[A-Za-z0-9_-]{8,512}$/)),
+  type: z.preprocess(firstParam, z.enum(EMAIL_LINK_TYPES)),
+});
 
 export const roleInputSchema = z.object({
   category: z.enum(CATEGORIES, { error: "Pick a role." }),
@@ -99,7 +111,6 @@ export const profileInputSchema = z.object({
 });
 
 /** Browse page search params. Anything unexpected falls back to the default instead of erroring. */
-const firstParam = (v: unknown) => (Array.isArray(v) ? v[0] : v);
 export const feedQuerySchema = z.object({
   skill: z.preprocess(firstParam, z.enum(CATEGORIES).nullable().catch(null)),
   q: z.preprocess(firstParam, z.string().catch("").transform(sanitizeSearch)),

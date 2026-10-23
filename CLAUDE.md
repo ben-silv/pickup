@@ -26,7 +26,8 @@ Approved screens live in `design/` (see `design/README.md`). They are the spec f
 src/app/page.tsx              landing page (public)
 src/app/sign-in/              sign in (email + password) and forgot password
 src/app/sign-up/              create an account: email → confirmation link → /welcome (basics + password)
-src/app/auth/callback/        exchanges the email link's code for a session, then sends unfinished accounts to /welcome
+src/app/auth/confirm/         where email links land: a button spends the one-time token (scanners only open links), then /welcome or onward
+src/app/auth/callback/        older links: exchanges the code for a session, then sends unfinished accounts to /welcome
 src/app/reset-password/       set a new password (reset emails and the account menu land here)
 src/app/(app)/                signed-in app: layout (auth backstop + nav), browse, post, messages, profile
 src/components/landing/       landing sections
