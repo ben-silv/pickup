@@ -2,7 +2,8 @@ import Link from "next/link";
 import { heroChips } from "@/content";
 import { HeroStack } from "./HeroStack";
 
-export function Hero() {
+/** `signedIn`: swap the join button for Browse, since the visitor already has an account. */
+export function Hero({ signedIn = false }: { signedIn?: boolean }) {
   return (
     <header className="hero">
       <div className="wrap hero-grid">
@@ -16,12 +17,25 @@ export function Hero() {
             Everybody gets credit.
           </p>
           <div className="cta-row">
-            <Link href="/sign-up" className="btn btn-lg glass-dark" data-track="hero_sign_up">
-              Join with your Tufts email
-            </Link>
-            <Link href="/browse" className="hero-note">
-              Browse open roles →
-            </Link>
+            {signedIn ? (
+              <>
+                <Link href="/browse" className="btn btn-lg glass-dark" data-track="hero_browse">
+                  Browse open roles
+                </Link>
+                <Link href="/post" className="hero-note">
+                  Post a project →
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link href="/sign-up" className="btn btn-lg glass-dark" data-track="hero_sign_up">
+                  Join with your Tufts email
+                </Link>
+                <Link href="/browse" className="hero-note">
+                  Browse open roles →
+                </Link>
+              </>
+            )}
           </div>
         </div>
 

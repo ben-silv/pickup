@@ -88,7 +88,8 @@ export function Faq() {
   );
 }
 
-export function FinalCta() {
+/** `signedIn`: point to Browse instead of sign-up. */
+export function FinalCta({ signedIn = false }: { signedIn?: boolean }) {
   return (
     <section className="final-cta">
       <div className="wrap stack-lg center">
@@ -97,11 +98,19 @@ export function FinalCta() {
           Get in on the <span className="hl">first round.</span>
         </h2>
         <p className="lead muted" style={{ maxWidth: "40ch" }}>
-          Join with your Tufts email, post what you&apos;re building or pick up a role. It takes about a minute.
+          {signedIn
+            ? "You're in. Post what you're building or pick up a role."
+            : "Join with your Tufts email, post what you're building or pick up a role. It takes about a minute."}
         </p>
-        <Link href="/sign-up" className="btn btn-lg glass-dark" data-track="final_sign_up">
-          Join with your Tufts email
-        </Link>
+        {signedIn ? (
+          <Link href="/browse" className="btn btn-lg glass-dark" data-track="final_browse">
+            Browse open roles
+          </Link>
+        ) : (
+          <Link href="/sign-up" className="btn btn-lg glass-dark" data-track="final_sign_up">
+            Join with your Tufts email
+          </Link>
+        )}
       </div>
     </section>
   );
