@@ -255,6 +255,14 @@ code { font-family: ui-monospace, Menlo, monospace; font-size: 0.9em; background
 .faq-plus { flex: none; width: 36px; height: 36px; border-radius: 50%; background: var(--cream); display: grid; place-items: center; font-size: 20px; transition: transform 0.2s ease; }
 .faq-list details[open] .faq-plus { transform: rotate(45deg); }
 .faq-list details p { padding-top: 12px; max-width: 60ch; }
+/* Answers slide open. Height animates where the browser can size to auto; everywhere else the text still fades in. */
+.faq-list details[open] > p { animation: fade-down 0.3s ease; }
+@supports (interpolate-size: allow-keywords) {
+  .faq-list details { interpolate-size: allow-keywords; }
+  .faq-list details::details-content { block-size: 0; overflow: clip; transition: block-size 0.3s ease, content-visibility 0.3s allow-discrete; }
+  .faq-list details[open]::details-content { block-size: auto; }
+}
+@keyframes fade-down { from { opacity: 0; transform: translateY(-6px); } }
 
 .final-cta { margin-top: var(--section); background: var(--cream); padding-block: clamp(64px, 9vw, 120px); }
 .elephant { color: var(--navy); }
@@ -421,6 +429,11 @@ code { font-family: ui-monospace, Menlo, monospace; font-size: 0.9em; background
 .bubble-wrap.mine { align-self: flex-end; align-items: flex-end; }
 .bubble { background: var(--white); color: var(--navy); border-radius: 20px 20px 20px 6px; padding: 12px 16px; font-size: 15px; line-height: 1.5; white-space: pre-line; overflow-wrap: anywhere; }
 .mine .bubble { background: var(--navy); color: var(--white); border-radius: 20px 20px 6px 20px; }
+/* Messages that arrive while the conversation is open ease in from below instead of popping in. */
+.msg-in { animation: msg-in 0.28s cubic-bezier(0.2, 0.8, 0.2, 1); transform-origin: bottom left; }
+.bubble-wrap.mine.msg-in { transform-origin: bottom right; }
+.thread-status.msg-in { transform-origin: center; }
+@keyframes msg-in { from { opacity: 0; transform: translateY(10px) scale(0.96); } }
 .composer { padding: 16px; border-top: 1.5px solid var(--line-warm); display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
 .composer-field { flex: 1 1 200px; min-width: 0; }
 .composer-field input { width: 100%; border: 1.5px solid var(--line); background: var(--field); border-radius: var(--pill); padding: 14px 18px; font-size: 16px; color: var(--navy); }
@@ -473,6 +486,8 @@ code { font-family: ui-monospace, Menlo, monospace; font-size: 0.9em; background
   .glass, .glass-dark { --shine: 0; }
   .nav { transition: none; }
   .switch, .switch::before { transition: none; }
+  .faq-list details[open] > p, .msg-in { animation: none; }
+  .faq-list details::details-content { transition: none; }
 }
 
 /* ---- Profile menu (nav avatar dropdown) ---------------------------------- */

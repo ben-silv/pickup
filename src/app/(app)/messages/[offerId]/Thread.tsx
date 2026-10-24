@@ -51,14 +51,21 @@ export function Thread({ offerId, initialMessages, timeline, canSend, closedNote
 
   const all = useMemo(() => mergeMessages(initialMessages, live), [initialMessages, live]);
   const items = useMemo(() => buildTimeline({ ...timeline, messages: all }), [timeline, all]);
+  // Only things that arrive after the page loads animate in; the history is just there.
+  const [firstKeys] = useState(() => new Set(buildTimeline({ ...timeline, messages: initialMessages }).map((i) => i.key)));
+  const enter = (key: string) => (firstKeys.has(key) ? "" : " msg-in");
   // Anti-spam: before the owner replies, a helper gets a few messages (the database enforces the same limit).
   const left = unansweredLeft({ viewerIsHelper: timeline.viewerIsHelper, viewerId: timeline.viewerId, offer: timeline.offer, messages: all });
   const capped = left === 0;
 
-  // Keep the newest message in view.
+  // Keep the newest message in view: jump there on load, glide there as new ones arrive.
+  const scrolledOnce = useRef(false);
   useEffect(() => {
     const el = bodyRef.current;
-    if (el) el.scrollTop = el.scrollHeight;
+    if (!el) return;
+    const glide = scrolledOnce.current && !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    el.scrollTo({ top: el.scrollHeight, behavior: glide ? "smooth" : "auto" });
+    scrolledOnce.current = true;
   }, [items.length]);
 
   // Clear the box once the message is sent, unless more was typed meanwhile; keep it (and focus it) if sending failed.
@@ -82,11 +89,11 @@ export function Thread({ offerId, initialMessages, timeline, canSend, closedNote
       <div ref={bodyRef} className="thread-body" role="log" aria-label="Messages" aria-live="polite">
         {items.map((item) =>
           item.kind === "status" ? (
-            <p key={item.key} className="label thread-status">
+            <p key={item.key} className={`label thread-status${enter(item.key)}`}>
               {item.text}
             </p>
           ) : (
-            <div key={item.key} className={`bubble-wrap${item.mine ? " mine" : ""}`}>
+            <div key={item.key} className={`bubble-wrap${item.mine ? " mine" : ""}${enter(item.key)}`}>
               <p className="bubble">
                 <span className="sr-only">{item.mine ? "You: " : "Them: "}</span>
                 {item.body}
