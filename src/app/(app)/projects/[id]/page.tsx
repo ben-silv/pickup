@@ -141,7 +141,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
             <section className="card example-note" aria-label="About this example">
               <p>
                 <strong>This is an example post</strong>, here to show what a project on Project Pickup looks like. The person and project
-                are made up, so it doesn&apos;t take offers. It disappears once real projects are posted.
+                are made up, so it doesn&apos;t take offers. It disappears once three real projects are posted.
               </p>
               <Link href="/post" className="btn btn-sm glass-dark">
                 Post a real project

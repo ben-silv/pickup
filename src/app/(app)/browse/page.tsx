@@ -29,7 +29,8 @@ export default async function BrowsePage({ searchParams }: { searchParams: Promi
     <>
       <PageBand
         title="Open roles"
-        lede="Small, scoped asks from Tufts students. Pick one you can finish in a weekend."
+        lede="Small, scoped asks from students on the Hill. Pick one you can finish in a weekend."
+        pattern
         actions={
           <Link href="/post" className="btn btn-lg btn-post glass">
             <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">

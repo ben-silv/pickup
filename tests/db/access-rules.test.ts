@@ -362,7 +362,7 @@ describe.skipIf(!url)("database access rules", () => {
   });
 
   describe("example project", () => {
-    it("shows the example in the feed until a real project is published, and never takes offers", async () => {
+    it("shows the example in the feed until 3 real projects are published, and never takes offers", async () => {
       const ben = await newUser("ben@tufts.edu");
       const maya = await newUser("maya@tufts.edu");
       const { projectId: exampleId, roleId: exampleRole } = await newProject(ben);
@@ -372,11 +372,15 @@ describe.skipIf(!url)("database access rules", () => {
       expect(await feed()).toEqual([{ project_id: exampleId, is_example: true }]);
       await expect(offer(maya, exampleRole)).rejects.toThrow(/row-level security/);
 
-      // A draft doesn't count; publishing a real project hides the example.
-      const { projectId: realId } = await newProject(maya, "draft");
+      // Drafts don't count; the example stays alongside the first two real projects and goes with the third.
+      const { projectId: draftId } = await newProject(maya, "draft");
       expect((await feed()).map((r) => r.project_id)).toEqual([exampleId]);
-      await as(maya, (c) => c.query("update projects set status = 'published' where id = $1", [realId]));
-      expect((await feed()).map((r) => r.project_id)).toEqual([realId]);
+      const ids = (rows: { project_id: string }[]) => rows.map((r) => r.project_id).sort();
+      await as(maya, (c) => c.query("update projects set status = 'published' where id = $1", [draftId]));
+      const { projectId: second } = await newProject(maya);
+      expect(ids(await feed())).toEqual([exampleId, draftId, second].sort());
+      const { projectId: third } = await newProject(maya);
+      expect(ids(await feed())).toEqual([draftId, second, third].sort());
     });
 
     it("can't be set by students", async () => {

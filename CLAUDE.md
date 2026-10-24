@@ -56,7 +56,7 @@ Tables: `profiles` (1 per auth user, created by trigger, Tufts emails only), `pr
   Messages: a trigger caps a helper at 5 messages on a pending offer until the owner replies or accepts (`UNANSWERED_LIMIT` in `src/lib/messages.ts`).
   Safety: `report_conversation(p_offer, p_reason, p_details)` writes `reports` (reviewed by the admin in the Supabase dashboard); `block_in_conversation` / `unblock_in_conversation` manage `blocks`. A block (either way) stops messages via a restrictive policy and offers via `can_offer_on`; `blocked_between` stays private so nobody can probe who blocked whom.
   Unread: `thread_reads` remembers when each person last opened a conversation; `unread_offer_ids()` drives the red dot, `mark_thread_read(p_offer)` clears it (called when a conversation opens).
-  Example project: `projects.is_example` (set only in the SQL Editor) is labelled everywhere, never takes offers (`can_offer_on`), and drops out of `open_roles` once any real project is published.
+  Example project: `projects.is_example` (set only in the SQL Editor) is labelled everywhere, never takes offers (`can_offer_on`), and drops out of `open_roles` once 3 real projects are published.
   Account deletion: `delete_my_account()` deletes only the caller's auth user; everything they made cascades (Edit profile → Delete account → /goodbye).
   Never add an UPDATE policy that would let users skip these.
 - Changing the schema = new migration + matching Zod change + a test in `tests/db/access-rules.test.ts` for any new rule.
