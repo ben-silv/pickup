@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { BandPattern } from "@/components/app/BandPattern";
 import { Logo } from "@/components/Logo";
 import { SignInForm, type SignInMode } from "./SignInForm";
 import { safeNextPath } from "@/lib/auth/paths";
@@ -11,6 +12,7 @@ export default async function SignInPage({ searchParams }: { searchParams: Promi
   const mode: SignInMode = params.mode === "forgot" ? "forgot" : "signin";
   return (
     <main className="sign-in">
+      <BandPattern fade={false} />
       <div className="sign-in-shape one" aria-hidden="true" />
       <div className="sign-in-shape two" aria-hidden="true" />
       <div className="sign-in-logo">

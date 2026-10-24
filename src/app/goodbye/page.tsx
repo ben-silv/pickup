@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { BandPattern } from "@/components/app/BandPattern";
 import Link from "next/link";
 import { Logo } from "@/components/Logo";
 
@@ -8,6 +9,7 @@ export const metadata: Metadata = { title: "Account deleted · Project Pickup", 
 export default function GoodbyePage() {
   return (
     <main className="sign-in">
+      <BandPattern fade={false} />
       <div className="sign-in-shape one" aria-hidden="true" />
       <div className="sign-in-shape two" aria-hidden="true" />
       <div className="sign-in-logo">

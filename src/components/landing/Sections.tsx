@@ -1,3 +1,4 @@
+import { BandPattern } from "../app/BandPattern";
 import Link from "next/link";
 import { faqs, points, roleExamples, steps } from "@/content";
 import { RoleTag } from "../RoleTag";
@@ -52,6 +53,7 @@ export function CampusBlock() {
     <section className="section-top">
       <div className="wrap">
         <div className="campus-block">
+          <BandPattern />
           <h2 className="display h2-xl">Built for the Hill, not the internet.</h2>
           <div className="point-grid">
             {points.map((p) => (

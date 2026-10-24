@@ -604,3 +604,10 @@ code { font-family: ui-monospace, Menlo, monospace; font-size: 0.9em; background
   -webkit-mask-image: linear-gradient(100deg, transparent 0%, transparent 18%, black 62%);
   mask-image: linear-gradient(100deg, transparent 0%, transparent 18%, black 62%);
 }
+
+/* Elephant pattern on every Tufts Blue area: home hero, the campus block and the sign-in pages (page bands above). */
+.band-pattern-even { opacity: 0.1; -webkit-mask-image: none; mask-image: none; }
+.hero { position: relative; overflow: hidden; }
+.hero > .wrap { position: relative; z-index: 1; }
+.campus-block { position: relative; overflow: hidden; }
+.campus-block > :not(.band-pattern) { position: relative; z-index: 1; }

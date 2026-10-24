@@ -12,7 +12,7 @@ export function PageBand({
   top,
   children,
   tall = true,
-  pattern = false,
+  pattern = true,
 }: {
   /** Optional: the profile pages put their h1 in the card that overlaps the band. */
   title?: string;
@@ -21,7 +21,7 @@ export function PageBand({
   top?: ReactNode;
   children?: ReactNode;
   tall?: boolean;
-  /** Faint elephant pattern in the background (Browse). Keep "Tufts" out of this band's text when it's on. */
+  /** Faint elephant pattern in the background (on by default). Keep "Tufts" out of this band's own text. */
   pattern?: boolean;
 }) {
   return (

@@ -18,13 +18,14 @@ function MiniElephant({ x, y, scale, flip = false }: { x: number; y: number; sca
 }
 
 /**
- * Faint repeating pattern for a PageBand: small elephants and the logo's two dots, tilted slightly and faded out
- * behind the title so the white text keeps full contrast. Decorative only. Never use it on a band that says "Tufts".
+ * Faint repeating pattern for Tufts Blue areas: small elephants and the logo's two dots, tilted slightly.
+ * `fade` (default) eases it out on the left, behind left-aligned titles; `fade={false}` keeps it even (sign-in pages).
+ * Decorative only. Text sitting directly on the pattern never says "Tufts" (white cards on top are fine).
  */
-export function BandPattern() {
+export function BandPattern({ fade = true }: { fade?: boolean }) {
   const id = useId().replace(/:/g, "");
   return (
-    <svg className="band-pattern" aria-hidden="true" focusable="false">
+    <svg className={`band-pattern${fade ? "" : " band-pattern-even"}`} aria-hidden="true" focusable="false">
       <defs>
         <pattern id={id} width="220" height="160" patternUnits="userSpaceOnUse" patternTransform="rotate(-8)">
           <g fill="currentColor">

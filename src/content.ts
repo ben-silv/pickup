@@ -27,7 +27,7 @@ export const roleExamples = [
 
 export const points = [
   { title: "Any size of ask", body: "A few hours on one piece, or someone to build the whole thing with you from scratch. Say which, and the right person says yes." },
-  { title: "People you can meet", body: "Everyone signs in with a Tufts email, so you can grab a table at Tisch instead of chasing strangers." },
+  { title: "People you can meet", body: "Everyone is a verified student on the Hill, so you can grab a table at Tisch instead of chasing strangers." },
   { title: "Credit that counts", body: "Every contribution is logged on the project page, with a note from the person you helped." },
 ];
 

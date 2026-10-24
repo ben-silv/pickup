@@ -94,12 +94,13 @@ Final direction from the Claude Design canvas: calm, roomy pages (Dirtywave) wit
 - **Liquid glass** (`.glass` light, `.glass-dark` navy): the menu, all primary buttons, chips and the sign-in card. Don't invent new glass variants; don't put glass on plain white areas where it can't be seen.
 - Depth from color blocks; cards get at most the one soft shadow in `.card`.
 - Hover changes shade, never position: `.btn.glass-dark` gets a bit darker, `.btn.glass` a bit brighter, `.btn-outline` gets a paper fill (all in `globals.css`). Nothing lifts or scales.
+- **Elephant pattern** (`BandPattern`): faint white elephants and logo dots on every Tufts Blue area (page bands by default, the home hero, the campus block, the sign-in pages). Text sitting directly on the pattern never says "Tufts" (use "on the Hill"); text inside a white card on top of it may.
 - Two signature animations, and only these two: the **glass light** (`GlassLight` moves a soft highlight under the mouse on `.glass`/`.glass-dark`), and the **hero post stack** (`HeroStack` shuffles example posts every 4.5s, pauses on hover/focus, has a Next button). Don't add more motion without asking.
 - State transitions (not decoration) are fine: the menu bar docks flush to the top once the page scrolls (`ScrollState` sets `data-scrolled` on `<html>`).
 - Respect `prefers-reduced-motion`: both animations and all transitions switch off.
 
 ### Components to reuse
-`Logo`, `RoleTag` (light-blue role pill + hours: use it wherever a role appears), `Elephant` (original art, never next to the word "Tufts"), `PageBand` (blue header on app pages, content below uses `.overlap`), `.card`, `.field`, `.btn` + `.glass-dark`, `.badge-success`, `.avatar-*`, `.pill-*`.
+`Logo`, `RoleTag` (light-blue role pill + hours: use it wherever a role appears), `Elephant` (original art, never next to the word "Tufts"), `PageBand` (blue header on app pages with the elephant pattern; content below uses `.overlap`), `.card`, `.field`, `.btn` + `.glass-dark`, `.badge-success`, `.avatar-*`, `.pill-*`.
 
 ### Tufts identity
 - **Never** use the Tufts logo, seal, wordmark or Jumbo artwork (needs written permission; student groups can't use the logo at all). Don't combine "Tufts" with an elephant or any Tufts mark.

@@ -165,7 +165,7 @@ test("the privacy note is public and linked from the footer and sign-up", async 
 
 test("the home page says it's open", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByText("For Tufts students · now open")).toBeVisible();
+  await expect(page.getByText("For students on the Hill · now open")).toBeVisible();
 });
 
 test("the goodbye page after deleting an account is public", async ({ page }) => {

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { BandPattern } from "@/components/app/BandPattern";
 import { redirect } from "next/navigation";
 import { Logo } from "@/components/Logo";
 import { WelcomeForm } from "./WelcomeForm";
@@ -22,6 +23,7 @@ export default async function WelcomePage({ searchParams }: { searchParams: Prom
 
   return (
     <main className="sign-in">
+      <BandPattern fade={false} />
       <div className="sign-in-shape one" aria-hidden="true" />
       <div className="sign-in-shape two" aria-hidden="true" />
       <div className="sign-in-logo">

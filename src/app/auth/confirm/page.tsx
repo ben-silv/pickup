@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { BandPattern } from "@/components/app/BandPattern";
 import Link from "next/link";
 import { Logo } from "@/components/Logo";
 import { ActionButton } from "@/components/app/ActionButton";
@@ -20,6 +21,7 @@ export default async function ConfirmPage({ searchParams }: { searchParams: Prom
 
   return (
     <main className="sign-in">
+      <BandPattern fade={false} />
       <div className="sign-in-shape one" aria-hidden="true" />
       <div className="sign-in-shape two" aria-hidden="true" />
       <div className="sign-in-logo">
