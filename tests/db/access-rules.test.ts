@@ -556,6 +556,34 @@ describe.skipIf(!url)("database access rules", () => {
     });
   });
 
+  describe("email preferences", () => {
+    it("are off by default, private to each person, and can be changed by them only", async () => {
+      const ana = await newUser("ana.email@tufts.edu");
+      const bo = await newUser("bo.email@tufts.edu");
+
+      expect(await as(ana, (c) => c.query("select updates from email_preferences"))).toMatchObject({ rowCount: 0 });
+      await as(ana, (c) => c.query("insert into email_preferences (user_id) values ($1)", [ana]));
+      const first = await as(ana, (c) => c.query("select updates, updated_at from email_preferences where user_id = $1", [ana]));
+      expect(first.rows[0].updates).toBe(false);
+
+      await as(ana, (c) =>
+        c.query("insert into email_preferences (user_id, updates) values ($1, true) on conflict (user_id) do update set updates = excluded.updates", [ana]),
+      );
+      expect((await as(ana, (c) => c.query("select updates from email_preferences"))).rows).toEqual([{ updates: true }]);
+
+      // Someone else can't see it, change it, or set one for another person.
+      expect((await as(bo, (c) => c.query("select * from email_preferences"))).rowCount).toBe(0);
+      expect((await as(bo, (c) => c.query("update email_preferences set updates = false where user_id = $1", [ana]))).rowCount).toBe(0);
+      await expect(as(bo, (c) => c.query("insert into email_preferences (user_id, updates) values ($1, false)", [ana]))).rejects.toThrow(/row-level security/);
+      await expect(as(null, (c) => c.query("select * from email_preferences"))).rejects.toThrow(/permission denied/);
+      expect((await admin("select updates from email_preferences where user_id = $1", [ana])).rows).toEqual([{ updates: true }]);
+
+      // Deleting the account removes it too.
+      await admin("delete from auth.users where id = $1", [ana]);
+      expect((await admin("select 1 from email_preferences where user_id = $1", [ana])).rowCount).toBe(0);
+    });
+  });
+
   describe("credits", () => {
     it("are written when the owner marks the role filled, and visible to everyone signed in", async () => {
       const ben = await newUser("ben@tufts.edu");

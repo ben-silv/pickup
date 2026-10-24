@@ -44,6 +44,10 @@ export default function PrivacyPage() {
                 make.
               </li>
               <li>
+                <strong>Your email choice:</strong> whether you ticked &ldquo;Email me important updates&rdquo; and when. It&apos;s off unless
+                you turn it on, only you can see it, and you can change it in Edit profile.
+              </li>
+              <li>
                 <strong>Visits:</strong> anonymous page-view counts through Vercel Web Analytics (pages visited, browser, device type and
                 country). It uses no cookies and isn&apos;t linked to your account.
               </li>
@@ -58,7 +62,7 @@ export default function PrivacyPage() {
                 Nothing is visible to people who aren&apos;t signed in.
               </li>
               <li>
-                <strong>Drafts</strong> are visible only to you.
+                <strong>Drafts</strong> and your email choice are visible only to you.
               </li>
               <li>
                 <strong>Offers and messages</strong> are visible only to the two people in that conversation.
@@ -78,7 +82,7 @@ export default function PrivacyPage() {
             <h2 className="display h3">Services we use</h2>
             <p>
               Supabase stores the database and handles sign-in. Vercel hosts the site and counts visits. Resend delivers sign-in and
-              password-reset emails. Each only gets what it needs to do that job.
+              password-reset emails, and update emails if you opted in. Each only gets what it needs to do that job.
             </p>
           </section>
 

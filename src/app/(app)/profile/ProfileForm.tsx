@@ -7,6 +7,7 @@ import { idleState } from "@/lib/action-state";
 import { CATEGORIES, CATEGORY_LABEL, type Category } from "@/lib/vocab";
 import { knownMajor } from "@/lib/onboarding";
 import { BasicsFields } from "@/components/forms/BasicsFields";
+import { EmailUpdatesField } from "@/components/forms/EmailUpdatesField";
 
 type Values = {
   fullName: string;
@@ -20,7 +21,7 @@ type Values = {
 };
 
 /** Edit name, year, major, bio, skills, availability and GitHub. Fields are uncontrolled, so they survive an error. */
-export function ProfileForm({ values }: { values: Values }) {
+export function ProfileForm({ values, emailUpdates }: { values: Values; emailUpdates: boolean }) {
   const [state, action, pending] = useActionState(updateProfile, idleState);
   const formRef = useRef<HTMLFormElement>(null);
   const errors = state.status === "error" ? (state.fieldErrors ?? {}) : {};
@@ -103,6 +104,7 @@ export function ProfileForm({ values }: { values: Values }) {
         <input name="githubUrl" type="url" placeholder="https://github.com/…" defaultValue={values.githubUrl ?? ""} aria-invalid={invalid("githubUrl")} aria-describedby={describedBy("githubUrl")} />
       </label>
       {errorText("githubUrl")}
+      <EmailUpdatesField checked={emailUpdates} />
       {state.status === "error" ? (
         <p id="profile-error" role="alert" tabIndex={-1} className="error-text">
           {state.message}

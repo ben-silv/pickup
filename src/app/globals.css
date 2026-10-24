@@ -626,3 +626,8 @@ code { font-family: ui-monospace, Menlo, monospace; font-size: 0.9em; background
 .hero > .wrap { position: relative; z-index: 1; }
 .campus-block { position: relative; overflow: hidden; }
 .campus-block > :not(.band-pattern) { position: relative; z-index: 1; }
+
+/* Opt-in checkbox for update emails (welcome step, Edit profile). */
+.consent-row { display: flex; align-items: flex-start; gap: 12px; font-size: 15px; line-height: 1.5; cursor: pointer; }
+.consent-row input { width: 20px; height: 20px; margin: 2px 0 0; flex-shrink: 0; accent-color: var(--navy); cursor: pointer; }
+.consent-row > span { min-width: 0; }

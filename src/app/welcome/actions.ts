@@ -7,6 +7,7 @@ import { setupSchema } from "@/lib/schemas";
 import { safeNextPath } from "@/lib/auth/paths";
 import { setupNeeds } from "@/lib/onboarding";
 import { setNewPassword } from "@/lib/auth/password";
+import { saveEmailUpdates, wantsEmailUpdates } from "@/lib/email-updates";
 import { friendlyDbError } from "@/lib/db-errors";
 import { fieldErrors, type ActionState } from "@/lib/action-state";
 
@@ -40,6 +41,8 @@ export async function completeOnboarding(_prev: ActionState, form: FormData): Pr
       console.error("completeOnboarding failed", error ?? `no profile row for ${user.id}`);
       return { status: "error", message: friendlyDbError(error ?? {}, "Couldn't save that. Try again.") };
     }
+    // New accounts see the opt-in box here. A failed save isn't worth blocking sign-up over; it can be set in Edit profile.
+    await saveEmailUpdates(supabase, user.id, wantsEmailUpdates(form));
   }
 
   if (needs.password) {

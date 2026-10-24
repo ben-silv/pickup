@@ -10,6 +10,7 @@ import {
 import { ProfileForm } from "./ProfileForm";
 import { DeleteAccount } from "./DeleteAccount";
 import { loadProfile } from "./data";
+import { getEmailUpdates } from "@/lib/email-updates";
 import { createClient, getUser } from "@/lib/supabase/server";
 import { signOut } from "../actions";
 
@@ -32,6 +33,7 @@ export default async function ProfilePage({
     credits,
     creditsFailed,
   } = await loadProfile(supabase, user.id, true);
+  const emailUpdates = editing ? await getEmailUpdates(supabase, user.id) : false;
 
   const signOutForm = (
     <form action={signOut}>
@@ -69,6 +71,7 @@ export default async function ProfilePage({
                   hoursPerWeek: profile.hours_per_week,
                   githubUrl: profile.github_url,
                 }}
+                emailUpdates={emailUpdates}
               />
               <DeleteAccount />
             </>

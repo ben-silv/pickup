@@ -5,6 +5,7 @@ import { completeOnboarding } from "./actions";
 import { idleState } from "@/lib/action-state";
 import { BasicsFields } from "@/components/forms/BasicsFields";
 import { PasswordField } from "@/components/forms/PasswordField";
+import { EmailUpdatesField } from "@/components/forms/EmailUpdatesField";
 
 type Props = {
   next: string;
@@ -78,6 +79,7 @@ export function WelcomeForm({ next, email, needsBasics, needsPassword, fullName,
           ) : null}
         </>
       ) : null}
+      {needsBasics ? <EmailUpdatesField /> : null}
       <input type="hidden" name="next" value={next} />
       {state.status === "error" && !Object.keys(errors).length ? (
         <p role="alert" className="error-text">

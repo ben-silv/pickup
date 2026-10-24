@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { createClient, getUser } from "@/lib/supabase/server";
 import { deleteAccountSchema, profileInputSchema } from "@/lib/schemas";
 import { profileFormValues } from "@/lib/profile";
+import { saveEmailUpdates, wantsEmailUpdates } from "@/lib/email-updates";
 import { friendlyDbError } from "@/lib/db-errors";
 import { fieldErrors, type ActionState } from "@/lib/action-state";
 
@@ -35,6 +36,9 @@ export async function updateProfile(_prev: ActionState, form: FormData): Promise
   if (error || !data?.length) {
     console.error("updateProfile failed", error ?? `no profile row updated for ${user.id}`);
     return { status: "error", message: friendlyDbError(error ?? {}, "Couldn't save your profile. Try again.") };
+  }
+  if (!(await saveEmailUpdates(supabase, user.id, wantsEmailUpdates(form)))) {
+    return { status: "error", message: "Saved your profile, but couldn't save your email setting. Try again." };
   }
   revalidatePath("/", "layout");
   redirect("/profile");
