@@ -596,6 +596,8 @@ code { font-family: ui-monospace, Menlo, monospace; font-size: 0.9em; background
 
 /* Elephant pattern behind a page band (Browse). Faint white, faded out on the left so the title stays crisp. */
 .band-has-pattern { position: relative; overflow: hidden; }
+/* The band is now positioned, so content that overlaps it (.overlap) must be too, or the band paints over it. */
+.overlap, .overlap-sm { position: relative; z-index: 1; }
 .band-has-pattern > .band-inner { position: relative; z-index: 1; }
 .band-pattern {
   position: absolute; inset: 0; width: 100%; height: 100%; color: var(--white); opacity: 0.13; pointer-events: none;
