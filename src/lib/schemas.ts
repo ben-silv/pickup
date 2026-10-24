@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { CATEGORIES, CLASS_YEARS, MAJORS, REPORT_REASONS, STAGES, TUFTS_EMAIL } from "./vocab";
+import { CATEGORIES, CLASS_YEARS, FULL_PROJECT_MAX_HOURS, MAJORS, REPORT_REASONS, ROLE_MAX_HOURS, STAGES, TUFTS_EMAIL, maxHoursFor } from "./vocab";
 import { FEED_SORTS, sanitizeSearch } from "./feed";
 
 /**
@@ -43,11 +43,22 @@ export const emailLinkSchema = z.object({
   type: z.preprocess(firstParam, z.enum(EMAIL_LINK_TYPES)),
 });
 
-export const roleInputSchema = z.object({
-  category: z.enum(CATEGORIES, { error: "Pick a role." }),
-  need: trimmed(5, 200, "Say what's needed in a few words.", "Keep it under 200 characters."),
-  hours: z.coerce.number().int("Use whole hours.").min(1, "At least 1 hour.").max(40, "Keep it under 40 hours. Split bigger jobs into two roles."),
-});
+export const roleInputSchema = z
+  .object({
+    category: z.enum(CATEGORIES, { error: "Pick a role." }),
+    need: trimmed(5, 200, "Say what's needed in a few words.", "Keep it under 200 characters."),
+    hours: z.coerce.number().int("Use whole hours.").min(1, "At least 1 hour.").max(FULL_PROJECT_MAX_HOURS, `Keep it under ${FULL_PROJECT_MAX_HOURS} hours.`),
+  })
+  // Same rule as the roles table: a full project can be estimated up to 120 hours, other roles up to 40.
+  .superRefine((r, ctx) => {
+    if (r.hours > maxHoursFor(r.category)) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["hours"],
+        message: `Keep it under ${ROLE_MAX_HOURS} hours. Split bigger jobs into two roles, or pick "Full project".`,
+      });
+    }
+  });
 
 export const projectInputSchema = z.object({
   title: trimmed(3, 80, "Give it a name (3+ characters).", "Keep the name under 80 characters."),
@@ -93,7 +104,7 @@ export const deleteAccountSchema = z.object({
 export const completeRoleInputSchema = z.object({
   roleId: z.uuid(),
   offerId: z.uuid(),
-  hours: z.coerce.number().int("Use whole hours.").min(1, "At least 1 hour.").max(80, "Up to 80 hours."),
+  hours: z.coerce.number().int("Use whole hours.").min(1, "At least 1 hour.").max(300, "Up to 300 hours."),
   note: trimmed(1, 400, "Write a short credit note.", "Keep the note under 400 characters."),
 });
 

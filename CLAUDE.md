@@ -58,6 +58,7 @@ Tables: `profiles` (1 per auth user, created by trigger, Tufts emails only), `pr
   Unread: `thread_reads` remembers when each person last opened a conversation; `unread_offer_ids()` drives the red dot, `mark_thread_read(p_offer)` clears it (called when a conversation opens).
   Example project: `projects.is_example` (set only in the SQL Editor) is labelled everywhere, never takes offers (`can_offer_on`), and drops out of `open_roles` once 3 real projects are published.
   Account deletion: `delete_my_account()` deletes only the caller's auth user; everything they made cascades (Edit profile → Delete account → /goodbye).
+  Role sizes: every role is up to 40 hours except `fullstack` ("Full project": someone to build the whole thing with you), up to 120 (`roles_hours_check`, mirrored by `maxHoursFor` in `src/lib/vocab.ts`). Credits log up to 300 hours.
   Never add an UPDATE policy that would let users skip these.
 - Changing the schema = new migration + matching Zod change + a test in `tests/db/access-rules.test.ts` for any new rule.
 

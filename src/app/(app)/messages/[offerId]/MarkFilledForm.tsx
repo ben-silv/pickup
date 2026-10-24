@@ -45,7 +45,7 @@ export function MarkFilledForm({ roleId, offerId, defaultHours, helperFirst }: P
             type="number"
             inputMode="numeric"
             min={1}
-            max={80}
+            max={300}
             defaultValue={defaultHours}
             required
             aria-invalid={hoursBad ? true : undefined}

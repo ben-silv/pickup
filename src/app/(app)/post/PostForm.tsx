@@ -4,7 +4,7 @@ import { startTransition, useActionState, useEffect, useRef, useState, type Form
 import { createProject } from "./actions";
 import { idleState } from "@/lib/action-state";
 import { MAX_ROLES } from "@/lib/post";
-import { CATEGORIES, CATEGORY_LABEL, STAGES, STAGE_LABEL, type Category } from "@/lib/vocab";
+import { CATEGORIES, CATEGORY_LABEL, STAGES, STAGE_LABEL, type Category, maxHoursFor } from "@/lib/vocab";
 import { RoleTag } from "@/components/RoleTag";
 
 type RoleRow = { key: number; category: Category | ""; need: string; hours: string };
@@ -190,7 +190,7 @@ export function PostForm() {
                   type="number"
                   inputMode="numeric"
                   min={1}
-                  max={40}
+                  max={maxHoursFor(r.category)}
                   value={r.hours}
                   onChange={(e) => updateRole(r.key, { hours: e.target.value })}
                   aria-invalid={invalid(`roles.${i}.hours`)}
@@ -243,6 +243,7 @@ export function PostForm() {
           <ul className="tip-list">
             <li>One role, one deliverable. &ldquo;3 onboarding screens&rdquo;, not &ldquo;help with design&rdquo;.</li>
             <li>Under 10 hours. Bigger jobs can be split into two roles.</li>
+            <li>Want someone to build the whole thing with you? Pick &ldquo;Full project&rdquo; and say what the first version needs.</li>
             <li>Show what exists. A link to the prototype or repo doubles replies.</li>
           </ul>
         </section>

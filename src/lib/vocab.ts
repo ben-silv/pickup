@@ -1,6 +1,11 @@
 /** Shared vocabulary. Matches the Postgres enums. No imports, so client components can use it freely. */
 export const STAGES = ["idea", "mockup", "prototype", "live"] as const;
-export const CATEGORIES = ["design", "frontend", "backend", "data", "ml", "mobile", "writing", "testing", "other"] as const;
+export const CATEGORIES = ["design", "frontend", "backend", "data", "ml", "mobile", "fullstack", "writing", "testing", "other"] as const;
+
+/** Hour estimates per role. A full project can be bigger; everything else stays a small, scoped ask. */
+export const ROLE_MAX_HOURS = 40;
+export const FULL_PROJECT_MAX_HOURS = 120;
+export const maxHoursFor = (category: string): number => (category === "fullstack" ? FULL_PROJECT_MAX_HOURS : ROLE_MAX_HOURS);
 export const CLASS_YEARS = ["2027", "2028", "2029", "2030", "Grad", "Other"] as const;
 export const TUFTS_EMAIL = /^[^@\s]+@tufts\.edu$/i;
 
@@ -25,6 +30,7 @@ export const CATEGORY_LABEL: Record<Category, string> = {
   data: "Data science",
   ml: "ML",
   mobile: "Mobile",
+  fullstack: "Full project (full stack)",
   writing: "Copywriting",
   testing: "User testing",
   other: "Other",
@@ -38,6 +44,7 @@ export const CATEGORY_CHIP_LABEL: Record<Category, string> = {
   data: "Data",
   ml: "ML",
   mobile: "Mobile",
+  fullstack: "Full project",
   writing: "Writing",
   testing: "Testing",
   other: "Other",

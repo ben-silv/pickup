@@ -26,7 +26,10 @@ describe("projectInputSchema", () => {
     expect(issue({ stage: "launched" })).toMatch(/how far along/);
     expect(issue({ repoUrl: "github.com/x" })).toMatch(/https/);
     expect(issue({ roles: [] })).toMatch(/at least one role/);
-    expect(issue({ roles: [{ ...role, hours: 41 }] })).toMatch(/under 40 hours/);
+    expect(issue({ roles: [{ ...role, hours: 41 }] })).toMatch(/under 40 hours.*Full project/);
+    // A full project can be estimated up to 120 hours.
+    expect(issue({ roles: [{ category: "fullstack", need: "Build the first version", hours: 120 }] })).toBeUndefined();
+    expect(issue({ roles: [{ category: "fullstack", need: "Build the first version", hours: 121 }] })).toMatch(/under 120 hours/);
     expect(issue({ roles: [{ ...role, category: "hacking" }] })).toMatch(/Pick a role/);
   });
 });
@@ -51,10 +54,10 @@ describe("offer, message and profile inputs", () => {
 describe("completeRoleInputSchema", () => {
   const ok = { roleId: "5eed0000-0000-4000-8000-0000000000c2", offerId: "5eed0000-0000-4000-8000-0000000000d1", hours: "6", note: " Great work. " };
 
-  it("matches the credits table limits (hours 1–80, note 1–400)", () => {
+  it("matches the credits table limits (hours 1–300, note 1–400)", () => {
     expect(completeRoleInputSchema.parse(ok)).toMatchObject({ hours: 6, note: "Great work." });
-    expect(completeRoleInputSchema.safeParse({ ...ok, hours: "80" }).success).toBe(true);
-    for (const hours of ["0", "81", "2.5", ""]) expect(completeRoleInputSchema.safeParse({ ...ok, hours }).success).toBe(false);
+    expect(completeRoleInputSchema.safeParse({ ...ok, hours: "300" }).success).toBe(true);
+    for (const hours of ["0", "301", "2.5", ""]) expect(completeRoleInputSchema.safeParse({ ...ok, hours }).success).toBe(false);
     expect(completeRoleInputSchema.safeParse({ ...ok, note: "   " }).success).toBe(false);
     expect(completeRoleInputSchema.safeParse({ ...ok, note: "x".repeat(401) }).success).toBe(false);
     expect(completeRoleInputSchema.safeParse({ ...ok, roleId: "nope" }).success).toBe(false);

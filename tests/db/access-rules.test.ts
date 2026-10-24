@@ -361,6 +361,22 @@ describe.skipIf(!url)("database access rules", () => {
     });
   });
 
+  describe("full-project roles", () => {
+    it("allow bigger estimates than regular roles", async () => {
+      const ben = await newUser("ben@tufts.edu");
+      const { projectId } = await newProject(ben);
+      const addRole = (category: string, hours: number) =>
+        as(ben, (c) => c.query("insert into roles (project_id, category, need, hours) values ($1, $2, 'Build it with me', $3)", [projectId, category, hours]));
+
+      await addRole("fullstack", 120);
+      await expect(addRole("fullstack", 121)).rejects.toThrow(/roles_hours_check/);
+      await addRole("backend", 40);
+      await expect(addRole("backend", 41)).rejects.toThrow(/roles_hours_check/);
+      const { rows } = await admin("select category::text from open_roles where category::text = 'fullstack'");
+      expect(rows).toHaveLength(1);
+    });
+  });
+
   describe("example project", () => {
     it("shows the example in the feed until 3 real projects are published, and never takes offers", async () => {
       const ben = await newUser("ben@tufts.edu");

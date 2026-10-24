@@ -1,6 +1,6 @@
 /** Landing page copy that renders as lists. Edit copy here, not in the components. */
 
-export const heroChips = ["UI/UX design", "Frontend", "Backend", "Data science", "ML", "iOS / Android", "Copywriting", "User testing"];
+export const heroChips = ["UI/UX design", "Frontend", "Backend", "Full project", "Data science", "ML", "iOS / Android", "Copywriting", "User testing"];
 
 export const exampleFeed = [
   { title: "Dewick wait-time tracker", role: "UI/UX", scope: "~5 hrs" },
@@ -22,19 +22,21 @@ export const roleExamples = [
   { task: "Landing page copy", role: "Writing", hours: "~2 hrs" },
   { task: "TestFlight build", role: "Mobile", hours: "~6 hrs" },
   { task: "Five user interviews", role: "User testing", hours: "~3 hrs" },
+  { task: "Build the first version", role: "Full project", hours: "~60 hrs" },
 ];
 
 export const points = [
-  { title: "Not a cofounder search", body: "A few hours on a defined piece is easy to say yes to. Joining someone's startup isn't." },
+  { title: "Any size of ask", body: "A few hours on one piece, or someone to build the whole thing with you from scratch. Say which, and the right person says yes." },
   { title: "People you can meet", body: "Everyone signs in with a Tufts email, so you can grab a table at Tisch instead of chasing strangers." },
   { title: "Credit that counts", body: "Every contribution is logged on the project page, with a note from the person you helped." },
 ];
 
 export const faqs = [
   { q: "Who can join?", a: "Any current Tufts student with a @tufts.edu email, undergrad or grad, any major. Designers, writers and pre-meds with a good idea are as welcome as CS majors." },
-  { q: "Does anyone get paid?", a: "No. Project Pickup is for side projects and learning. You trade a few hours of help for credit, portfolio work and a teammate." },
+  { q: "Does anyone get paid?", a: "No. Project Pickup is for side projects and learning. You trade your time for credit, portfolio work and a teammate." },
+  { q: "Can I find someone to build a whole project with?", a: "Yes. Post your idea and pick the \"Full project\" role to look for a full-stack partner who builds it with you from scratch. Or ask for one piece, like design or a backend, and keep it small." },
   { q: "Who owns the project?", a: "The person who posts it. Before you start, agree in writing on what the helper gets credit for and what happens if the project turns into a business." },
-  { q: "How do I sign in?", a: "Enter your Tufts email and we send you a one-time link. No passwords. The first link creates your account." },
+  { q: "How do I sign up?", a: "Enter your Tufts email and we send a link to confirm it. Then pick a password and fill in your name, year and major. After that, sign in with your email and password." },
 ];
 
 /** Example posts the hero card stack shuffles through. Illustrations, not real students. */

@@ -31,7 +31,7 @@ export function Roles() {
       <div className="wrap stack-xl">
         <div className="stack-sm" style={{ maxWidth: 760 }}>
           <p className="label muted">Open roles · examples</p>
-          <h2 className="display h2">Small asks people actually say yes to.</h2>
+          <h2 className="display h2">From a two-hour fix to a whole build.</h2>
         </div>
         <div className="role-grid">
           {roleExamples.map((r) => (
