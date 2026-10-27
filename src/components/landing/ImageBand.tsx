@@ -1,18 +1,14 @@
 import { exampleFeed } from "@/content";
+import { DeskScene } from "./DeskScene";
 
-/** Three big rounded tiles: a photo slot and two product shots. */
+/** Three big rounded tiles: the 3D table scene (photo slot) and two product shots. */
 export function ImageBand() {
   return (
     <section className="section-top" aria-label="Project Pickup in use">
       <div className="wrap tiles">
-        <figure className="tile tile-wide tile-cream">
-          {/* Replace with a real photo (next/image from /public), see CLAUDE.md → Images. */}
-          <svg aria-hidden="true" width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="var(--brown)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-            <rect x="3" y="6" width="18" height="13" rx="3" />
-            <circle cx="12" cy="12.5" r="3.5" />
-            <path d="M8 6l1.5-2h5L16 6" />
-          </svg>
-          <figcaption className="label tile-caption">Photo · two students at a table in Tisch, one laptop, one sketchbook</figcaption>
+        <figure className="tile tile-wide tile-cream tile-desk" role="img" aria-label="Illustration: a table on the Hill with an open laptop and a sketchbook, role tags floating above it">
+          {/* Illustrated stand-in until there's a real photo (next/image from /public), see CLAUDE.md → Images. */}
+          <DeskScene />
         </figure>
 
         <figure className="tile tile-blue tile-phone" role="img" aria-label="The Project Pickup feed on a phone">

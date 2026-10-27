@@ -218,8 +218,48 @@ code { font-family: ui-monospace, Menlo, monospace; font-size: 0.9em; background
 .tile-blue { background: var(--tufts-blue); }
 .tile-navy { background: var(--navy); padding: 24px; }
 .tile-phone { align-items: flex-end; }
-.tile-caption { position: absolute; left: 20px; right: 20px; bottom: 20px; background: var(--white); padding: 12px 16px; border-radius: var(--radius); }
 .tile-flag { position: absolute; top: 20px; left: 20px; color: var(--white); }
+
+/* ---- Desk scene (3D stand-in for the Tisch photo) ------------------------
+   The stage tilts back (rotateX) and sways (rotateZ); each tag undoes both so it faces you. Keep the two
+   keyframe pairs in sync. Transforms only, so it runs on the GPU. */
+.tile-desk { container-type: inline-size; content-visibility: auto; }
+.desk-scene { position: relative; width: 460px; height: 300px; flex: none; perspective: 1400px; scale: 0.82; translate: 0 36px; }
+@container (min-width: 560px) { .desk-scene { scale: 1; } }
+@container (max-width: 400px) { .desk-scene { scale: 0.62; } }
+.desk-shadow { position: absolute; left: 50%; top: 62%; width: 380px; height: 120px; translate: -50% -50%; border-radius: 50%; background: radial-gradient(closest-side, rgba(99, 73, 58, 0.18), transparent); }
+.desk-stage, .desk-top, .laptop, .desk-float, .desk-bob, .desk-face { transform-style: preserve-3d; }
+.desk-stage { position: absolute; inset: 0; transform: rotateX(58deg) rotateZ(-30deg); animation: desk-sway 9s ease-in-out infinite alternate; }
+.desk-top { position: absolute; left: 50%; top: 50%; width: 440px; height: 260px; margin: -130px 0 0 -220px; background: var(--white); border-radius: 28px; }
+.desk-edge { position: absolute; background: var(--line); }
+.desk-edge-front { left: 22px; right: 22px; top: 100%; height: 16px; transform-origin: top; transform: rotateX(-90deg); }
+.desk-edge-side { top: 22px; bottom: 22px; right: 100%; width: 16px; transform-origin: right; transform: rotateY(-90deg); background: var(--line-warm); }
+
+.laptop { position: absolute; left: 150px; top: 70px; width: 170px; height: 112px; }
+.laptop-base { position: absolute; inset: 0; background: var(--navy); border-radius: 12px; transform: translateZ(2px); padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; align-items: center; }
+.laptop-keys { width: 100%; height: 46px; border-radius: 6px; background: repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.16) 0 10px, transparent 10px 14px), repeating-linear-gradient(0deg, transparent 0 4px, var(--navy) 4px 7px); }
+.laptop-pad { width: 50px; height: 26px; border-radius: 6px; background: rgba(255, 255, 255, 0.12); }
+.laptop-lid { position: absolute; left: 0; right: 0; bottom: 100%; height: 108px; background: var(--navy); border-radius: 12px; transform-origin: bottom; transform: translateZ(2px) rotateX(-78deg); padding: 8px; }
+.laptop-screen { height: 100%; border-radius: 6px; background: var(--sky-soft); padding: 12px; display: flex; flex-direction: column; gap: 7px; }
+.screen-title { width: 62%; height: 9px; border-radius: 4px; background: var(--navy); }
+.screen-line { width: 90%; height: 6px; border-radius: 3px; background: var(--sky); }
+.screen-line.short { width: 55%; }
+.screen-pill { margin-top: auto; width: 46px; height: 14px; border-radius: 999px; background: var(--tufts-blue); }
+
+.sketchbook { position: absolute; left: 40px; top: 120px; width: 96px; height: 120px; border-radius: 8px; background: var(--cream); border-left: 8px solid var(--sky); transform: translateZ(2px) rotateZ(14deg); padding: 14px 12px; display: flex; flex-direction: column; gap: 10px; }
+.sketch-frame { height: 34px; border: 1.5px solid var(--muted); border-radius: 6px; }
+.sketch-frame.small { width: 60%; height: 22px; }
+.pencil { position: absolute; left: 60px; top: 40px; width: 74px; height: 6px; border-radius: 3px; background: var(--brown); transform: rotateZ(-38deg) translateZ(3px); }
+
+.desk-float { position: absolute; left: 0; top: 0; }
+.desk-bob { animation: desk-bob 4.5s ease-in-out infinite alternate; }
+.desk-face { transform: rotateZ(30deg) rotateX(-58deg); animation: desk-face 9s ease-in-out infinite alternate; }
+.desk-chip { background: var(--white); border-radius: var(--pill); padding: 6px 12px 6px 6px; box-shadow: 0 10px 24px rgba(0, 46, 109, 0.14); white-space: nowrap; translate: -50% -100%; }
+.desk-chip .role-tag { flex-wrap: nowrap; }
+
+@keyframes desk-sway { from { transform: rotateX(58deg) rotateZ(-38deg); } to { transform: rotateX(58deg) rotateZ(-22deg); } }
+@keyframes desk-face { from { transform: rotateZ(38deg) rotateX(-58deg); } to { transform: rotateZ(22deg) rotateX(-58deg); } }
+@keyframes desk-bob { from { transform: translateZ(0); } to { transform: translateZ(18px); } }
 .phone { width: 240px; height: 88%; background: var(--white); border: 8px solid var(--navy); border-bottom: 0; border-radius: 34px 34px 0 0; padding: 18px 14px 0; display: flex; flex-direction: column; gap: 10px; overflow: hidden; }
 .phone-head { display: flex; justify-content: space-between; align-items: center; }
 .phone-head .display { font-size: 17px; }
@@ -486,7 +526,7 @@ code { font-family: ui-monospace, Menlo, monospace; font-size: 0.9em; background
   .glass, .glass-dark { --shine: 0; }
   .nav { transition: none; }
   .switch, .switch::before { transition: none; }
-  .faq-list details[open] > p, .msg-in { animation: none; }
+  .faq-list details[open] > p, .msg-in, .desk-stage, .desk-face, .desk-bob { animation: none; }
   .faq-list details::details-content { transition: none; }
 }
 

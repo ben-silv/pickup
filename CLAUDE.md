@@ -96,9 +96,9 @@ Final direction from the Claude Design canvas: calm, roomy pages (Dirtywave) wit
 - Depth from color blocks; cards get at most the one soft shadow in `.card`.
 - Hover changes shade, never position: `.btn.glass-dark` gets a bit darker, `.btn.glass` a bit brighter, `.btn-outline` gets a paper fill (all in `globals.css`). Nothing lifts or scales.
 - **Elephant pattern** (`BandPattern`): faint white elephants and logo dots on every Tufts Blue area (page bands by default, the home hero, the campus block, the sign-in pages). Text sitting directly on the pattern never says "Tufts" (use "on the Hill"); text inside a white card on top of it may.
-- Two signature animations, and only these two: the **glass light** (`GlassLight` moves a soft highlight under the mouse on `.glass`/`.glass-dark`), and the **hero post stack** (`HeroStack` shuffles example posts every 4.5s, pauses on hover/focus, has a Next button). Don't add more motion without asking.
+- Three signature animations, and only these three: the **glass light** (`GlassLight` moves a soft highlight under the mouse on `.glass`/`.glass-dark`), the **hero post stack** (`HeroStack` shuffles example posts every 4.5s, pauses on hover/focus, has a Next button), and the **desk scene** (`DeskScene`, pure CSS 3D in the landing photo tile: the table sways, role tags bob; transforms only, no JS). Don't add more motion without asking.
 - State transitions (not decoration) are fine: the menu bar docks flush to the top once the page scrolls (`ScrollState` sets `data-scrolled` on `<html>`).
-- Respect `prefers-reduced-motion`: both animations and all transitions switch off.
+- Respect `prefers-reduced-motion`: all three animations and all transitions switch off.
 
 ### Components to reuse
 `Logo`, `RoleTag` (light-blue role pill + hours: use it wherever a role appears), `Elephant` (original art, never next to the word "Tufts"), `PageBand` (blue header on app pages with the elephant pattern; content below uses `.overlap`), `.card`, `.field`, `.btn` + `.glass-dark`, `.badge-success`, `.avatar-*`, `.pill-*`.
@@ -110,7 +110,7 @@ Final direction from the Claude Design canvas: calm, roomy pages (Dirtywave) wit
 
 ### Images
 - Real photos of students working, project screenshots. Never stock photos, AI photos of people, or official Tufts photography.
-- `next/image` from `public/`, meaningful `alt`, files under 200KB. Until a photo exists, keep the labelled placeholder tile.
+- `next/image` from `public/`, meaningful `alt`, files under 200KB. Until a photo exists, the landing photo tile shows the `DeskScene` illustration (approved stand-in).
 
 ### Copy
 - Short, warm, student voice. No emoji. Buttons say exactly what happens ("Send offer", "Email me a sign-in link").
